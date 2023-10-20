@@ -1,0 +1,79 @@
+﻿<Page x:Class="PH4_WPF.Browser.Page_Explot"
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+      xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+      xmlns:local="clr-namespace:PH4_WPF.Browser"
+      mc:Ignorable="d" 
+      d:DesignHeight="450" d:DesignWidth="800"
+      Title="Page_Explot">
+
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="193*"/>
+            <ColumnDefinition Width="607*"/>
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="79*"/>
+            <RowDefinition Height="25*"/>
+            <RowDefinition Height="25*"/>
+            <RowDefinition Height="321*"/>
+        </Grid.RowDefinitions>
+        <Grid Background="#FFF0EDED" Grid.RowSpan="4" Grid.ColumnSpan="2">
+            <Rectangle HorizontalAlignment="Left" Margin="0,100,0,0" Width="191" Fill="#FFF0EDED" Stroke="Black"/>
+            <Image HorizontalAlignment="Stretch" Height="79" VerticalAlignment="Top" Source="/Content/UI/logo0000.gif" Stretch="Fill" StretchDirection="Both"/>
+            <Rectangle Height="21" Margin="0,79,0,0" VerticalAlignment="Top" Fill="#FFDFDFDF" Stroke="Black"/>
+            <Grid x:Name="GridDownload" Margin="196,105,0,0" VerticalAlignment="Stretch" Background="#FFF0EDED">
+                <Rectangle Margin="-196,-6,609,0" VerticalAlignment="Top" Height="19" Stroke="#FF323030" Grid.Row="1" Grid.Column="1" Width="191" HorizontalAlignment="Left">
+                    <Rectangle.Fill>
+                        <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
+                            <GradientStop Color="#FFA8A8A8" Offset="0.639"/>
+                            <GradientStop Color="#FFCACACA" Offset="0"/>
+                        </LinearGradientBrush>
+                    </Rectangle.Fill>
+                </Rectangle>
+                <Label Cursor="Hand"  HorizontalAlignment="Left" Margin="-194,46,0,0" VerticalAlignment="Top" Width="189" Foreground="#FF2F10FF" PreviewMouseDown="СкачатьПрограммуF">
+                    <TextBlock TextDecorations="Underline" FontSize="14" Width="182"><Run Text="Сканер портов PScanе v1.0"/></TextBlock>
+                </Label>
+                <ScrollViewer x:Name="myScrollViewer" HorizontalScrollBarVisibility ="Auto" >
+                    <StackPanel x:Name="SP_ListNews" Margin="0,25,0,0" CanHorizontallyScroll="True" Background="#FFF0EDED" Orientation="Vertical" VerticalAlignment="Stretch">
+                        <Grid Height="100">
+                            <Rectangle Margin="0,1,0,77" Stroke="#FF3D3D3D">
+                                <Rectangle.Fill>
+                                    <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
+                                        <GradientStop Color="#FFA8A8A8" Offset="0.639"/>
+                                        <GradientStop Color="#FFCACACA" Offset="0"/>
+                                    </LinearGradientBrush>
+                                </Rectangle.Fill>
+                            </Rectangle>
+                            <TextBlock TextWrapping="WrapWithOverflow" Margin="0,28,0,0" FontSize="14" HorizontalAlignment="Center" VerticalAlignment="Top" Height="62" Foreground="#FF292929" Text="sfsdfsdf sdfsdfsdfsdf sdfsdfsdf sdfsdf  sdfsdf sdf sdf sdf sdf ssdf sfs s sdfs sdfsdf sdfdf sdfs df" Width="584">
+                            </TextBlock>
+                            <Label Content="Описание уязвимости" HorizontalAlignment="Left" Margin="16,-2,0,0" VerticalAlignment="Top" FontWeight="Bold" Foreground="#FF606060"/>
+                            <Border BorderThickness="1" BorderBrush="Black">
+                                <Button Content="Button" Margin="9,26,544,37"/>
+                            </Border>
+
+                        </Grid>
+
+                    </StackPanel>
+                </ScrollViewer>
+            </Grid>
+
+            <Label Content="Поиск:" HorizontalAlignment="Left" Height="28" Margin="502,50,0,0" VerticalAlignment="Top" Width="92" Background="{x:Null}" Foreground="#FF111010" RenderTransformOrigin="0.5,0.5" FontSize="14" FontWeight="Bold">
+                <Label.RenderTransform>
+                    <TransformGroup>
+                        <ScaleTransform/>
+                        <SkewTransform AngleX="6.816"/>
+                        <RotateTransform Angle="0.237"/>
+                        <TranslateTransform X="1.673" Y="0.007"/>
+                    </TransformGroup>
+                </Label.RenderTransform>
+            </Label>
+            <TextBox HorizontalAlignment="Left" Margin="566,56,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="145" FontSize="14" Background="#FFF0EDED" TextChanged="ПоисковаяПанель"/>
+            <Label Content="Наш IRC-сервер: irc.dalnet.ru   Канал: #exploit.in   Порт: 6667" HorizontalAlignment="Center" Height="23" Margin="231,77,0,0" VerticalAlignment="Top" Width="348" FontSize="11"/>
+            <Label Content="Скачать программы" HorizontalAlignment="Left" Margin="17,94,0,0" VerticalAlignment="Top" FontWeight="Bold" Foreground="#FF606060"/>
+
+        </Grid>
+
+    </Grid>
+</Page>

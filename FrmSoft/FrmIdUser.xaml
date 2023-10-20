@@ -1,0 +1,99 @@
+﻿<Window x:Class="PH4_WPF.FrmSoft.FrmIdUser"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:PH4_WPF.FrmSoft"
+        mc:Ignorable="d"
+          WindowStyle="None" 
+        WindowState="Normal" 
+        ResizeMode="NoResize"
+        Title="FrmIdUser" Height="450" Width="800" Loaded="Загруженно" Closed="ЗакрытаФорма" MouseDown="Перемещение">
+    <Grid Background="#FFD6DBE2">
+        <Grid.Effect>
+            <DropShadowEffect BlurRadius="15" Direction="-90"
+                              RenderingBias="Quality" ShadowDepth="2"/>
+        </Grid.Effect>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="83*"/>
+            <ColumnDefinition Width="317*"/>
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="4*"/>
+            <RowDefinition Height="71*"/>
+        </Grid.RowDefinitions>
+        <Rectangle Grid.ColumnSpan="2" HorizontalAlignment="Left" Height="24" Margin="-10,0,0,0" VerticalAlignment="Center" Width="825" Fill="#FF2A1D3B"/>
+        <Rectangle HorizontalAlignment="Left" Height="455" Margin="-10,-5,0,0" Grid.RowSpan="2" VerticalAlignment="Top" Width="176" Fill="#FF2A1D3B"/>
+        <Ellipse x:Name="ElipsAva" Margin="48,10,58,358" Grid.Row="1" Width="48" Height="48">
+            <Ellipse.Fill>
+                <ImageBrush ImageSource="/Content/Desktop/ambiend.bmp" Stretch="Fill"/>
+            </Ellipse.Fill>
+        </Ellipse>
+        <Label x:Name="NickName" Content="NickName" HorizontalAlignment="Center" Margin="0,71,0,0" Grid.Row="1" VerticalAlignment="Top" Foreground="#FFFFF1F1" Width="166" VerticalContentAlignment="Center" HorizontalContentAlignment="Center"/>
+        <Label x:Name="Label1" Content="Возраст:" HorizontalAlignment="Left" Margin="10,102,0,0" Grid.Row="1" VerticalAlignment="Top" Foreground="#FFFFF1F1" Width="63" VerticalContentAlignment="Center" HorizontalContentAlignment="Right" FontWeight="Bold"/>
+        <Label x:Name="AgeUser" Content="00" HorizontalAlignment="Left" Margin="78,103,0,0" Grid.Row="1" VerticalAlignment="Top" Foreground="#FFFFF1F1" Width="24" VerticalContentAlignment="Center" HorizontalContentAlignment="Center"/>
+        <Label x:Name="Label2" Content="Пол:" HorizontalAlignment="Left" Margin="10,128,0,0" Grid.Row="1" VerticalAlignment="Top" Foreground="#FFFFF1F1" Width="63" VerticalContentAlignment="Center" HorizontalContentAlignment="Right" FontWeight="Bold"/>
+        <Label x:Name="GenderUser" Content="00" HorizontalAlignment="Left" Margin="78,128,0,0" Grid.Row="1" VerticalAlignment="Top" Foreground="#FFFFF1F1" Width="58" VerticalContentAlignment="Center" HorizontalContentAlignment="Left"/>
+        <Button Content="&#xE106;" Grid.Column="1" HorizontalAlignment="Left" Margin="600,0,0,0" VerticalAlignment="Center" Width="24" FontFamily="Segoe MDL2 Assets" Height="20
+                " Background="#FFB4365C" Foreground="White" BorderBrush="{x:Null}" Click="ЗакрытьОкно"/>
+        <Grid Grid.Column="1" Grid.Row="1" Background="#FFF6F0F0" Margin="212,10,10,10">
+            <Label Content="Полученные навыки" HorizontalAlignment="Left" Margin="10,0,0,0" VerticalAlignment="Top" Foreground="#FF1A041B" Height="33" Width="196" FontSize="16" FontStyle="Normal" FontFamily="Corbel" FontWeight="Bold"/>
+            <Label Cursor="Hand" Content="Кодер" HorizontalAlignment="Left" Margin="33,38,0,0" VerticalAlignment="Top" Foreground="#FF1A041B" Height="27" Width="109" FontSize="14" FontStyle="Normal" FontFamily="Corbel" FontWeight="Normal" Background="{x:Null}" MouseDown="ВыборКодера"/>
+            <Label  Cursor="Hand" Content="Дефейсер" HorizontalAlignment="Left" Margin="33,65,0,0" VerticalAlignment="Top" Foreground="#FF1A041B" Height="27" Width="109" FontSize="14" FontStyle="Normal" FontFamily="Corbel" FontWeight="Normal" Background="{x:Null}" MouseDown="ВыборДефейсер"/>
+            <Label Cursor="Hand" Content="Вирьмейкер" HorizontalAlignment="Left" Margin="33,92,0,0" VerticalAlignment="Top" Foreground="#FF1A041B" Height="27" Width="109" FontSize="14" FontStyle="Normal" FontFamily="Corbel" FontWeight="Normal" Background="{x:Null}" MouseDown="ВыборВирьмейкер"/>
+            <Label x:Name="L_Coder" Cursor="Hand" Content="&#xE299;" HorizontalAlignment="Left" Margin="1,38,0,0" VerticalAlignment="Top" Foreground="#FF474148" Height="27" Width="32" FontSize="22" FontStyle="Normal" FontFamily="Segoe MDL2 Assets" FontWeight="Normal" Background="{x:Null}" Padding="5,3,5,0" MouseDown="ВыборКодера"/>
+            <Label x:Name="L_Defecer" Cursor="Hand" Content="&#xE75A;" HorizontalAlignment="Left" Margin="1,65,0,0" VerticalAlignment="Top" Foreground="#FF474148" Height="27" Width="32" FontSize="22" FontStyle="Normal" FontFamily="Segoe MDL2 Assets" FontWeight="Normal" Padding="5,2,5,0" Background="{x:Null}" MouseDown="ВыборДефейсер"/>
+            <Label x:Name="L_Vir" Cursor="Hand" Content="&#xE730;" HorizontalAlignment="Left" Margin="2,92,0,0" VerticalAlignment="Top" Foreground="#FF474148" Height="27" Width="32" FontSize="22" FontStyle="Normal" FontFamily="Segoe MDL2 Assets" FontWeight="Normal" Background="{x:Null}" Padding="5,3,5,0" MouseDown="ВыборВирьмейкер"/>
+            <Label Content="&#xE00A;&#xE00A;&#xE00A;&#xE00A;&#xE00A;&#xE00A;&#xE00A;&#xE00A;&#xE00A;&#xE00A;" HorizontalAlignment="Left" Margin="147,39,0,0" VerticalAlignment="Top" Height="27" Width="238" FontSize="22" FontStyle="Normal" FontFamily="Segoe MDL2 Assets" FontWeight="Normal" Background="{x:Null}" Padding="5,1,5,0">
+                <Label.Foreground>
+                    <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
+                        <GradientStop Color="#FFC8C8C8"/>
+                        <GradientStop Color="#FFDCD5D5" Offset="0.429"/>
+                    </LinearGradientBrush>
+                </Label.Foreground>
+            </Label>
+            <Label x:Name="CoderStars" Content="1" HorizontalAlignment="Left" Margin="147,39,0,0" VerticalAlignment="Top" Height="27" Width="238" FontSize="22" FontStyle="Normal" FontFamily="Segoe MDL2 Assets" FontWeight="Normal" Background="{x:Null}" Padding="5,1,5,0" Foreground="#FF3861A1"/>
+            <Label Content="&#xE00A;&#xE00A;&#xE00A;&#xE00A;&#xE00A;&#xE00A;&#xE00A;&#xE00A;&#xE00A;&#xE00A;" HorizontalAlignment="Left" Margin="147,65,0,0" VerticalAlignment="Top" Height="27" Width="238" FontSize="22" FontStyle="Normal" FontFamily="Segoe MDL2 Assets" FontWeight="Normal" Background="{x:Null}" Padding="5,1,5,0">
+                <Label.Foreground>
+                    <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
+                        <GradientStop Color="#FFC8C8C8"/>
+                        <GradientStop Color="#FFDCD5D5" Offset="0.429"/>
+                    </LinearGradientBrush>
+                </Label.Foreground>
+            </Label>
+            <Label Content="&#xE00A;&#xE00A;&#xE00A;&#xE00A;&#xE00A;&#xE00A;&#xE00A;&#xE00A;&#xE00A;&#xE00A;" HorizontalAlignment="Left" Margin="147,92,0,0" VerticalAlignment="Top" Height="27" Width="238" FontSize="22" FontStyle="Normal" FontFamily="Segoe MDL2 Assets" FontWeight="Normal" Background="{x:Null}" Padding="5,1,5,0">
+                <Label.Foreground>
+                    <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
+                        <GradientStop Color="#FFC8C8C8"/>
+                        <GradientStop Color="#FFDCD5D5" Offset="0.429"/>
+                    </LinearGradientBrush>
+                </Label.Foreground>
+            </Label>
+            <Label Content="&#xE00A;&#xE00A;&#xE00A;&#xE00A;&#xE00A;&#xE00A;&#xE00A;&#xE00A;&#xE00A;&#xE00A;" HorizontalAlignment="Left" Margin="147,119,0,0" VerticalAlignment="Top" Height="27" Width="238" FontSize="22" FontStyle="Normal" FontFamily="Segoe MDL2 Assets" FontWeight="Normal" Background="{x:Null}" Padding="5,1,5,0">
+                <Label.Foreground>
+                    <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
+                        <GradientStop Color="#FFC8C8C8"/>
+                        <GradientStop Color="#FFDCD5D5" Offset="0.429"/>
+                    </LinearGradientBrush>
+                </Label.Foreground>
+            </Label>
+            <Label x:Name="DefecerStars" Content="&#xE00A;" HorizontalAlignment="Left" Margin="147,65,0,0" VerticalAlignment="Top" Height="27" Width="238" FontSize="22" FontStyle="Normal" FontFamily="Segoe MDL2 Assets" FontWeight="Normal" Background="{x:Null}" Padding="5,1,5,0" Foreground="#FF3861A1"/>
+            <Label x:Name="VirStars" Content="&#xE00A;" HorizontalAlignment="Left" Margin="147,92,0,0" VerticalAlignment="Top" Height="27" Width="238" FontSize="22" FontStyle="Normal" FontFamily="Segoe MDL2 Assets" FontWeight="Normal" Background="{x:Null}" Padding="5,1,5,0" Foreground="#FF3861A1"/>
+            <Label x:Name="L_Craker" Cursor="Hand" Content="&#xE1A7;" HorizontalAlignment="Left" Margin="2,119,0,0" VerticalAlignment="Top" Foreground="#FF474148" Height="27" Width="32" FontSize="22" FontStyle="Normal" FontFamily="Segoe MDL2 Assets" FontWeight="Normal" Background="{x:Null}" Padding="5,3,5,0" MouseDown="ВыборКрекер"/>
+            <Label Cursor="Hand" Content="Крекер" HorizontalAlignment="Left" Margin="33,119,0,0" VerticalAlignment="Top" Foreground="#FF1A041B" Height="27" Width="109" FontSize="14" FontStyle="Normal" FontFamily="Corbel" FontWeight="Normal" Background="{x:Null}" MouseDown="ВыборКрекер"/>
+            <Label x:Name="CrackerStars" Content="&#xE00A;" HorizontalAlignment="Left" Margin="147,119,0,0" VerticalAlignment="Top" Height="27" Width="238" FontSize="22" FontStyle="Normal" FontFamily="Segoe MDL2 Assets" FontWeight="Normal" Background="{x:Null}" Padding="5,1,5,0" Foreground="#FF3861A1"/>
+        </Grid>
+        <Label Content="Профиль" HorizontalAlignment="Left" Margin="10,-3,0,0" VerticalAlignment="Top" Foreground="#FFFFF1F1" Height="27" Width="116" FontSize="14" FontStyle="Normal" FontFamily="Corbel"/>
+        <Label x:Name="Label2_Copy" Content="Уровень:" HorizontalAlignment="Left" Margin="10,184,0,0" Grid.Row="1" VerticalAlignment="Top" Foreground="#FFFFF1F1" Width="63" VerticalContentAlignment="Center" HorizontalContentAlignment="Right" FontWeight="Bold"/>
+        <Label x:Name="LvlUser" Content="LvlUser" HorizontalAlignment="Left" Margin="78,184,0,0" Grid.Row="1" VerticalAlignment="Top" Foreground="#FFFFF1F1" Width="58" VerticalContentAlignment="Center" HorizontalContentAlignment="Left"/>
+        <Rectangle HorizontalAlignment="Left" Height="4" Margin="54,169,0,0" Grid.Row="1" VerticalAlignment="Top" Width="100" Fill="#FF454944"/>
+        <Rectangle x:Name="ExpUser" HorizontalAlignment="Left" Height="4" Margin="54,169,0,0" Grid.Row="1" VerticalAlignment="Top" Width="100" Fill="#FF1CDAA7"/>
+        <Label x:Name="Label2_Copy1" Content="Exp:" HorizontalAlignment="Left" Margin="12,156,0,0" Grid.Row="1" VerticalAlignment="Top" Foreground="#FFFFF1F1" Width="63" VerticalContentAlignment="Center" HorizontalContentAlignment="Left" FontWeight="Bold"/>
+        <TextBlock x:Name="InfoLabel" TextWrapping ="WrapWithOverflow"   Background="#FFF6F0F0" Grid.Column="1" Margin="10,10,437,245" Grid.Row="1" Foreground="#FF454345" FontFamily="Corbel" FontSize="14" TextAlignment="Center" Text="InfoLabel" Padding="0,2,0,0"/>
+        <Rectangle StrokeThickness="2" Grid.ColumnSpan="2" HorizontalAlignment="Left" Height="47" Margin="-98,-23,0,0" Stroke="#FFDFDFDF" VerticalAlignment="Top" Width="913"/>
+        <ListBox x:Name="LB_Info" Grid.Column="1" HorizontalAlignment="Left" Height="185" Margin="219,225,0,0" Grid.Row="1" VerticalAlignment="Top" Width="399" Background="{x:Null}" FontFamily="Arial" BorderBrush="#FFC0BFBF" Foreground="#FF1A041B" SelectionChanged="ВыборНавыкаСписка"/>
+        <Border BorderThickness="1" BorderBrush="#FFE4E0E0" Grid.Row="1" Width="30" Height="30" Margin="118,375,18,21"/>
+        <Label x:Name="Label_point" ToolTip="Очки для навыков " Content="1" HorizontalAlignment="Left" Height="28" Grid.Row="1" Margin="119,376,0,0"  VerticalAlignment="Top" Width="28" Background="#FF07B2F1" Foreground="White" FontSize="20" VerticalContentAlignment="Top" HorizontalContentAlignment="Center" Padding="5,0,5,0" BorderBrush="#FFF9F9F9"/>
+        <Button x:Name="ButtonUPLvl" Content="Повысить навык" Grid.Column="1" HorizontalAlignment="Left" Margin="10,210,0,0" Grid.Row="1" VerticalAlignment="Top" Width="187" Foreground="#FF1A041B" Click="Повысить_навык"/>
+    </Grid>
+</Window>

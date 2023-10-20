@@ -1,0 +1,198 @@
+﻿<Window x:Class="PH4_WPF.GameStart"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:PH4_WPF"
+        mc:Ignorable="d"
+          WindowStyle="None" 
+        WindowState="Maximized" 
+        ResizeMode="NoResize"
+        Title="GameStart" Height="450" Width="800" Loaded="Загруженно">
+    <Grid Background="Black">
+        <Grid HorizontalAlignment="Left" Margin="-19,-15,0,0" VerticalAlignment="Stretch" Width="264">
+            <Grid.Background>
+                <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0" SpreadMethod="Reflect">
+                    <LinearGradientBrush.RelativeTransform>
+                        <TransformGroup>
+                            <ScaleTransform CenterY="0.5" CenterX="0.5"/>
+                            <SkewTransform CenterY="0.5" CenterX="0.5"/>
+                            <RotateTransform Angle="270" CenterY="0.5" CenterX="0.5"/>
+                            <TranslateTransform/>
+                        </TransformGroup>
+                    </LinearGradientBrush.RelativeTransform>
+                    <GradientStop Color="#FF00C7FF" Offset="0.95"/>
+                    <GradientStop Color="Black" Offset="1"/>
+                </LinearGradientBrush>
+            </Grid.Background>
+            <Button Content="Новая игра" HorizontalAlignment="Left" Margin="26,44,0,0" VerticalAlignment="Top" Width="189" Height="34" FontFamily="Arial Black" FontSize="18" Background="#FF00C7FF">
+                <Button.BorderBrush>
+                    <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
+                        <GradientStop Color="Black"/>
+                        <GradientStop Color="#FF0849DA" Offset="1"/>
+                    </LinearGradientBrush>
+                </Button.BorderBrush>
+                <Button.Foreground>
+                    <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
+                        <GradientStop Color="#FF00C7FF" Offset="1"/>
+                        <GradientStop Color="#FF0600F6" Offset="0.034"/>
+                    </LinearGradientBrush>
+                </Button.Foreground>
+            </Button>
+            <Button Content="Новая игра" HorizontalAlignment="Left" Margin="26,44,0,0" VerticalAlignment="Top" Width="189" Height="34" FontFamily="Arial Black" FontSize="18" Background="#FF00C7FF" Click="НоваяИгра">
+                <Button.BorderBrush>
+                    <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
+                        <GradientStop Color="#FFF6F8FF"/>
+                        <GradientStop Color="#FF0849DA" Offset="1"/>
+                    </LinearGradientBrush>
+                </Button.BorderBrush>
+                <Button.Foreground>
+                    <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
+                        <GradientStop Color="#FF00C7FF" Offset="1"/>
+                        <GradientStop Color="#FF0600F6" Offset="0.034"/>
+                    </LinearGradientBrush>
+                </Button.Foreground>
+            </Button>
+            <Button Content="Загрузить игру" HorizontalAlignment="Left" Margin="26,93,0,0" VerticalAlignment="Top" Width="189" Height="34" FontFamily="Arial Black" FontSize="18" Background="#FF00C7FF" Click="СписокИгры">
+                <Button.BorderBrush>
+                    <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
+                        <GradientStop Color="#FFF6F8FF"/>
+                        <GradientStop Color="#FF0849DA" Offset="1"/>
+                    </LinearGradientBrush>
+                </Button.BorderBrush>
+                <Button.Foreground>
+                    <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
+                        <GradientStop Color="#FF00C7FF" Offset="1"/>
+                        <GradientStop Color="#FF0600F6" Offset="0.034"/>
+                    </LinearGradientBrush>
+                </Button.Foreground>
+            </Button>
+            <Button Content="Выход из игры" HorizontalAlignment="Left" Margin="26,144,0,0" VerticalAlignment="Top" Width="189" Height="34" FontFamily="Arial Black" FontSize="18" Background="#FF00C7FF" Click="ЗакрытьИгру">
+                <Button.BorderBrush>
+                    <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
+                        <GradientStop Color="#FFF6F8FF"/>
+                        <GradientStop Color="#FF0849DA" Offset="1"/>
+                    </LinearGradientBrush>
+                </Button.BorderBrush>
+                <Button.Foreground>
+                    <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
+                        <GradientStop Color="#FF00C7FF" Offset="1"/>
+                        <GradientStop Color="#FF0600F6" Offset="0.034"/>
+                    </LinearGradientBrush>
+                </Button.Foreground>
+            </Button>
+            <Label x:Name="LabelVer" Content="Label" HorizontalAlignment="Left" Margin="26,428,0,0" Width="232" Foreground="White" FontWeight="Normal" FontFamily="Calibri" FontSize="14" VerticalAlignment="Bottom"/>
+        </Grid>
+        <TextBlock x:Name="TextHack" HorizontalAlignment="Stretch" Margin="250,0,0,0" VerticalAlignment="Stretch" Foreground="#FF13DD2B" Text="0202121541" FontWeight="Bold" FontSize="16" FontFamily="Orator Std"/>
+
+        <Grid x:Name="StartPanel" Margin="245,0,0,0" Visibility="Visible" HorizontalAlignment="Left" VerticalAlignment="Top" Width="545" Height="430">
+            <Grid.Background>
+                <ImageBrush ImageSource="/Content/Desktop/ambiend.bmp"/>
+            </Grid.Background>
+            <Label Content="Новая Игра" HorizontalAlignment="Left" Margin="38,8,0,0" VerticalAlignment="Top" FontSize="20" FontFamily="Arial Black" Foreground="#FF412FEE" Width="300"/>
+
+            <Image x:Name="ImageAva" HorizontalAlignment="Left" Height="48" Margin="57,105,0,0" VerticalAlignment="Top" Width="48" Source="/Content/CmdImg/icon.png" Stretch="Uniform" StretchDirection="UpOnly" RenderTransformOrigin="0.337,0.042"/>
+            <RadioButton x:Name="RB2" Content="Женский" HorizontalAlignment="Left" Margin="209,128,0,0" VerticalAlignment="Top" FontSize="14" FontFamily="Arial" Background="#FFABEDFF">
+                <RadioButton.Foreground>
+                    <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
+                        <GradientStop Color="#FF0E0AB4" Offset="0.608"/>
+                        <GradientStop Color="Black" Offset="1"/>
+                    </LinearGradientBrush>
+                </RadioButton.Foreground>
+            </RadioButton>
+            <RadioButton x:Name="RB1" Content="Мужской" HorizontalAlignment="Left" Margin="209,101,0,0" VerticalAlignment="Top" FontSize="14" FontFamily="Arial" Background="#FFABEDFF">
+                <RadioButton.Foreground>
+                    <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
+                        <GradientStop Color="#FF0E0AB4" Offset="0.608"/>
+                        <GradientStop Color="Black" Offset="1"/>
+                    </LinearGradientBrush>
+                </RadioButton.Foreground>
+            </RadioButton>
+            <RadioButton x:Name="RB3" Content="Неопределённый" HorizontalAlignment="Left" Margin="209,156,0,0" VerticalAlignment="Top" FontSize="14" FontFamily="Arial" Background="#FFABEDFF" IsChecked="True">
+                <RadioButton.Foreground>
+                    <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
+                        <GradientStop Color="#FF0E0AB4" Offset="0.608"/>
+                        <GradientStop Color="Black" Offset="1"/>
+                    </LinearGradientBrush>
+                </RadioButton.Foreground>
+            </RadioButton>
+            <Label Content="Nickname" HorizontalAlignment="Left" Margin="33,0,0,0" VerticalAlignment="Center" FontSize="14" FontFamily="Arial" Width="113" FontWeight="Bold" Foreground="#FF04339F"/>
+            <TextBox x:Name="Nick" MaxLines="31" HorizontalAlignment="Left" Margin="124,0,0,0" Text="Blazer" TextWrapping="Wrap" VerticalAlignment="Center" Width="148" Background="#FF089ED6" Foreground="#FF0C0663" FontSize="14" UndoLimit="32" BorderBrush="#FF103DC7"/>
+            <Button x:Name="ButtonEnd" Content="Начать Игру" HorizontalAlignment="Left" Margin="322,368,0,0" VerticalAlignment="Top" Width="189" Height="34" FontFamily="Arial Black" FontSize="18" Background="{x:Null}" Click="НачатьИгру">
+                <Button.BorderBrush>
+                    <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
+                        <GradientStop Color="#FFF6F8FF"/>
+                        <GradientStop Color="#FF0849DA" Offset="1"/>
+                    </LinearGradientBrush>
+                </Button.BorderBrush>
+                <Button.Foreground>
+                    <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
+                        <GradientStop Color="#FF00C7FF" Offset="1"/>
+                        <GradientStop Color="#FF0600F6" Offset="0.034"/>
+                    </LinearGradientBrush>
+                </Button.Foreground>
+            </Button>
+            <Button x:Name="ButtonLeft" Content="&#xF0B0;" HorizontalAlignment="Left" Margin="38,163,0,0" VerticalAlignment="Top" Width="41" Height="23" FontFamily="Segoe MDL2 Assets" FontSize="18" Background="#FF00C7FF" Click="ПереместитьВЛево" Foreground="#FF072663">
+                <Button.BorderBrush>
+                    <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
+                        <GradientStop Color="#FFF6F8FF"/>
+                        <GradientStop Color="#FF0849DA" Offset="1"/>
+                    </LinearGradientBrush>
+                </Button.BorderBrush>
+            </Button>
+            <Button x:Name="ButtonRight" Content="&#xF0AF;" HorizontalAlignment="Left" Margin="84,163,0,0" VerticalAlignment="Top" Width="41" Height="23" FontFamily="Segoe MDL2 Assets" FontSize="18" Background="#FF00C7FF" Click="ПереместитьВПраво" Foreground="#FF072663">
+                <Button.BorderBrush>
+                    <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
+                        <GradientStop Color="#FFF6F8FF"/>
+                        <GradientStop Color="#FF0849DA" Offset="1"/>
+                    </LinearGradientBrush>
+                </Button.BorderBrush>
+            </Button>
+            <Label Content="Ваше фото" HorizontalAlignment="Left" Margin="33,66,0,0" VerticalAlignment="Top" FontSize="14" FontFamily="Arial" Width="113" FontWeight="Bold" Foreground="#FF04339F"/>
+            <Label Content="Ваш пол" HorizontalAlignment="Left" Margin="207,66,0,0" VerticalAlignment="Top" FontSize="14" FontFamily="Arial" Width="113" FontWeight="Bold" Foreground="#FF04339F"/>
+            <Label Content="Ваш возраст" HorizontalAlignment="Left" Margin="360,66,0,0" VerticalAlignment="Top" FontSize="14" FontFamily="Arial" Width="113" FontWeight="Bold" Foreground="#FF04339F"/>
+            <TextBox x:Name="AgeGamer" MaxLines=" 1" HorizontalAlignment="Left" Margin="388,94,0,0" Text="20" TextWrapping="Wrap" VerticalAlignment="Top" Width="28" Background="#FF089ED6" Foreground="#FF0C0663" FontSize="18" UndoLimit="2" BorderBrush="#FF103DC7"/>
+
+        </Grid>
+
+        <Grid x:Name="LoadList" Margin="286,0,0,0" HorizontalAlignment="Left" VerticalAlignment="Top" Width="474" Height="440" Visibility="Hidden">
+            <Grid.Background>
+                <ImageBrush ImageSource="/Content/Desktop/ambiend.bmp"/>
+            </Grid.Background>
+            <Label Content="Загрузка Игры" HorizontalAlignment="Left" Margin="38,8,0,0" VerticalAlignment="Top" FontSize="20" FontFamily="Arial Black" Foreground="#FF412FEE" Width="300"/>
+            <Button Content="Удалить игру" HorizontalAlignment="Left" Margin="32,387,0,0" VerticalAlignment="Top" Width="189" Height="29" FontFamily="Arial Black" FontSize="18" Background="#FF00C7FF" Click="УдалитьИгру">
+                <Button.BorderBrush>
+                    <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
+                        <GradientStop Color="#FFF6F8FF"/>
+                        <GradientStop Color="#FF0849DA" Offset="1"/>
+                    </LinearGradientBrush>
+                </Button.BorderBrush>
+                <Button.Foreground>
+                    <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
+                        <GradientStop Color="#FF00C7FF" Offset="1"/>
+                        <GradientStop Color="#FF0600F6" Offset="0.034"/>
+                    </LinearGradientBrush>
+                </Button.Foreground>
+            </Button>
+            <Button Content="Выбрать игру" HorizontalAlignment="Left" Margin="250,387,0,0" VerticalAlignment="Top" Width="189" Height="29" FontFamily="Arial Black" FontSize="18" Background="#FF00C7FF" Click="ЗагрузитьИгру">
+                <Button.BorderBrush>
+                    <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
+                        <GradientStop Color="#FFF6F8FF"/>
+                        <GradientStop Color="#FF0849DA" Offset="1"/>
+                    </LinearGradientBrush>
+                </Button.BorderBrush>
+                <Button.Foreground>
+                    <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
+                        <GradientStop Color="#FF00C7FF" Offset="1"/>
+                        <GradientStop Color="#FF0600F6" Offset="0.034"/>
+                    </LinearGradientBrush>
+                </Button.Foreground>
+            </Button>
+            <ListBox x:Name="ListFile" HorizontalAlignment="Left" Height="302" Margin="38,74,0,0" VerticalAlignment="Top" Width="401" Background="{x:Null}" BorderBrush="{x:Null}" Foreground="#FF1F066C" FontSize="14" FontFamily="Arial" FontWeight="Bold"/>
+        </Grid>
+
+        <Grid/>
+
+
+    </Grid>
+</Window>

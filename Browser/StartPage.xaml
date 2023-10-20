@@ -1,0 +1,40 @@
+﻿<Page x:Class="PH4_WPF.Browser.StartPage"
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+      xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+      xmlns:local="clr-namespace:PH4_WPF.Browser"
+      mc:Ignorable="d" d:DesignWidth="800"
+      Title="StartPage" Height="600">
+    <ScrollViewer>
+        <Grid Margin="0,0,0,0" Height="1151">
+        <Grid Background="White" Margin="0,0,0,0">
+            <Rectangle HorizontalAlignment="Center" Height="108" VerticalAlignment="Top" Width="800">
+                <Rectangle.Fill>
+                    <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
+                        <GradientStop Color="#FF23257B" Offset="0.633"/>
+                        <GradientStop Color="White" Offset="1"/>
+                    </LinearGradientBrush>
+                </Rectangle.Fill>
+            </Rectangle>
+            <Rectangle HorizontalAlignment="Center" Height="22" Margin="0,113,0,0" VerticalAlignment="Top" Width="800" Stroke="Black" StrokeThickness="2" Fill="#FFF9E2B7"/>
+            <Rectangle HorizontalAlignment="Center" Height="217" Margin="0,134,0,0" Stroke="Black" VerticalAlignment="Top" Width="800" StrokeThickness="2"/>
+            <Label Content="Стартовая Страница" HorizontalAlignment="Left" Margin="95,10,0,0" VerticalAlignment="Top" Foreground="White" FontFamily="Comic Sans MS" FontSize="36" FontStyle="Italic"/>
+            <Label Cursor="Hand"  HorizontalAlignment="Right" Margin="0,140,439,0" VerticalAlignment="Top" Width="334" Foreground="#FF2F10FF" PreviewMouseDown="ГайдШеллы">
+                <TextBlock TextDecorations="Underline" FontSize="16" Width="319"><Run Text="Шелл-shell как этим пользоваться"/></TextBlock>
+            </Label>
+            <Label Content="Гайды" Margin="365,108,364,0" VerticalAlignment="Top" Foreground="#FF080707" FontFamily="Comic Sans MS" FontStyle="Italic" FontSize="14"/>
+            <Label Cursor="Hand"  HorizontalAlignment="Right" Margin="0,171,439,0" VerticalAlignment="Top" Width="334" Foreground="#FF2F10FF" PreviewMouseDown="Эксплойты">
+                <TextBlock TextDecorations="Underline" FontSize="16" Width="319"><Run Text="Типы Exploit что они дают вам"/></TextBlock>
+            </Label>
+        </Grid>  
+        <RichTextBox x:Name="Rtf" IsReadOnly="True " Background="White" Margin="10,357,10,-244" BorderBrush="Black">
+            <FlowDocument>
+                <Paragraph>
+                    <Run Text=""/>
+                </Paragraph>
+            </FlowDocument>
+        </RichTextBox>
+    </Grid>
+    </ScrollViewer>
+</Page>

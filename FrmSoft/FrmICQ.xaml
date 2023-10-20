@@ -1,0 +1,57 @@
+﻿<Window x:Class="PH4_WPF.FrmSoft.FrmICQ"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:PH4_WPF.FrmSoft"
+        mc:Ignorable="d"
+          WindowStyle="None"         
+        ResizeMode="NoResize"
+        Title="ICQ" Height="301" Width="739" Closed="ФормаЗакрыта" GotFocus="ВыбранаФорма">
+
+    <Grid Background="#FFDEFDE7">
+        <Rectangle HorizontalAlignment="Center" Height="35" VerticalAlignment="Top" Width="800">
+            <Rectangle.Fill>
+                <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
+                    <GradientStop Color="#FF58970D" Offset="0.531"/>
+                    <GradientStop Color="#FFDEFDE7" Offset="0.928"/>
+                </LinearGradientBrush>
+            </Rectangle.Fill>
+        </Rectangle>
+        <Rectangle HorizontalAlignment="Center" Height="219" Margin="0,67,0,0" Stroke="#FF9391E7" VerticalAlignment="Top" Width="800" Fill="#FFDEFDE7"/>
+        <Image x:Name="ImgAva" HorizontalAlignment="Left" Height="76" Margin="15,90,0,0" VerticalAlignment="Top" Width="65" Stretch="Fill"/>
+        <Border BorderThickness="1" BorderBrush="#FF338600" HorizontalAlignment="Left" Height="86" Margin="10,85,0,0" VerticalAlignment="Top" Width="73"/>
+        <ComboBox x:Name="CBoxAnswer" HorizontalAlignment="Left" Margin="210,237,0,0" VerticalAlignment="Top" Width="514" BorderBrush="#FF338600" Foreground="#FF110BF3" FontWeight="Bold" SelectionChanged="ВыбранОтвет">
+            <ComboBox.Background>
+                <LinearGradientBrush EndPoint="0,1">
+                    <GradientStop Color="#FFF0F0F0"/>
+                    <GradientStop Color="#FFE40E0E" Offset="1"/>
+                </LinearGradientBrush>
+            </ComboBox.Background>
+        </ComboBox>
+        <Label Content="Выбор ответа" HorizontalAlignment="Left" Margin="97,233,0,0" VerticalAlignment="Top" FontSize="14" Foreground="#FF142EBD"/>
+
+        <Label x:Name="L_NameN" Content="---" HorizontalAlignment="Left" Margin="0,171,0,0" VerticalAlignment="Top" Foreground="#FF142EBD" Width="94" HorizontalContentAlignment="Center"/>
+        <Border BorderThickness="1" BorderBrush="#FF338600" HorizontalAlignment="Left" Height="144" VerticalAlignment="Top" Width="630" Margin="94,83,0,0" Background="#FFE8E8E8"/>
+        <Rectangle HorizontalAlignment="Center" Height="18" VerticalAlignment="Top" Width="739" PreviewMouseDown="ПеретаскиваниеФормы">
+            <Rectangle.Fill>
+                <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
+                    <GradientStop Color="#FFA6DC79" Offset="0.212"/>
+                    <GradientStop Color="#FF59980F" Offset="0.6"/>
+                </LinearGradientBrush>
+            </Rectangle.Fill>
+        </Rectangle>
+        <Rectangle HorizontalAlignment="Center" Height="301" Stroke="#FF054224" VerticalAlignment="Center" Width="739"/>
+        <TextBlock TextWrapping="WrapWithOverflow"  x:Name="TB_BodyText" Margin="99,85,22,74" Foreground="#FF146025" FontSize="14" Text="Нет новых сообщений" FontFamily="Arial"/>
+        <Label x:Name="L_AnswerText" Visibility="Visible"  Content="&lt;Нет&gt;" HorizontalAlignment="Left" Margin="97,233,0,0" VerticalAlignment="Top" FontSize="14" Foreground="#FF142EBD" Width="627" Background="#FF9AD951"/>
+        <Button Content="" HorizontalAlignment="Left" Margin="687,3,0,0" VerticalAlignment="Top" Height="18" Width="30" BorderBrush="#FF506539" Click="Свернуть">
+            <Button.Background>
+                <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
+                    <GradientStop Color="#FFB3D789"/>
+                    <GradientStop Color="#FF6F9C3A" Offset="1"/>
+                </LinearGradientBrush>
+            </Button.Background>
+        </Button>
+
+    </Grid>
+</Window>

@@ -1,0 +1,107 @@
+﻿<Window x:Class="PH4_WPF.FrmSoft.Mail"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:PH4_WPF.FrmSoft"
+        xmlns:props="clr-namespace:PH4_WPF.Properties"
+        mc:Ignorable="d"
+          WindowStyle="None" 
+        
+        ResizeMode="NoResize"
+        Title="Mail" Height="491" Width="800" Closed="Закртыта_форма">
+
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="149*"/>
+            <ColumnDefinition Width="251*"/>
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="25*"/>
+            <RowDefinition Height="384*"/>
+            <RowDefinition Height="25*"/>
+        </Grid.RowDefinitions>
+        <Rectangle HorizontalAlignment="Left" Height="23" Stroke="#FF67AE92" VerticalAlignment="Center" Width="800" Fill="#FF67AE92" Grid.ColumnSpan="2" MouseDown="Перетаскивание"/>
+        <Rectangle HorizontalAlignment="Center" Height="25" Grid.Row="2" Stroke="#FFAFC9C0" VerticalAlignment="Center" Width="298" Fill="#FFAFC9C0"/>
+        <Rectangle Grid.Column="1" HorizontalAlignment="Center" Height="25" Grid.Row="2" Stroke="#FFE8E0E1" VerticalAlignment="Center" Width="502" Fill="#FFE8E0E1"/>
+        <ListView x:Name="LsMail" Background="#FFD0DED9" BorderBrush="#FF9FABBF" ItemsSource="{Binding ListViewItemsCollections}" Margin="0,25,0,26" Grid.RowSpan="3" PreviewMouseLeftButtonUp="Выбор"  >
+
+            <ListView.View>
+                <GridView AllowsColumnReorder="False">
+                    <GridViewColumn x:Name="GridViewColumnName" Header="Name"  Width="200">
+                        <GridViewColumn.CellTemplate>
+                            <DataTemplate>
+                                <StackPanel Orientation="Horizontal">
+                                    <Image x:Name="Image_GridViewColumnName" Width="32" Height="32" Source="{Binding GridViewColumnName_ImageSource}" />
+                                    <Label x:Name="Padl" Content="{Binding GridViewColumnName_LabelContent}" Foreground="#FF114825" />
+                                </StackPanel>
+                            </DataTemplate>
+                        </GridViewColumn.CellTemplate>
+                    </GridViewColumn>
+
+                </GridView>
+            </ListView.View>
+
+
+
+            <ListView.Resources>
+                <Style TargetType="GridViewColumnHeader">
+                    <Setter Property="Visibility" Value="Collapsed" />
+                </Style>
+
+
+                <ControlTemplate x:Key="SelectedTemplate" TargetType="ListViewItem">
+                    <Border Background="#388095" >
+                        <StackPanel Orientation="Horizontal">
+                            <Image x:Name="Image_GridViewColumnName" Width="32" Height="32" Source="{Binding GridViewColumnName_ImageSource}" />
+                            <Label x:Name="Padl" Content="{Binding GridViewColumnName_LabelContent}"  Foreground="#FF213428"/>
+                        </StackPanel>
+                    </Border>
+                </ControlTemplate>
+
+                <Style TargetType="ListViewItem">
+                    <Setter Property="Template">
+                        <Setter.Value>
+                            <ControlTemplate TargetType="ListViewItem">
+                                <Border Background="#FFD0DED9" Cursor="Hand"  >
+                                    <StackPanel Orientation="Horizontal">
+                                        <Image x:Name="Image_GridViewColumnName" Width="32" Height="32" Source="{Binding GridViewColumnName_ImageSource}" />
+                                        <Label x:Name="Padl" Content="{Binding GridViewColumnName_LabelContent}"  Foreground="#FF114825"/>
+                                    </StackPanel>
+                                </Border>
+                            </ControlTemplate>
+                        </Setter.Value>
+                    </Setter>
+                    <Style.Triggers>
+                        <MultiTrigger>
+                            <MultiTrigger.Conditions>
+                                <Condition Property="IsSelected" Value="true" />
+                            </MultiTrigger.Conditions>
+                            <Setter Property="Template" Value="{StaticResource SelectedTemplate}" />
+                        </MultiTrigger>
+                    </Style.Triggers>
+                </Style>
+            </ListView.Resources>
+        </ListView>
+
+        <TextBlock x:Name="MailText"  Grid.Column="1" HorizontalAlignment="Center" Margin="0,27,0,0" VerticalAlignment="Top" Width="482" Height="400" Grid.RowSpan="2"/>
+        <Ellipse x:Name="RedButton" HorizontalAlignment="Left" Height="20" Margin="467,0,0,0" Stroke="#FF06256E" VerticalAlignment="Center" Width="20" Fill="#FF097134" MouseEnter="КурсорНадКраснымКружком" MouseLeave="КурсорСошелСкрасногоКружка" MouseDown="НажатКрасный" Grid.Column="1"/>
+        <Button Content="" Margin="268,0,4,0" Grid.Row="2" VerticalAlignment="Center" Height="22" Click="УдалениеКнопка">
+            <Button.Background>
+                <ImageBrush ImageSource="/Content/soft/mail/bin.png"/>
+            </Button.Background>
+        </Button>
+        <Label Content="MailServer" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="10,0,0,0" FontSize="14" FontWeight="Bold" Foreground="#FF0D5C44"/>
+        <Button Content="" Margin="467,4,9,0" Grid.Row="2" VerticalAlignment="Top" Height="22"  Grid.Column="1">
+            <Button.Background>
+                <ImageBrush ImageSource="/Content/soft/mail/back.png"/>
+            </Button.Background>
+        </Button>
+        <Button x:Name="OpenAtch" Visibility="Hidden"  Content="" Margin="430,0,46,0" Grid.Row="2" VerticalAlignment="Center" Height="22"  Grid.Column="1" Click="ОткрытьПрикрКомманду">
+            <Button.Background>
+                <ImageBrush ImageSource="/Content/soft/mail/rec.png"/>
+            </Button.Background>
+        </Button>
+
+    </Grid>
+</Window>

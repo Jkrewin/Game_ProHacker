@@ -1,0 +1,608 @@
+﻿<Project Sdk="Microsoft.NET.Sdk.WindowsDesktop">
+
+  <PropertyGroup>
+    <OutputType>WinExe</OutputType>
+    <TargetFramework>netcoreapp3.1</TargetFramework>
+    <UseWPF>true</UseWPF>
+    <UseWindowsForms>true</UseWindowsForms>
+    <AssemblyVersion>0.1.0.0</AssemblyVersion>
+    <FileVersion>0.1.0.0</FileVersion>
+    <Version>0.1</Version>
+  </PropertyGroup>
+
+  <ItemGroup>    
+    <None Remove="bpanel.png" />    
+    <None Remove="Content\chat_avators\A-Killer.gif" />    
+    <None Remove="Content\chat_avators\Alaub.gif" />    
+    <None Remove="Content\chat_avators\Babki.gif" />    
+    <None Remove="Content\chat_avators\Black_Bull.gif" />    
+    <None Remove="Content\chat_avators\Boris_928_GT.gif" />    
+    <None Remove="Content\chat_avators\BYKEE.gif" />    
+    <None Remove="Content\chat_avators\DDC.jpg" />    
+    <None Remove="Content\chat_avators\Dexter.gif" />    
+    <None Remove="Content\chat_avators\Dim635CSi.gif" />    
+    <None Remove="Content\chat_avators\Dimon099.gif" />    
+    <None Remove="Content\chat_avators\Dobriy.gif" />    
+    <None Remove="Content\chat_avators\Fiesta.gif" />    
+    <None Remove="Content\chat_avators\FIMKA.gif" />    
+    <None Remove="Content\chat_avators\Frank.gif" />    
+    <None Remove="Content\chat_avators\images.jpeg.jpg" />    
+    <None Remove="Content\chat_avators\images111.jpeg.jpg" />    
+    <None Remove="Content\chat_avators\job05.gif" />    
+    <None Remove="Content\chat_avators\Pajero.gif" />    
+    <None Remove="Content\CmdImg\console.png" />    
+    <None Remove="Content\Desktop\1696525559492.png" />    
+    <None Remove="Content\Desktop\ambiend.bmp" />    
+    <None Remove="Content\Desktop\bPanel\bpanel.png" />    
+    <None Remove="Content\Desktop\bPanel\colm.png" />    
+    <None Remove="Content\Desktop\bPanel\mail.png" />    
+    <None Remove="Content\Desktop\bPanel\news.png" />    
+    <None Remove="Content\Desktop\bPanel\profile.png" />    
+    <None Remove="Content\Desktop\bPanel\sel mail.png" />    
+    <None Remove="Content\Desktop\bPanel\sel news.png" />    
+    <None Remove="Content\Desktop\bPanel\speed.png" />    
+    <None Remove="Content\Desktop\bPanel\Speed1x.png" />    
+    <None Remove="Content\Desktop\bPanel\Speed2x.png" />    
+    <None Remove="Content\Desktop\bPanel\Speed4x.png" />    
+    <None Remove="Content\Desktop\bPanel\SpeedPause.png" />    
+    <None Remove="Content\Desktop\bPanel\spPanel.png" />    
+    <None Remove="Content\Desktop\bPanel\spPanel1X.png" />    
+    <None Remove="Content\Desktop\bPanel\spPanel1Xsel.png" />    
+    <None Remove="Content\Desktop\bPanel\spPanel2X.png" />    
+    <None Remove="Content\Desktop\bPanel\spPanel2Xsel.png" />    
+    <None Remove="Content\Desktop\bPanel\spPanel4X.png" />    
+    <None Remove="Content\Desktop\bPanel\spPanel4Xsel.png" />    
+    <None Remove="Content\Desktop\bPanel\spPanelii.png" />    
+    <None Remove="Content\Desktop\bPanel\spPaneliisel.png" />    
+    <None Remove="Content\Desktop\face\106-skull.gif" />    
+    <None Remove="Content\Desktop\face\10814.gif" />    
+    <None Remove="Content\Desktop\face\1123084.gif" />    
+    <None Remove="Content\Desktop\face\1268763.gif" />    
+    <None Remove="Content\Desktop\face\3535.gif" />    
+    <None Remove="Content\Desktop\face\5265.gif" />    
+    <None Remove="Content\Desktop\face\5266.gif" />    
+    <None Remove="Content\Desktop\face\5393.gif" />    
+    <None Remove="Content\Desktop\face\9842.gif" />    
+    <None Remove="Content\Desktop\face\MДеадмент.gif" />    
+    <None Remove="Content\Desktop\face\MИз темноты.gif" />    
+    <None Remove="Content\Desktop\face\MКак гари потер.gif" />    
+    <None Remove="Content\Desktop\face\MКвадрат.gif" />    
+    <None Remove="Content\Desktop\face\MКрашмен.gif" />    
+    <None Remove="Content\Desktop\face\MМолодой парень.gif" />    
+    <None Remove="Content\Desktop\face\MПсих.gif" />    
+    <None Remove="Content\Desktop\face\MС банданой.gif" />    
+    <None Remove="Content\Desktop\face\SЭто товой предок.gif" />    
+    <None Remove="Content\Desktop\face\WАзиатка.gif" />    
+    <None Remove="Content\Desktop\face\WДевушка.gif" />    
+    <None Remove="Content\Desktop\face\WОбычная девушка.gif" />    
+    <None Remove="Content\Desktop\face\WСтарое фото.gif" />    
+    <None Remove="Content\Desktop\Srv\BigData.png" />    
+    <None Remove="Content\Desktop\Srv\BigData_1.png" />    
+    <None Remove="Content\Desktop\Srv\BigData_2.png" />    
+    <None Remove="Content\Desktop\Srv\BigData_3.png" />    
+    <None Remove="Content\Desktop\Srv\BigData_4.png" />    
+    <None Remove="Content\Desktop\Srv\BigData_5.png" />    
+    <None Remove="Content\Desktop\Srv\BigSvr.png" />    
+    <None Remove="Content\Desktop\Srv\BigSvr_1.png" />    
+    <None Remove="Content\Desktop\Srv\BigSvr_2.png" />    
+    <None Remove="Content\Desktop\Srv\BigSvr_3.png" />    
+    <None Remove="Content\Desktop\Srv\BigSvr_4.png" />    
+    <None Remove="Content\Desktop\Srv\BigSvr_5.png" />    
+    <None Remove="Content\Desktop\Srv\Mainframe.png" />    
+    <None Remove="Content\Desktop\Srv\Mainframe_1.png" />    
+    <None Remove="Content\Desktop\Srv\Mainframe_2.png" />    
+    <None Remove="Content\Desktop\Srv\Mainframe_3.png" />    
+    <None Remove="Content\Desktop\Srv\Mainframe_4.png" />    
+    <None Remove="Content\Desktop\Srv\Mainframe_5.png" />    
+    <None Remove="Content\Desktop\Srv\Ones.png" />    
+    <None Remove="Content\Desktop\Srv\Ones_1.png" />    
+    <None Remove="Content\Desktop\Srv\Ones_2.png" />    
+    <None Remove="Content\Desktop\Srv\Ones_3.png" />    
+    <None Remove="Content\Desktop\Srv\Ones_4.png" />    
+    <None Remove="Content\Desktop\Srv\Ones_5.png" />    
+    <None Remove="Content\Desktop\Srv\ServerTI.png" />    
+    <None Remove="Content\Desktop\Srv\ServerTI_1.png" />    
+    <None Remove="Content\Desktop\Srv\ServerTI_2.png" />    
+    <None Remove="Content\Desktop\Srv\ServerTI_3.png" />    
+    <None Remove="Content\Desktop\Srv\ServerTI_4.png" />    
+    <None Remove="Content\Desktop\Srv\ServerTI_5.png" />    
+    <None Remove="Content\Desktop\Srv\Standart.png" />    
+    <None Remove="Content\Desktop\Srv\Standart_1.png" />    
+    <None Remove="Content\Desktop\Srv\Standart_2.png" />    
+    <None Remove="Content\Desktop\Srv\Standart_3.png" />    
+    <None Remove="Content\Desktop\Srv\Standart_4.png" />    
+    <None Remove="Content\Desktop\Srv\Standart_5.png" />    
+    <None Remove="Content\Desktop\Srv\Standelone.png" />    
+    <None Remove="Content\Desktop\Srv\Standelone_1.png" />    
+    <None Remove="Content\Desktop\Srv\Standelone_2.png" />    
+    <None Remove="Content\Desktop\Srv\Standelone_3.png" />    
+    <None Remove="Content\Desktop\Srv\Standelone_4.png" />    
+    <None Remove="Content\Desktop\Srv\Standelone_5.png" />    
+    <None Remove="Content\Desktop\Srv\StandSvr.png" />    
+    <None Remove="Content\Desktop\Srv\StandSvr_1.png" />    
+    <None Remove="Content\Desktop\Srv\StandSvr_2.png" />    
+    <None Remove="Content\Desktop\Srv\StandSvr_3.png" />    
+    <None Remove="Content\Desktop\Srv\StandSvr_4.png" />    
+    <None Remove="Content\Desktop\Srv\StandSvr_5.png" />    
+    <None Remove="Content\Desktop\Wallpapers.png" />    
+    <None Remove="Content\Firewall.txt" />    
+    <None Remove="Content\msg\download.png" />    
+    <None Remove="Content\msg\error.png" />    
+    <None Remove="Content\msg\inform.png" />    
+    <None Remove="Content\msg\qest.png" />    
+    <None Remove="Content\News.txt" />    
+    <None Remove="Content\OS.txt" />    
+    <None Remove="Content\rtf\exploit.rtf" />    
+    <None Remove="Content\rtf\shell.rtf" />    
+    <None Remove="Content\site\milw0rm.jpg" />    
+    <None Remove="Content\soft\browser\browIcon.png" />    
+    <None Remove="Content\soft\FileManager\conf.png" />    
+    <None Remove="Content\soft\FileManager\cpp.png" />    
+    <None Remove="Content\soft\FileManager\dll.png" />    
+    <None Remove="Content\soft\FileManager\etc.png" />    
+    <None Remove="Content\soft\FileManager\exe.png" />    
+    <None Remove="Content\soft\FileManager\filesystems.png" />    
+    <None Remove="Content\soft\FileManager\ini.png" />    
+    <None Remove="Content\soft\FileManager\log.png" />    
+    <None Remove="Content\soft\FileManager\os.png" />    
+    <None Remove="Content\soft\FileManager\pl.png" />    
+    <None Remove="Content\soft\FileManager\sys.png" />    
+    <None Remove="Content\soft\FileManager\txt.png" />    
+    <None Remove="Content\soft\FileManager\uprow.png" />    
+    <None Remove="Content\soft\IQ.png" />    
+    <None Remove="Content\soft\IQNewMess.png" />    
+    <None Remove="Content\soft\mail\back.png" />    
+    <None Remove="Content\soft\mail\bin.png" />    
+    <None Remove="Content\soft\mail\Mail.png" />    
+    <None Remove="Content\soft\mail\mailnew.png" />    
+    <None Remove="Content\soft\mail\rec.png" />    
+    <None Remove="Content\soft\scaner_server\Alert.png" />    
+    <None Remove="Content\soft\scaner_server\ButtonSearch.png" />    
+    <None Remove="Content\soft\scaner_server\close.png" />    
+    <None Remove="Content\soft\scaner_server\PortActive.png" />    
+    <None Remove="Content\soft\scaner_server\PortDeactive.png" />    
+    <None Remove="Content\soft\scaner_server\rolle.png" />    
+    <None Remove="Content\soft\scaner_server\ScanerG1.png" />    
+    <None Remove="Content\soft\scaner_server\win.png" />    
+    <None Remove="Content\sound\buy.mp3" />    
+    <None Remove="Content\sound\gameover.mp3" />    
+    <None Remove="Content\sound\iqWav.mp3" />    
+    <None Remove="Content\sound\newMail.mp3" />    
+    <None Remove="Content\UI\logo0000.gif" />    
+    <None Remove="Content\XmlInfoCommand.xml" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="bin\Debug\netcoreapp3.1\Content\pwd.txt" />
+    <None Include="bin\Debug\netcoreapp3.1\Content\login.txt" />
+    <Content Include="Content\chat_avators\A-Killer.gif">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Content\chat_avators\Alaub.gif">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Content\chat_avators\Babki.gif">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Content\chat_avators\Black_Bull.gif">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Content\chat_avators\Boris_928_GT.gif">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Content\chat_avators\BYKEE.gif">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Content\chat_avators\DDC.jpg">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Content\chat_avators\Dexter.gif">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Content\chat_avators\Dim635CSi.gif">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Content\chat_avators\Dimon099.gif">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Content\chat_avators\Dobriy.gif">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Content\chat_avators\Fiesta.gif">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Content\chat_avators\FIMKA.gif">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Content\chat_avators\Frank.gif">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Content\chat_avators\images.jpeg.jpg">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Content\chat_avators\images111.jpeg.jpg">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Content\chat_avators\job05.gif">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Content\chat_avators\Pajero.gif">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Content\Desktop\1696525559492.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Content\Desktop\face\106-skull.gif">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Content\Desktop\face\10814.gif">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Content\Desktop\face\1123084.gif">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Content\Desktop\face\1268763.gif">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Content\Desktop\face\3535.gif">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Content\Desktop\face\5265.gif">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Content\Desktop\face\5266.gif">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Content\Desktop\face\5393.gif">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Content\Desktop\face\9842.gif">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Content\Desktop\face\MДеадмент.gif">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Content\Desktop\face\MИз темноты.gif">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Content\Desktop\face\MКак гари потер.gif">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Content\Desktop\face\MКвадрат.gif">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Content\Desktop\face\MКрашмен.gif">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Content\Desktop\face\MМолодой парень.gif">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Content\Desktop\face\MПсих.gif">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Content\Desktop\face\MС банданой.gif">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Content\Desktop\face\SЭто товой предок.gif">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Content\Desktop\face\WАзиатка.gif">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Content\Desktop\face\WДевушка.gif">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Content\Desktop\face\WОбычная девушка.gif">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Content\Desktop\face\WСтарое фото.gif">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Content\Desktop\Srv\BigData.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Content\Desktop\Srv\BigData_1.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Content\Desktop\Srv\BigData_2.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Content\Desktop\Srv\BigData_3.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Content\Desktop\Srv\BigData_4.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Content\Desktop\Srv\BigData_5.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Content\Desktop\Srv\BigSvr.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Content\Desktop\Srv\BigSvr_1.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Content\Desktop\Srv\BigSvr_2.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Content\Desktop\Srv\BigSvr_3.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Content\Desktop\Srv\BigSvr_4.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Content\Desktop\Srv\BigSvr_5.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Content\Desktop\Srv\Mainframe.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Content\Desktop\Srv\Mainframe_1.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Content\Desktop\Srv\Mainframe_2.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Content\Desktop\Srv\Mainframe_3.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Content\Desktop\Srv\Mainframe_4.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Content\Desktop\Srv\Mainframe_5.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Content\Desktop\Srv\Ones.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Content\Desktop\Srv\Ones_1.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Content\Desktop\Srv\Ones_2.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Content\Desktop\Srv\Ones_3.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Content\Desktop\Srv\Ones_4.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Content\Desktop\Srv\Ones_5.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Content\Desktop\Srv\ServerTI.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Content\Desktop\Srv\ServerTI_1.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Content\Desktop\Srv\ServerTI_2.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Content\Desktop\Srv\ServerTI_3.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Content\Desktop\Srv\ServerTI_4.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Content\Desktop\Srv\ServerTI_5.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Content\Desktop\Srv\Standart.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Content\Desktop\Srv\Standart_1.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Content\Desktop\Srv\Standart_2.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Content\Desktop\Srv\Standart_3.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Content\Desktop\Srv\Standart_4.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Content\Desktop\Srv\Standart_5.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Content\Desktop\Srv\Standelone.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Content\Desktop\Srv\Standelone_1.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Content\Desktop\Srv\Standelone_2.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Content\Desktop\Srv\Standelone_3.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Content\Desktop\Srv\Standelone_4.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Content\Desktop\Srv\Standelone_5.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Content\Desktop\Srv\StandSvr.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Content\Desktop\Srv\StandSvr_1.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Content\Desktop\Srv\StandSvr_2.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Content\Desktop\Srv\StandSvr_3.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Content\Desktop\Srv\StandSvr_4.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Content\Desktop\Srv\StandSvr_5.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Content\Firewall.txt">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Content\msg\download.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Content\msg\error.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Content\msg\inform.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Content\msg\qest.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Content\News.txt">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Content\OS.txt">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Content\rtf\exploit.rtf">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Content\rtf\shell.rtf">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Content\site\milw0rm.jpg">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Content\soft\FileManager\conf.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Content\soft\FileManager\cpp.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Content\soft\FileManager\dll.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Content\soft\FileManager\etc.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Content\soft\FileManager\exe.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Content\soft\FileManager\ini.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Content\soft\FileManager\log.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Content\soft\FileManager\os.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Content\soft\FileManager\pl.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Content\soft\FileManager\sys.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Content\soft\FileManager\txt.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Content\soft\scaner_server\Alert.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Content\soft\scaner_server\PortActive.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Content\soft\scaner_server\PortDeactive.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Content\sound\buy.mp3">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Content\sound\gameover.mp3">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Content\sound\iqWav.mp3">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Content\sound\newMail.mp3">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Content\XmlInfoCommand.xml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+  </ItemGroup>
+
+  <ItemGroup>
+    <Resource Include="Content\CmdImg\console.png" />
+    <Resource Include="Content\Desktop\ambiend.bmp" />
+    <Resource Include="Content\Desktop\bPanel\bpanel.png" />
+    <Resource Include="Content\Desktop\bPanel\colm.png" />
+    <Content Include="Content\Desktop\bPanel\mail.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Content\Desktop\bPanel\news.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Resource Include="Content\Desktop\bPanel\profile.png" />
+    <Content Include="Content\Desktop\bPanel\sel mail.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Content\Desktop\bPanel\sel news.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Resource Include="Content\Desktop\bPanel\speed.png" />
+    <Resource Include="Content\Desktop\bPanel\Speed1x.png" />
+    <Resource Include="Content\Desktop\bPanel\Speed2x.png" />
+    <Resource Include="Content\Desktop\bPanel\Speed4x.png" />
+    <Resource Include="Content\Desktop\bPanel\SpeedPause.png" />
+    <Resource Include="Content\Desktop\bPanel\spPanel.png" />
+    <Resource Include="Content\Desktop\bPanel\spPanel1X.png" />
+    <Resource Include="Content\Desktop\bPanel\spPanel1Xsel.png" />
+    <Resource Include="Content\Desktop\bPanel\spPanel2X.png" />
+    <Resource Include="Content\Desktop\bPanel\spPanel2Xsel.png" />
+    <Resource Include="Content\Desktop\bPanel\spPanel4X.png" />
+    <Resource Include="Content\Desktop\bPanel\spPanel4Xsel.png" />
+    <Resource Include="Content\Desktop\bPanel\spPanelii.png" />
+    <Resource Include="Content\Desktop\bPanel\spPaneliisel.png" />
+    <Resource Include="Content\Desktop\Wallpapers.png" />
+    <Resource Include="Content\soft\browser\browIcon.png" />
+    <Resource Include="Content\soft\FileManager\filesystems.png" />
+    <Resource Include="Content\soft\FileManager\uprow.png" />
+    <Resource Include="Content\soft\IQ.png" />
+    <Resource Include="Content\soft\IQNewMess.png" />
+    <Resource Include="Content\soft\mail\back.png" />
+    <Resource Include="Content\soft\mail\bin.png" />
+    <Content Include="Content\soft\mail\Mail.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Content\soft\mail\mailnew.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Resource Include="Content\soft\mail\rec.png" />
+    <Resource Include="Content\soft\scaner_server\ButtonSearch.png" />
+    <Resource Include="Content\soft\scaner_server\close.png" />
+    <Resource Include="Content\soft\scaner_server\rolle.png" />
+    <Resource Include="Content\soft\scaner_server\ScanerG1.png" />
+    <Resource Include="Content\soft\scaner_server\win.png" />
+    <Resource Include="Content\UI\logo0000.gif" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Compile Update="Properties\Resources.Designer.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Resources.resx</DependentUpon>
+    </Compile>
+  </ItemGroup>
+
+  <ItemGroup>
+    <EmbeddedResource Update="Properties\Resources.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+  </ItemGroup>
+
+  <ItemGroup>
+    <Service Include="{508349b6-6b84-4df5-91f0-309beebad82d}" />
+  </ItemGroup>
+
+</Project>

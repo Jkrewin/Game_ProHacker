@@ -1,0 +1,29 @@
+﻿<Window x:Class="PH4_WPF.FrmSoft.FrmError"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:PH4_WPF.FrmSoft"
+        mc:Ignorable="d"
+         WindowStyle="None"        
+        ResizeMode="NoResize"
+        Title="FrmError" Height="208" Width="660" Background="#FF748499" WindowStartupLocation="CenterScreen">
+    <Grid>
+        <Image x:Name="Img" HorizontalAlignment="Left" Height="82" Margin="10,36,0,0" VerticalAlignment="Top" Width="80" OpacityMask="#FFAE1212"/>
+        <TextBlock x:Name="MessText" TextWrapping="WrapWithOverflow" Margin="115,26,0,0" FontSize="14" HorizontalAlignment="Left" VerticalAlignment="Top" Height="131" Foreground="#FF132379" Text="sfsdfsdf sdfsdfsdfsdf sdfsdfsdf sdfsdf  sdfsdf sdf sdf sdf sdf ssdf sfs s sdfs sdfsdf sdfdf sdfs df" Width="523">
+        </TextBlock>
+        <Rectangle Height="21" Margin="-152,0,-59,0" Stroke="#FF025AB9" VerticalAlignment="Top" Fill="#FF025AB9" MouseDown="Перетаскивание"/>
+        <Rectangle HorizontalAlignment="Center" Height="187" Margin="0,21,0,0" Stroke="#FF3F4D60" VerticalAlignment="Top" Width="660"/>
+        <Label x:Name="TitleMsg" Content="Label" HorizontalAlignment="Left" Margin="45,-2,0,0" VerticalAlignment="Top" Foreground="White" FontWeight="Bold"/>
+        <Button x:Name="OK_Button" Content="OK" HorizontalAlignment="Left" Margin="185,174,0,0" VerticalAlignment="Top" Width="119" FontSize="14" Background="#FF627288" Foreground="#FF322D2D" FontWeight="Bold" BorderBrush="#FF025AB9" Click="КнопкаОК"/>
+        <ProgressBar x:Name="SetupBar" HorizontalAlignment="Left" Height="18" Margin="196,1,0,0" VerticalAlignment="Top" Width="442" Background="#FF025AB9" BorderBrush="#FF468FD9" Foreground="#FF1FF3FF" SmallChange="1" Maximum="20"/>
+        <Button x:Name="RunButton" Content="ДА" HorizontalAlignment="Left" Margin="351,174,0,0" VerticalAlignment="Top" Width="119" FontSize="14" Background="#FF627288" Foreground="#FF322D2D" FontWeight="Bold" BorderBrush="#FF025AB9" Click="КнопкаRun" Visibility="Hidden"/>
+
+
+
+
+    </Grid>
+    <Window.Effect >
+        <DropShadowEffect BlurRadius="10" Direction="-90" RenderingBias="Performance" ShadowDepth="2" Opacity="0.8"/>
+    </Window.Effect>
+</Window>

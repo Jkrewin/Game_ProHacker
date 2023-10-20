@@ -1,0 +1,89 @@
+<?xml version="1.0"?>
+<ArrayOfXmlInfoCommand xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+	
+    <XmlInfoCommand NameCommand="ls">
+    <Comment>
+      <string>-la;[-la подробный отчет]</string>      
+    </Comment>
+    <Info>Выводит на экран  содержимое каталогов. Работает в UNIX</Info>
+	<Menu>2</Menu>
+  </XmlInfoCommand>	
+	<XmlInfoCommand NameCommand="ping">
+		<Comment>
+			<string>;[название сервера]</string>
+			<string>-p;{-p Число пакетов (по умолчанию 5), пример: -p1}</string>
+		</Comment>
+		<Info>Определяет работу сервера или узнать IP адрес сервера</Info>
+		<Menu>1</Menu>
+	</XmlInfoCommand>	
+	<XmlInfoCommand NameCommand="pwd">
+		<Comment>			
+		</Comment>
+		<Info>present working directory — текущий рабочий каталог. Работает под UNIX OS</Info>
+		<Menu>2</Menu>
+	</XmlInfoCommand>
+	<XmlInfoCommand NameCommand="exist">
+		<Comment>
+			<string>;[путь к файлу]</string>			
+		</Comment>
+		<Info>Проверка на существование файла</Info>
+		<Menu>2</Menu>
+	</XmlInfoCommand>
+	<XmlInfoCommand NameCommand="mail">
+		<Comment>
+			<string>open;open - открыть программу</string>
+			<string>ls;ls - список сообщений</string>
+			<string>list;list - список сообщений</string>
+			<string>read;read [id] - прочитать сообщение требуеться указать id письма</string>
+		</Comment>
+		<Info>Прочитать почту через консоль</Info>
+		<Menu>3</Menu>
+	</XmlInfoCommand>
+	<XmlInfoCommand NameCommand="cd">
+		<Comment>
+			<string>;[путь или папка для перехода]</string>			
+		</Comment>
+		<Info>Команда командной строки для изменения рабочего каталога. Для указания каталога ниже используете ../ &#10;В написании пути, вместо пробела используете %20</Info>
+		<Menu>2</Menu>
+	</XmlInfoCommand>
+	<XmlInfoCommand NameCommand="connect">
+		<Comment>
+			<string>-ip;(-ip[IP сервера]</string>
+			<string>-adress;или -adress навание </string>
+			<string>-off;или -off отключиться)</string>
+			<string>-shell;(-shell[путь к шеллу]</string>
+			<string>-auth;или -auth по логину и паролю</string>
+			<string>-regexpl;или -regexpl по правам)</string>
+		</Comment>
+		<Info>Подключаеться к серверу, чтобы управлять им. Не забывайте отключаться и чистить логи.</Info>
+		<Menu>1</Menu>
+	</XmlInfoCommand>
+	<XmlInfoCommand NameCommand="wget">
+		<Comment>
+			<string>-u;-u[Укажите адрес доступного ресурса чтобы скачать файл в текущую папку]</string>			
+		</Comment>
+		<Info>Скачивает файлы из сети в текущую папку. Для Unix систем. &#10; Доступные ресурсы вашого сервера можно проверить командой openurl</Info>
+		<Menu>1</Menu>
+	</XmlInfoCommand>
+	<XmlInfoCommand NameCommand="download">
+		<Comment>
+			<string>;[Укажите адрес доступного ресурса чтобы скачать файл в текущую папку]</string>
+		</Comment>
+		<Info>Скачивает файлы из сети в текущую папку. Для Win систем. &#10; Доступные ресурсы вашого сервера можно проверить командой openurl</Info>
+		<Menu>1</Menu>
+	</XmlInfoCommand>
+	<XmlInfoCommand NameCommand="openurl">
+		<Comment>
+		</Comment>
+		<Info>Списки ресурсов открытых на вашим сервере</Info>
+		<Menu>3</Menu>
+	</XmlInfoCommand>
+	<XmlInfoCommand NameCommand="pl">
+		<Comment>
+			<string>;[путь к скрипту Perl]</string>
+		</Comment>
+		<Info>Запускает Perl скрипт, можно указать как файл, так и путь к скрипту. Пробел следует заменить на %20</Info>
+		<Menu>3</Menu>
+	</XmlInfoCommand>
+	
+</ArrayOfXmlInfoCommand>

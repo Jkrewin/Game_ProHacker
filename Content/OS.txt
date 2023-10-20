@@ -1,0 +1,6 @@
+WIN system Low=Win 98 SP,Win XP SP3,Win XP SP2,Win XP 64-bits,WinVista SP1,Win Vista,Win ME,Win 98,Win 95,Win XP
+WIN system High=Win 2003 SP,Win 2003,Win 2000,Windows 2008,Win XP corporate,Win NT SP6,Win NT SP5,Win NT
+BSD system Low=FreeBSD,FreeBSD 5.4,NetBSD,OpenBSD 3.8,OpenBSD 2.0,Big Server
+BSD system High=Turbolinux,AltLinux,Ubuntu,Mandriva one,Linux,Inferno,Iri,Solaris 9,Solaris 10,Mac OS,Opensuse,Freespire,Red hat
+# low для систем ниже популярности 40
+# этот файл содержит список досупных названий для ОС и для шелла

@@ -1,0 +1,50 @@
+﻿<Window x:Class="PH4_WPF.FrmSoft.Cmd"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:PH4_WPF.FrmSoft"
+        mc:Ignorable="d"
+         WindowStyle="None"
+        WindowStartupLocation="CenterScreen"
+        AllowsTransparency="True"
+        Background="Transparent"
+        Title="Cmd" Height="700" Width="800" Loaded="Загруженно" KeyDown="НажатиеКлав" Closed="ЗакрытаФорма">
+    <Window.Clip>
+        <RectangleGeometry Rect="0,0,800,700" RadiusX="10" RadiusY="10"/>
+    </Window.Clip>
+    <Grid x:Name="MyGrid" Background="#FF222735">
+        <TextBlock x:Name="txt_Txt"/>
+        <Rectangle x:Name="PanelUp" Height="30" Margin="-5,0,-5,0" Stroke="Black" VerticalAlignment="Top" Fill="#FF2E3444" MouseDown="Перетаскивание"/>
+        <Grid HorizontalAlignment="Center" Margin="0,634,0,0" Width="800" Background="#FF7A2A2A">
+            <Label x:Name="InfoArgument" Content="&lt;нет&gt;" HorizontalAlignment="Center" VerticalAlignment="Top" Height="46" Width="780" Foreground="#FFBABABA" FontWeight="Normal" Margin="0,20,0,0"/>
+            <TextBlock x:Name="CommandInfo" HorizontalAlignment="Center" VerticalAlignment="Top" Height="24" Width="780" Foreground="#FFBABABA" FontWeight="Normal"/>
+        </Grid>
+        <Grid x:Name="CmdPanel" Height="583" Margin="5,51,5,0" VerticalAlignment="Top" Background="#FF222735" MouseMove="КурсорНадКонсольюТекст">
+            <TextBlock x:Name="CmdText" Foreground="#FF34C354" FontSize="13" Text="1" FontFamily="Consolas" ></TextBlock>
+            <TextBlock x:Name="EnteringText" Foreground="#FF8AF0A1" FontSize="13" Text="" FontFamily="Consolas" ></TextBlock>
+            <TextBlock x:Name="CursorText" Foreground="#FF8AF0A1" FontSize="13" Text="_" FontFamily="Consolas" FontWeight="Bold" ></TextBlock>
+            <StackPanel x:Name="MenuCommand" HorizontalAlignment="Left" Height="182" Margin="-5,1,0,0" VerticalAlignment="Top" Width="160" Background="#FF363D23" MouseLeave="КурсорВышелИзМеню">
+                <Button x:Name="BB1" Content="Button" Height="20" Background="#FF3F4B39" Foreground="#FF49CE67" BorderBrush="#FF1D1212" Click="BBAtc"/>
+                <Button x:Name="BB2" Content="Button" Height="20" Background="#FF3F4B39" Foreground="#FF49CE67" BorderBrush="#FF1D1212" Click="BBAtc"/>
+                <Button x:Name="BB3" Content="Button" Height="20" Background="#FF3F4B39" Foreground="#FF49CE67" BorderBrush="#FF1D1212" Click="BBAtc"/>
+                <Button x:Name="BB4" Content="Button" Height="20" Background="#FF3F4B39" Foreground="#FF49CE67" BorderBrush="#FF1D1212" Click="BBAtc"/>
+                <Button x:Name="BB5" Content="Button" Height="20" Background="#FF3F4B39" Foreground="#FF49CE67" BorderBrush="#FF1D1212" Click="BBAtc"/>
+                <Button x:Name="BB6" Content="Button" Height="20" Background="#FF3F4B39" Foreground="#FF49CE67" BorderBrush="#FF1D1212" Click="BBAtc"/>
+                <Button x:Name="BB7" Content="Button" Height="20" Background="#FF3F4B39" Foreground="#FF49CE67" BorderBrush="#FF1D1212" Click="BBAtc"/>
+                <Button x:Name="BB8" Content="Button" Height="20" Background="#FF3F4B39" Foreground="#FF49CE67" BorderBrush="#FF1D1212" Click="BBAtc"/>
+                <Button x:Name="BB9" Content="Button" Height="20" Background="#FF3F4B39" Foreground="#FF49CE67" BorderBrush="#FF1D1212" Click="BBAtc"/>
+            </StackPanel>
+        </Grid >
+        <DockPanel HorizontalAlignment="Center" Height="21" LastChildFill="False" Margin="0,30,0,0" VerticalAlignment="Top" Width="800" Background="#FF382121">
+            <Button Content="Сетивые комманды F1" Width="161" Background="#FF495726" BorderBrush="Black" Foreground="#FF479A1A" FontWeight="Bold" Padding="1,0,1,1" Grid.IsSharedSizeScope="True" Click="Button_Click"/>
+            <Button Content="Системные комманды F2" Background="#FF495726" BorderBrush="Black" Foreground="#FF479A1A" FontWeight="Bold" Padding="1,0,1,1" Grid.IsSharedSizeScope="True" Width="161 " Click="СистемКлик"/>
+            <Button Content="Общие комманды F3" Background="#FF495726" BorderBrush="Black" Foreground="#FF479A1A" FontWeight="Bold" Padding="1,0,1,1" Grid.IsSharedSizeScope="True" Click="ОбщиеКлик" Width="161"/>
+        </DockPanel>
+        <Ellipse x:Name="RedButton" HorizontalAlignment="Left" Height="20" Margin="765,4,0,0" Stroke="#FF650909" VerticalAlignment="Top" Width="20" Fill="#FFD31F11" MouseEnter="КурсорНадКраснымКружком" MouseLeave="КурсорСошелСкрасногоКружка" MouseDown="НажатКрасный"/>
+        <Ellipse x:Name="BlueButton" HorizontalAlignment="Left" Height="20" Margin="737,4,0,0" Stroke="#FF092165" VerticalAlignment="Top" Width="20" Fill="#FF118AD3" MouseEnter="КурсорНадСиним" MouseLeave="КурсорУшелСинего" MouseDown="НажатСиний"/>
+        <Label x:Name="TimerAdminLog" Content="---" HorizontalAlignment="Left" Margin="663,6,0,0" VerticalAlignment="Top" Foreground="#FFDFDFDF" Width="50" FontFamily="OCR A Std" FontWeight="Bold" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" Padding="5,0,5,5" FontSize="16" ToolTip="Вероятное время вашего обнаружения, когда вы подключены к серверу"/>
+        <Label x:Name="TimerAdminStr" Content="" HorizontalAlignment="Left" Margin="616,6,0,0" VerticalAlignment="Top" Foreground="#FFDFDFDF" Width="47" FontFamily="OCR A Std" FontWeight="Bold" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" Padding="5,0,5,5" FontSize="16" ToolTip=""/>
+
+    </Grid>
+</Window>
