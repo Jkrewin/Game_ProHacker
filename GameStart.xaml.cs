@@ -24,8 +24,8 @@ namespace PH4_WPF
         int MyIndex = 0;
         string[] Ava;
         int My_char = 0;
-        char[] All_char = new[] {'%','^','0','+','@','~','3' };
-        string[] TextHack_Text = new string  [55];
+        readonly char[] All_char = new[] {'%','^','0','+','@','~','3' };
+        readonly string[] TextHack_Text = new string  [55];
         int X_inf=0;
         Bitmap grayScaleImage;
         private readonly System.Windows.Threading.DispatcherTimer AnimationTimer = new System.Windows.Threading.DispatcherTimer();
@@ -41,6 +41,9 @@ namespace PH4_WPF
             AnimationTimer.Start();
 
             StartPanel.Visibility = Visibility.Hidden;
+
+            var dir = System.AppDomain.CurrentDomain.BaseDirectory + "Save";
+            if (System.IO.Directory.Exists(dir) == false) System.IO.Directory.CreateDirectory(dir);
 
 
         }
@@ -78,7 +81,7 @@ namespace PH4_WPF
                 Color pixelColor = grayScaleImage.GetPixel(X_inf, y);
                 int grayScaleValue = (pixelColor.R + pixelColor.G + pixelColor.B) / 3;
 
-                char character = ' ';
+                char character;
                 if (grayScaleValue > 200)
                     character = '.';
                 else if (grayScaleValue > 150)
@@ -169,10 +172,12 @@ namespace PH4_WPF
         private void НачатьИгру(object sender, RoutedEventArgs e)
         {
             FileInfo f = new FileInfo(Ava [MyIndex]);
-            GamerInfoClass gamer = new GamerInfoClass();
-            gamer.Ava = @"face\" + f.Name;
-            gamer.Age = short.Parse ( AgeGamer.Text);
-            gamer.GameName = Nick.Text;
+            GamerInfoClass gamer = new GamerInfoClass
+            {
+                Ava = @"face\" + f.Name,
+                Age = short.Parse(AgeGamer.Text),
+                GameName = Nick.Text
+            };
 
             if (RB1.IsChecked == true) gamer.Gender = 1;
             else if (RB2.IsChecked == true) gamer.Gender = 0;

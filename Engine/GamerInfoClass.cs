@@ -54,7 +54,7 @@ namespace PH4_WPF.Engine
         /// <summary>
         /// Очки навыка
         /// </summary>
-        public byte PointUp = 0;
+        public byte ExtraPoint = 0;
         /// <summary>
         /// кодер завезды
         /// </summary>
@@ -87,9 +87,9 @@ namespace PH4_WPF.Engine
             exp += e;
             if (exp > expNext)
             {
-                expNext = expNext * 2;
+                expNext *= 2;
                 level++;
-                PointUp++;
+                ExtraPoint++;
                 App.GameGlobal.LogAdd("!Новый левел lvl:" + level );
             }
             // Обновить пункты если окно открыто со статусом левела 

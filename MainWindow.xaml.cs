@@ -64,11 +64,12 @@ namespace PH4_WPF
         private readonly BitmapImage[,] ImageArr = new BitmapImage[8, 6];        
         private readonly System.Windows.Threading.DispatcherTimer GameTimer =new System.Windows.Threading.DispatcherTimer();
         private readonly System.Windows.Threading.DispatcherTimer AnimationTimer = new System.Windows.Threading.DispatcherTimer();
+        private readonly System.Windows.Threading.DispatcherTimer AnimationText = new System.Windows.Threading.DispatcherTimer();
         private sbyte AnmIndex = 0;
         private float speedCanvas = 1;
 
-        private List<string> LogGame = new List<string>();
-
+        private readonly List<string> LogGame = new List<string>();
+        private readonly List<string> TextAnimation = new List<string> ();
        
 
         //Данные из файлов
@@ -105,7 +106,7 @@ namespace PH4_WPF
         }
 
 
-        private void test(object sender, RoutedEventArgs e)=> System.Windows.Application.Current.Shutdown();
+      
 
         private void LoadValue() {
             try            {           
@@ -185,6 +186,7 @@ namespace PH4_WPF
 
         private void LoadConfig()
         {
+            if (System.IO.File.Exists(FileConfig) == false) return;
             string[] txt = System.IO.File.ReadAllLines(FileConfig, System.Text.Encoding.Default);
 
             foreach (var item in txt)
@@ -228,10 +230,34 @@ namespace PH4_WPF
             GameTimer.Interval = TimeSpan.FromMilliseconds(1000);
             GameTimer.Start();
 
+            //Настройка таймера игрового времени
+            AnimationText.Tick += new EventHandler(АнимацияТекста);
+            AnimationText.Interval = TimeSpan.FromMilliseconds(200);
+            AnimationText.Stop();
+
             //Маштабирование UI
-            ButtonOption.Margin = new Thickness(DownPanel.Margin.Left + ButtonOption.Height, 0, 0, 0);
+            ButtonOption.Margin = new Thickness(DownPanel.Margin.Left + ButtonOption.Height, 0, 0, 0);          
 
+        }
 
+        int possTextAnm = 0;
+        private void АнимацияТекста(object sender, EventArgs e)
+        {
+            if (possTextAnm == TextAnimation.Count)
+            {
+                possTextAnm = 0;
+                TextAnimation.Clear();
+                DeskCmd.Text = "";
+                DeskCmd.Visibility = Visibility.Hidden;
+                AnimationText.Interval = TimeSpan.FromMilliseconds(200);
+                AnimationText.Stop();
+            }
+            else
+            {
+                DeskCmd.Text += TextAnimation[possTextAnm] + "\n";
+                possTextAnm++;
+                if (possTextAnm == TextAnimation.Count) AnimationText.Interval = TimeSpan.FromMilliseconds(5000); // задержка чтобы текст сразу не пропал
+            }
         }
 
         private void ИгроваяЛогикаВремeни(object sender, EventArgs e) {
@@ -305,6 +331,7 @@ namespace PH4_WPF
         /// <param name="value">Значение для сохранения</param>
         public void SaveConfig(string key, object value)
         {
+            if (System.IO.Directory.Exists(System.AppDomain.CurrentDomain.BaseDirectory + "Save") == false) return;
             string[] txt = System.IO.File.ReadAllLines(FileConfig, System.Text.Encoding.Default);
 
             for (int i = 0; i < txt.Length; i++)
@@ -329,7 +356,7 @@ namespace PH4_WPF
 
             foreach (var item in Engine.FileServerClass.GetInfoFiles("/apps/", App.GameGlobal.MyServer))
             {
-                switch (Engine.FileServerClass.PatchToFileName (item.FileName.ToLower ()) )
+                switch (FileServerClass.PatchToFileName (item.FileName.ToLower ()) )
                 {
                     case "portscaner":
                         PortScanerIcon1.Visibility = Visibility.Visible;
@@ -339,6 +366,16 @@ namespace PH4_WPF
                 }
             }
 
+        }
+
+        /// <summary>
+        /// Высвечивает текст на консоли на экране
+        /// </summary>
+        /// <param name="ls"></param>
+        public void StartConsoleText (List <string> ls) {
+            DeskCmd.Visibility = Visibility.Visible;
+            TextAnimation.AddRange  ( ls);
+            AnimationText.Start();        
         }
 
         Server SelectedServer;
@@ -398,10 +435,10 @@ namespace PH4_WPF
             LoadConfig();
             string sFile = System.AppDomain.CurrentDomain.BaseDirectory + @"Save\1.sav";
             BinaryFormatter formatter = new BinaryFormatter();
-            using (FileStream fs = new FileStream(sFile, FileMode.OpenOrCreate))
-                formatter.Serialize(fs, App.GameGlobal);
+            using FileStream fs = new FileStream(sFile, FileMode.OpenOrCreate);
+            formatter.Serialize(fs, App.GameGlobal);
 
-            
+
         }
 
         public void LoadGame(object sender, RoutedEventArgs e)
@@ -439,8 +476,7 @@ namespace PH4_WPF
         private void OpenNews()
         {
             var bc = new BrushConverter();
-            ListNewsLog.Items.Clear();
-            var t = App.GameGlobal.News.News.Count;
+            ListNewsLog.Items.Clear();            
 
             for (int i = 0; i < App.GameGlobal.News.News.Count; i++)
             {
@@ -743,8 +779,7 @@ namespace PH4_WPF
         }
 
         private void ОткрытьQMess(object sender, RoutedEventArgs e)
-        {
-            var t = App.GameGlobal.GameChat;
+        {            
             if (App.GameGlobal.GameChat != null) {                
                 App.GameGlobal.GameChat.OpenWin();             
             }
@@ -854,6 +889,8 @@ namespace PH4_WPF
             msg.Activate();
             msg.Topmost = true;
         }
+
+        private void ВыходИзПроекта(object sender, RoutedEventArgs e) => System.Windows.Application.Current.Shutdown();
     }
 
     

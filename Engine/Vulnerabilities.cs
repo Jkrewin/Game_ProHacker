@@ -8,7 +8,7 @@ namespace PH4_WPF.Engine
     [Serializable]
     public class Vulnerabilities
     {
-        private int id;
+        private readonly int id;
         /// <summary>
         /// ID для быстрого поиска так как есть много совпадений по названию
         /// </summary>

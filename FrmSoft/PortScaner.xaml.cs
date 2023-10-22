@@ -17,10 +17,10 @@ namespace PH4_WPF.FrmSoft
 {    
     public partial class PortScaner : Window
     {
-        private DispatcherTimer DisTimer = new System.Windows.Threading.DispatcherTimer();
-        private BitmapImage Img1Port;
-        private BitmapImage Img2Port;
-        private BitmapImage ImgAlert;
+        private readonly DispatcherTimer DisTimer = new System.Windows.Threading.DispatcherTimer();
+        private readonly BitmapImage Img1Port;
+        private readonly BitmapImage Img2Port;
+        private readonly BitmapImage ImgAlert;
         private Image LastImage;
         private Label LastLabel;
         private ProgressBar LastProgressBar;
@@ -32,7 +32,7 @@ namespace PH4_WPF.FrmSoft
         public PortScaner()
         {
             InitializeComponent();
-            DisTimer.Tick += new EventHandler(dispatcherTimer_Tick);
+            DisTimer.Tick += new EventHandler(DispatcherTimer_Tick);
             DisTimer.Interval = TimeSpan.FromMilliseconds (250);
             
             
@@ -170,7 +170,7 @@ namespace PH4_WPF.FrmSoft
         }
 
         bool chImg;
-        private void dispatcherTimer_Tick(object sender, EventArgs e)
+        private void DispatcherTimer_Tick(object sender, EventArgs e)
         {
             if (LastProgressBar.Value >= LastProgressBar.Maximum)
             {
@@ -197,12 +197,8 @@ namespace PH4_WPF.FrmSoft
 
                     PossPort++;
                     CreateUnitPort();
-                }
-
-               
-
+                }     
             }
-
             chImg = !chImg;
             LastImage.Source = (chImg) ? Img1Port : Img2Port;
             LastProgressBar.Value++;

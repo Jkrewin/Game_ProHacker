@@ -135,7 +135,7 @@ namespace PH4_WPF.FrmSoft
 
             UpdateLev();
             InfoLabel.Text = "Выберете необходимый навык чтобы получить подробную информацию";
-            Label_point.Content = GamerInfo.PointUp;
+            Label_point.Content = GamerInfo.ExtraPoint;
             ButtonUPLvl.Visibility = Visibility.Hidden;
             
             AddStars(CoderStars, GamerInfo.CoderLvl);
@@ -212,7 +212,7 @@ namespace PH4_WPF.FrmSoft
             if (e.LeftButton == MouseButtonState.Pressed) { 
                 SelectTem((Label)sender, CorderInfo, App.GameGlobal.GamerInfo.CoderLvl); 
                 SelectK = 1;
-                if (GamerInfo.PointUp != 0) ButtonUPLvl.Visibility = Visibility.Visible;
+                if (GamerInfo.ExtraPoint != 0) ButtonUPLvl.Visibility = Visibility.Visible;
             }
         }
 
@@ -222,7 +222,7 @@ namespace PH4_WPF.FrmSoft
             {
                 SelectTem((Label)sender, DefecerInfo, App.GameGlobal.GamerInfo.DefecerLvl);
                 SelectK = 2;
-                if (GamerInfo.PointUp != 0) ButtonUPLvl.Visibility = Visibility.Visible;
+                if (GamerInfo.ExtraPoint != 0) ButtonUPLvl.Visibility = Visibility.Visible;
             }
         }
 
@@ -231,7 +231,7 @@ namespace PH4_WPF.FrmSoft
             if (e.LeftButton == MouseButtonState.Pressed) { 
                 SelectTem((Label)sender, VirInfo, App.GameGlobal.GamerInfo.VirLvl);
                 SelectK = 3;
-                if (GamerInfo.PointUp != 0) ButtonUPLvl.Visibility = Visibility.Visible;
+                if (GamerInfo.ExtraPoint != 0) ButtonUPLvl.Visibility = Visibility.Visible;
             }
         }
 
@@ -240,7 +240,7 @@ namespace PH4_WPF.FrmSoft
             if (e.LeftButton == MouseButtonState.Pressed) { 
                 SelectTem((Label)sender, CrackerInfo, App.GameGlobal.GamerInfo.CrackLvl);
                 SelectK = 4;
-                if (GamerInfo.PointUp != 0) ButtonUPLvl.Visibility = Visibility.Visible;
+                if (GamerInfo.ExtraPoint != 0) ButtonUPLvl.Visibility = Visibility.Visible;
             }
         }        
 
@@ -262,35 +262,35 @@ namespace PH4_WPF.FrmSoft
                     if (GamerInfo.CoderLvl != 10) 
                     {
                         GamerInfo.CoderLvl++;
-                        GamerInfo.PointUp--;
+                        GamerInfo.ExtraPoint--;
                     }
                     break;
                 case 2:
                     if (GamerInfo.DefecerLvl != 10)
                     {
                         GamerInfo.DefecerLvl++;
-                        GamerInfo.PointUp--;
+                        GamerInfo.ExtraPoint--;
                     }
                     break;
                 case 3:
                     if (GamerInfo.VirLvl != 10)
                     {
                         GamerInfo.VirLvl++;
-                        GamerInfo.PointUp--;
+                        GamerInfo.ExtraPoint--;
                     }
                     break;
                 case 4:
                     if (GamerInfo.CrackLvl != 10)
                     {
                         GamerInfo.CrackLvl++;
-                        GamerInfo.PointUp--;
+                        GamerInfo.ExtraPoint--;
                     }
                     break;
                 default:
                     break;
             }
-            Label_point.Content = GamerInfo.PointUp;
-            if (GamerInfo.PointUp == 0) ButtonUPLvl.Visibility = Visibility.Hidden;
+            Label_point.Content = GamerInfo.ExtraPoint;
+            if (GamerInfo.ExtraPoint == 0) ButtonUPLvl.Visibility = Visibility.Hidden;
         }
     }
 }

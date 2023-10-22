@@ -232,6 +232,16 @@ namespace PH4_WPF.Engine
         public int LogSaver = 0;
 
         /// <summary>
+        /// Закрывает дыры в безопасности 
+        /// </summary>
+        public void CheckAuditSecurity() {
+            Premision = PremissionServerEnum.none;
+            /*foreach (var port in Ports)
+            {
+               
+            }*/
+        }
+        /// <summary>
         /// создает логин и пароль или обновляет его 
         /// </summary>
         public void CreateLoginPass() {
@@ -328,14 +338,13 @@ namespace PH4_WPF.Engine
         /// <summary>
         /// Создание для файлов авто генерации
         /// </summary>        
-        public void CreateFiles(string patch, string nameFile, string comment, int size, Engine.FileServerClass.PremisionEnum rights, string perfix, bool systemFile = false, bool createDirAuto = true)
+        public void CreateFiles(string patch, string nameFile, string comment, int size, Engine.FileServerClass.PremisionEnum rights,  bool systemFile = false, bool createDirAuto = true)
         {
             CreateFiles(patch, nameFile, new FileServerClass.ParameterClass()
             {
                 TypeInformation = FileServerClass.ParameterClass.TypeParam.file,
                 TextCommand = comment
-            }
-            , size, rights, systemFile, createDirAuto);
+            }, size, rights, systemFile, createDirAuto);
         }
         /// <summary>
         /// Создает каталог на сервере
@@ -371,122 +380,153 @@ namespace PH4_WPF.Engine
         public void FileGenerator()
         {
             switch (OS)
-            {
+            {               
                 case TypeOSEnum.Unknown:
-                    CreateFiles("/MyFile/", "txt.txt", "Файлы пользователей", 1423, FileServerClass.PremisionEnum.AdminUserGuest, "", true);
-                    CreateFiles("/Core/", "core", "Системные файлы", 1423, FileServerClass.PremisionEnum.OnlyAdmin, "", true);
-                    break;
+                    CreateFiles("/MyFile/", "txt.txt", "Файлы пользователей", 1423, FileServerClass.PremisionEnum.AdminUserGuest,  true);
+                    CreateFiles("/Core/", "core", "Системные файлы", 1423, FileServerClass.PremisionEnum.OnlyAdmin,  true);
+                    break;  
                 case TypeOSEnum.WinSrv:
-                    CreateFiles("/Windows/", "log", "Системные файлы", 123, FileServerClass.PremisionEnum.OnlyAdmin, "", true);
-                    CreateFiles("/Windows/", "adb.exe", "Системные файлы", 1513, FileServerClass.PremisionEnum.OnlyAdmin, "", true);
-                    CreateFiles("/Windows/", "comsetup", "Системные файлы", 7834, FileServerClass.PremisionEnum.OnlyAdmin, "", true);
-                    CreateFiles("/Windows/", "DPINST", "Системные файлы", 468, FileServerClass.PremisionEnum.OnlyAdmin, "", true);
-                    CreateFiles("/Windows/", "gdrv.sys", "Системные файлы", 74343, FileServerClass.PremisionEnum.OnlyAdmin, "", true);
-                    CreateFiles("/Windows/", "explorer.exe", "Системные файлы", 7349, FileServerClass.PremisionEnum.OnlyAdmin, "", true);
-                    CreateFiles("/Windows/", "ntbtlog", "Системные файлы", 457, FileServerClass.PremisionEnum.OnlyAdmin, "", true);
-                    CreateFiles("/Windows/", "RtlExUpd.dll", "Системные файлы", 6976, FileServerClass.PremisionEnum.OnlyAdmin, "", true);
-                    CreateFiles("/Windows/", "splwow64", "Системные файлы", 42, FileServerClass.PremisionEnum.OnlyAdmin, "", true);
-                    CreateFiles("/Windows/", "system.ini", "Системные файлы", 45378, FileServerClass.PremisionEnum.OnlyAdmin, "", true);
-                    CreateFiles("/Windows/", "twain_32.dll", "Системные файлы", 4792, FileServerClass.PremisionEnum.OnlyAdmin, "", true);
-                    CreateFiles("/Windows/", "WMSysPr9.prx", "Системные файлы", 768, FileServerClass.PremisionEnum.OnlyAdmin, "", true);
-                    CreateFiles("/Windows/", "HelpPane.exe", "Системные файлы", 667, FileServerClass.PremisionEnum.OnlyAdmin, "", true);
-                    CreateFiles("/Windows/System32/", "CbsApi.dll", "Системные файлы", 57, FileServerClass.PremisionEnum.OnlyAdmin, "", true);
-                    CreateFiles("/Windows/Speech/", ".log", "Системные файлы", 452, FileServerClass.PremisionEnum.OnlyAdmin, "", true);
-                    CreateFiles("/Windows/Web/", "wiatwain.ds", "Системные файлы", 654, FileServerClass.PremisionEnum.OnlyAdmin, "", true);
-                    CreateFiles("/Windows/IME/", "amd64_installed.exe", "Системные файлы", 78, FileServerClass.PremisionEnum.OnlyAdmin, "", true);
-                    CreateFiles("/Windows/INF/", "amdi2c.ini", "Системные файлы", 452, FileServerClass.PremisionEnum.OnlyAdmin, "", true);
-                    CreateFiles("/Windows/L2Schemas/", "Dkk.dll", "Системные файлы", 54, FileServerClass.PremisionEnum.OnlyAdmin, "", true);
-                    Ports.ForEach(x => CreateFiles("/Program Files/", x.NameTitle, "Необходимые файлы для работы сервера", (x.Text.Length) * 58, FileServerClass.PremisionEnum.OnlyAdmin, "", true));
-                    CreateFiles("/User/", ".logs", "Файлы пользователей ", 356, FileServerClass.PremisionEnum.OnlyAdmin, "");
-                    CreateFiles("/User/Admin/", "configstore", "Файлы пользователей ", 6422, FileServerClass.PremisionEnum.OnlyAdmin, "", true);
-                    CreateFiles("/User/Admin/", "profiledata", "Файлы пользователей ", 2562, FileServerClass.PremisionEnum.OnlyAdmin, "", true);
-                    CreateFiles("/User/Admin/", "qttmlanguage.ini", "Файлы пользователей ", 24566, FileServerClass.PremisionEnum.OnlyAdmin, "", true);
-                    CreateFiles("/User/Admin/", "IntelME.ini", "Файлы пользователей ", 2543, FileServerClass.PremisionEnum.OnlyAdmin, "", true);
-                    CreateFiles("/User/Admin/", "lock.bit", "Файлы пользователей ", 234, FileServerClass.PremisionEnum.OnlyAdmin, "", true);
-                    CreateFiles("/User/User/", "profiledata", "Файлы пользователей ", 2455, FileServerClass.PremisionEnum.AdminAndUser, "", true);
-                    CreateFiles("/User/User/", "configstore", "Файлы пользователей ", 2542, FileServerClass.PremisionEnum.AdminAndUser, "", true);
-                    CreateFiles("/User/User/", "qttmlanguage.ini", "Файлы пользователей ", 2545, FileServerClass.PremisionEnum.AdminAndUser, "", true);
-                    CreateFiles("/User/User/", "IntelME.ini", "Файлы пользователей ", 245243, FileServerClass.PremisionEnum.AdminAndUser, "", true);
+                    CreateFiles("/Windows/", "log", "Системные файлы", 123, FileServerClass.PremisionEnum.OnlyAdmin, true);
+                    CreateFiles("/Windows/", "adb.exe", "Системные файлы", 1513, FileServerClass.PremisionEnum.OnlyAdmin, true);
+                    CreateFiles("/Windows/", "comsetup", "Системные файлы", 7834, FileServerClass.PremisionEnum.OnlyAdmin, true);
+                    CreateFiles("/Windows/", "DPINST", "Системные файлы", 468, FileServerClass.PremisionEnum.OnlyAdmin, true);
+                    CreateFiles("/Windows/", "gdrv.sys", "Системные файлы", 74343, FileServerClass.PremisionEnum.OnlyAdmin, true);
+                    CreateFiles("/Windows/", "explorer.exe", "Системные файлы", 7349, FileServerClass.PremisionEnum.OnlyAdmin, true);
+                    CreateFiles("/Windows/", "ntbtlog", "Системные файлы", 457, FileServerClass.PremisionEnum.OnlyAdmin, true);
+                    CreateFiles("/Windows/", "RtlExUpd.dll", "Системные файлы", 6976, FileServerClass.PremisionEnum.OnlyAdmin, true);
+                    CreateFiles("/Windows/", "splwow64", "Системные файлы", 42, FileServerClass.PremisionEnum.OnlyAdmin, true);
+                    CreateFiles("/Windows/", "system.ini", "Системные файлы", 45378, FileServerClass.PremisionEnum.OnlyAdmin, true);
+                    CreateFiles("/Windows/", "twain_32.dll", "Системные файлы", 4792, FileServerClass.PremisionEnum.OnlyAdmin, true);
+                    CreateFiles("/Windows/", "WMSysPr9.prx", "Системные файлы", 768, FileServerClass.PremisionEnum.OnlyAdmin, true);
+                    CreateFiles("/Windows/", "HelpPane.exe", "Системные файлы", 667, FileServerClass.PremisionEnum.OnlyAdmin, true);
+                    CreateFiles("/Windows/System32/", "CbsApi.dll", "Системные файлы", 57, FileServerClass.PremisionEnum.OnlyAdmin, true);
+                    CreateFiles("/Windows/Speech/", ".log", "Системные файлы", 452, FileServerClass.PremisionEnum.OnlyAdmin, true);
+                    CreateFiles("/Windows/Web/", "wiatwain.ds", "Системные файлы", 654, FileServerClass.PremisionEnum.OnlyAdmin, true);
+                    CreateFiles("/Windows/IME/", "amd64_installed.exe", "Системные файлы", 78, FileServerClass.PremisionEnum.OnlyAdmin, true);
+                    CreateFiles("/Windows/INF/", "amdi2c.ini", "Системные файлы", 452, FileServerClass.PremisionEnum.OnlyAdmin, true);
+                    CreateFiles("/Windows/L2Schemas/", "Dkk.dll", "Системные файлы", 54, FileServerClass.PremisionEnum.OnlyAdmin, true);
+                    Ports.ForEach(x => CreateFiles("/Program Files/", x.NameTitle, "Необходимые файлы для работы сервера", (x.Text.Length) * 58, FileServerClass.PremisionEnum.OnlyAdmin, true));
+                    CreateFiles("/User/", ".logs", "Файлы пользователей ", 356, FileServerClass.PremisionEnum.OnlyAdmin, true);
+                    CreateFiles("/User/Admin/", "configstore", "Файлы пользователей ", 6422, FileServerClass.PremisionEnum.OnlyAdmin, true);
+                    CreateFiles("/User/Admin/", "profiledata", "Файлы пользователей ", 2562, FileServerClass.PremisionEnum.OnlyAdmin, true);
+                    CreateFiles("/User/Admin/", "qttmlanguage.ini", "Файлы пользователей ", 24566, FileServerClass.PremisionEnum.OnlyAdmin, true);
+                    CreateFiles("/User/Admin/", "IntelME.ini", "Файлы пользователей ", 2543, FileServerClass.PremisionEnum.OnlyAdmin, true);
+                    CreateFiles("/User/Admin/", "lock.bit", "Файлы пользователей ", 234, FileServerClass.PremisionEnum.OnlyAdmin, true);
+                    CreateFiles("/User/User/", "profiledata", "Файлы пользователей ", 2455, FileServerClass.PremisionEnum.AdminAndUser, true);
+                    CreateFiles("/User/User/", "configstore", "Файлы пользователей ", 2542, FileServerClass.PremisionEnum.AdminAndUser, true);
+                    CreateFiles("/User/User/", "qttmlanguage.ini", "Файлы пользователей ", 2545, FileServerClass.PremisionEnum.AdminAndUser, true);
+                    CreateFiles("/User/User/", "IntelME.ini", "Файлы пользователей ", 245243, FileServerClass.PremisionEnum.AdminAndUser, true);
                     break;
                 case TypeOSEnum.Linux:
-                    Ports.ForEach(x => CreateFiles("/bin/", x.NameTitle, "Необходимые файлы для работы сервера" + x.ControlSS, (x.Text.Length) * 52, FileServerClass.PremisionEnum.OnlyAdmin, "", true));
+                    Ports.ForEach(x => CreateFiles("/bin/", x.NameTitle, "Необходимые файлы для работы сервера" + x.ControlSS, (x.Text.Length) * 52, FileServerClass.PremisionEnum.OnlyAdmin, true));
                     CreateDir("/", "bin", FileServerClass.PremisionEnum.AdminAndUser);
-                    CreateFiles("/bin/", "ls", "Необходимые файлы для работы сервера", 521, FileServerClass.PremisionEnum.OnlyAdmin, "", true);
-                    CreateFiles("/bin/", "kill", "Необходимые файлы для работы сервера", 521, FileServerClass.PremisionEnum.OnlyAdmin, "", true);
-                    CreateFiles("/bin/", "curl", "Необходимые файлы для работы сервера", 55, FileServerClass.PremisionEnum.OnlyAdmin, "", true);
-                    CreateFiles("/bin/", "id", "Необходимые файлы для работы сервера", 100, FileServerClass.PremisionEnum.OnlyAdmin, "", true);
-                    CreateFiles("/bin/", "found", "Необходимые файлы для работы сервера", 555, FileServerClass.PremisionEnum.OnlyAdmin, "", true);
+                    CreateFiles("/bin/", "ls", "Необходимые файлы для работы сервера", 521, FileServerClass.PremisionEnum.OnlyAdmin, true);
+                    CreateFiles("/bin/", "kill", "Необходимые файлы для работы сервера", 521, FileServerClass.PremisionEnum.OnlyAdmin, true);
+                    CreateFiles("/bin/", "curl", "Необходимые файлы для работы сервера", 55, FileServerClass.PremisionEnum.OnlyAdmin, true);
+                    CreateFiles("/bin/", "id", "Необходимые файлы для работы сервера", 100, FileServerClass.PremisionEnum.OnlyAdmin, true);
+                    CreateFiles("/bin/", "found", "Необходимые файлы для работы сервера", 555, FileServerClass.PremisionEnum.OnlyAdmin, true);
                     CreateDir("/", "boot", FileServerClass.PremisionEnum.AdminAndUser);
-                    CreateFiles("/boot/", "x54", "", 8899, FileServerClass.PremisionEnum.OnlyAdmin, "", true);
+                    CreateFiles("/boot/", "x54", "", 8899, FileServerClass.PremisionEnum.OnlyAdmin, true);
                     CreateDir("/boot/", "grub", FileServerClass.PremisionEnum.AdminAndUser, true);
-                    CreateFiles("/boot/grub", "libattr.so ", "Ядро Линукс и загрузка", 1500, FileServerClass.PremisionEnum.OnlyAdmin, "", true);
-                    CreateFiles("/boot/grub", "libattr.so.1", "Ядро Линукс и загрузка", 569, FileServerClass.PremisionEnum.OnlyAdmin, "", true);
-                    CreateFiles("/boot/grub", "libcrypto.so", "Ядро Линукс и загрузка", 2345, FileServerClass.PremisionEnum.OnlyAdmin, "so", true);
-                    CreateFiles("/boot/grub", "libeinfo.so", "Ядро Линукс и загрузка", 97555, FileServerClass.PremisionEnum.OnlyAdmin, "", true);
-                    CreateFiles("/boot/grub/apk", "lids", "Ядро Линукс и загрузка", 255, FileServerClass.PremisionEnum.OnlyAdmin, "", true);
-                    CreateFiles("/boot/grub/mdev", "libz.so", "Ядро Линукс и загрузка", 6432, FileServerClass.PremisionEnum.OnlyAdmin, "", true);
-                    CreateFiles("/etc/", "lftp.conf", "Файлы настройки некоторых программ", 5325, FileServerClass.PremisionEnum.AdminAndUser, "conf", true);
-                    CreateFiles("/etc/", "sysctl.conf", "Файлы настройки некоторых программ", 6674, FileServerClass.PremisionEnum.AdminAndUser, "conf", true);
-                    CreateFiles("/etc/", "passwd", "Файлы настройки некоторых программ", 4224, FileServerClass.PremisionEnum.AdminAndUser, "", true);
-                    CreateFiles("/etc/", "profile", "Файлы настройки некоторых программ", 22, FileServerClass.PremisionEnum.AdminAndUser, "", true);
-                    CreateFiles("/etc/", "rc.conf", "Файлы настройки некоторых программ", 6257, FileServerClass.PremisionEnum.AdminAndUser, "conf", true);
-                    CreateFiles("/etc/zsh/", "zsh.cnf", "Файлы настройки некоторых программ", 235324, FileServerClass.PremisionEnum.AdminAndUser, "cnf", true);
-                    CreateFiles("/dev/", "vcs1", "Файлы устройств", 3435, FileServerClass.PremisionEnum.AdminAndUser, "", true);
-                    CreateFiles("/dev/", "tty49", "Файлы устройств", 24, FileServerClass.PremisionEnum.AdminAndUser, "", true);
-                    CreateFiles("/dev/", "loop0", "Файлы устройств", 5234, FileServerClass.PremisionEnum.AdminAndUser, "", true);
-                    CreateFiles("/dev/", "loop2", "Файлы устройств", 33345, FileServerClass.PremisionEnum.AdminAndUser, "", true);
-                    CreateFiles("/dev/", "vcsa1", "Файлы устройств", 54325, FileServerClass.PremisionEnum.AdminAndUser, "", true);
-                    CreateFiles("/dev/", "console", "Файлы устройств", 54676, FileServerClass.PremisionEnum.AdminAndUser, "", true);
-                    CreateFiles("/dev/", "urandom", "Файлы устройств", 2555, FileServerClass.PremisionEnum.AdminAndUser, "", true);
-                    CreateFiles("/dev/", "zero", "Файлы устройств", 2545, FileServerClass.PremisionEnum.AdminAndUser, "", true);
-                    CreateFiles("/dev/", "fer", "Файлы устройств", 25435, FileServerClass.PremisionEnum.AdminAndUser, "", true);
-                    CreateFiles("/var/apk/", "logs", "Файлы часто меняющие", 25435, FileServerClass.PremisionEnum.AdminAndUser, "", true);
-                    CreateFiles("/var/", "fdj", "Файлы часто меняющие", 34, FileServerClass.PremisionEnum.AdminAndUser, "", true);
-                    CreateFiles("/var/svn/", "pps", "Файлы часто меняющие", 55232, FileServerClass.PremisionEnum.AdminAndUser, "", true);
-                    CreateFiles("/var/", ".lock", "Файлы часто меняющие", 42, FileServerClass.PremisionEnum.AdminAndUser, "", true);
-                    CreateFiles("/usr/bin/", "make", "Установленные пакеты программм", 422, FileServerClass.PremisionEnum.AdminAndUser, "", true);
-                    CreateFiles("/usr/bin/", "xxd", "Установленные пакеты программм", 2422, FileServerClass.PremisionEnum.AdminAndUser, "", true);
-                    CreateFiles("/usr/bin/", "zfgrep", "Установленные пакеты программм", 21422, FileServerClass.PremisionEnum.AdminAndUser, "", true);
-                    CreateFiles("/usr/bin/", "znew", "Установленные пакеты программм", 3422, FileServerClass.PremisionEnum.AdminAndUser, "", true);
-                    CreateFiles("/usr/bin/", "lollipop", "Установленные пакеты программм", 11422, FileServerClass.PremisionEnum.AdminAndUser, "", true);
-                    CreateFiles("/usr/lib", "ytasm", "Установленные пакеты программм", 2342, FileServerClass.PremisionEnum.AdminAndUser, "", true);
-                    CreateFiles("/usr/lib", "xset", "Установленные пакеты программм", 2342, FileServerClass.PremisionEnum.AdminAndUser, "", true);
-                    CreateFiles("/usr/local", "ffasn1dump", "Установленные пакеты программм", 3442, FileServerClass.PremisionEnum.AdminAndUser, "", true);
-                    CreateFiles("/usr/sbin", "delgroup", "Установленные пакеты программм", 3442, FileServerClass.PremisionEnum.AdminAndUser, "", true);
-                    CreateFiles("/usr/sbin", "sudo_logsrvd", "Установленные пакеты программм", 3442, FileServerClass.PremisionEnum.AdminAndUser, "", true);
-                    CreateFiles("/home/", "log", "Файлы пользователей", 42, FileServerClass.PremisionEnum.AdminAndUser, ".log", true);
+                    CreateFiles("/boot/grub", "libattr.so ", "Ядро Линукс и загрузка", 1500, FileServerClass.PremisionEnum.OnlyAdmin, true);
+                    CreateFiles("/boot/grub", "libattr.so.1", "Ядро Линукс и загрузка", 569, FileServerClass.PremisionEnum.OnlyAdmin, true);
+                    CreateFiles("/boot/grub", "libcrypto.so", "Ядро Линукс и загрузка", 2345, FileServerClass.PremisionEnum.OnlyAdmin,  true);
+                    CreateFiles("/boot/grub", "libeinfo.so", "Ядро Линукс и загрузка", 97555, FileServerClass.PremisionEnum.OnlyAdmin, true);
+                    CreateFiles("/boot/grub/apk", "lids", "Ядро Линукс и загрузка", 255, FileServerClass.PremisionEnum.OnlyAdmin, true);
+                    CreateFiles("/boot/grub/mdev", "libz.so", "Ядро Линукс и загрузка", 6432, FileServerClass.PremisionEnum.OnlyAdmin, true);
+                    CreateFiles("/etc/", "lftp.conf", "Файлы настройки некоторых программ", 5325, FileServerClass.PremisionEnum.AdminAndUser, true);
+                    CreateFiles("/etc/", "sysctl.conf", "Файлы настройки некоторых программ", 6674, FileServerClass.PremisionEnum.AdminAndUser,  true);
+                    CreateFiles("/etc/", "passwd", "Файлы настройки некоторых программ", 4224, FileServerClass.PremisionEnum.AdminAndUser, true);
+                    CreateFiles("/etc/", "profile", "Файлы настройки некоторых программ", 22, FileServerClass.PremisionEnum.AdminAndUser, true);
+                    CreateFiles("/etc/", "rc.conf", "Файлы настройки некоторых программ", 6257, FileServerClass.PremisionEnum.AdminAndUser,  true);
+                    CreateFiles("/etc/zsh/", "zsh.cnf", "Файлы настройки некоторых программ", 235324, FileServerClass.PremisionEnum.AdminAndUser,  true);
+                    CreateFiles("/dev/", "vcs1", "Файлы устройств", 3435, FileServerClass.PremisionEnum.AdminAndUser, true);
+                    CreateFiles("/dev/", "tty49", "Файлы устройств", 24, FileServerClass.PremisionEnum.AdminAndUser, true);
+                    CreateFiles("/dev/", "loop0", "Файлы устройств", 5234, FileServerClass.PremisionEnum.AdminAndUser, true);
+                    CreateFiles("/dev/", "loop2", "Файлы устройств", 33345, FileServerClass.PremisionEnum.AdminAndUser, true);
+                    CreateFiles("/dev/", "vcsa1", "Файлы устройств", 54325, FileServerClass.PremisionEnum.AdminAndUser, true);
+                    CreateFiles("/dev/", "console", "Файлы устройств", 54676, FileServerClass.PremisionEnum.AdminAndUser, true);
+                    CreateFiles("/dev/", "urandom", "Файлы устройств", 2555, FileServerClass.PremisionEnum.AdminAndUser, true);
+                    CreateFiles("/dev/", "zero", "Файлы устройств", 2545, FileServerClass.PremisionEnum.AdminAndUser, true);
+                    CreateFiles("/dev/", "fer", "Файлы устройств", 25435, FileServerClass.PremisionEnum.AdminAndUser, true);
+                    CreateFiles("/var/apk/", "logs", "Файлы часто меняющие", 25435, FileServerClass.PremisionEnum.AdminAndUser, true);
+                    CreateFiles("/var/", "fdj", "Файлы часто меняющие", 34, FileServerClass.PremisionEnum.AdminAndUser, true);
+                    CreateFiles("/var/svn/", "pps", "Файлы часто меняющие", 55232, FileServerClass.PremisionEnum.AdminAndUser, true);
+                    CreateFiles("/var/", ".lock", "Файлы часто меняющие", 42, FileServerClass.PremisionEnum.AdminAndUser, true);
+                    CreateFiles("/usr/bin/", "make", "Установленные пакеты программм", 422, FileServerClass.PremisionEnum.AdminAndUser, true);
+                    CreateFiles("/usr/bin/", "xxd", "Установленные пакеты программм", 2422, FileServerClass.PremisionEnum.AdminAndUser, true);
+                    CreateFiles("/usr/bin/", "zfgrep", "Установленные пакеты программм", 21422, FileServerClass.PremisionEnum.AdminAndUser, true);
+                    CreateFiles("/usr/bin/", "znew", "Установленные пакеты программм", 3422, FileServerClass.PremisionEnum.AdminAndUser, true);
+                    CreateFiles("/usr/bin/", "lollipop", "Установленные пакеты программм", 11422, FileServerClass.PremisionEnum.AdminAndUser, true);
+                    CreateFiles("/usr/lib", "ytasm", "Установленные пакеты программм", 2342, FileServerClass.PremisionEnum.AdminAndUser, true);
+                    CreateFiles("/usr/lib", "xset", "Установленные пакеты программм", 2342, FileServerClass.PremisionEnum.AdminAndUser, true);
+                    CreateFiles("/usr/local", "ffasn1dump", "Установленные пакеты программм", 3442, FileServerClass.PremisionEnum.AdminAndUser, true);
+                    CreateFiles("/usr/sbin", "delgroup", "Установленные пакеты программм", 3442, FileServerClass.PremisionEnum.AdminAndUser, true);
+                    CreateFiles("/usr/sbin", "sudo_logsrvd", "Установленные пакеты программм", 3442, FileServerClass.PremisionEnum.AdminAndUser, true);
+                    CreateFiles("/home/", "log", "Файлы пользователей", 42, FileServerClass.PremisionEnum.AdminAndUser, true);
                     break;
                 case TypeOSEnum.Logerhead:
-                    CreateFiles("/", "logs", "", 1500, FileServerClass.PremisionEnum.OnlyAdmin, "log", true);
-                    CreateFiles("/", "start", ".os", 589, FileServerClass.PremisionEnum.OnlyAdmin, "", true);
-                    CreateFiles("/", "pref_files_524621", ".nns", 1500, FileServerClass.PremisionEnum.OnlyAdmin, "", true);
-                    CreateFiles("/etc/grafics/", "gr", ".os", 58900, FileServerClass.PremisionEnum.OnlyAdmin, "", true);
-                    CreateFiles("/etc/grafics/", "thumbnail", ".os", 154002, FileServerClass.PremisionEnum.OnlyAdmin, "", true);
-                    CreateFiles("/etc/", "programm", ".os", 54200, FileServerClass.PremisionEnum.OnlyAdmin, "", true);
-                    CreateFiles("/", "kernel64", ".os", 89055, FileServerClass.PremisionEnum.OnlyAdmin, "", true);
-                    CreateFiles("/", "main", ".os", 874522, FileServerClass.PremisionEnum.OnlyAdmin, "", true);
-                    CreateFiles("/desk/", "cvd", ".os", 88522, FileServerClass.PremisionEnum.OnlyAdmin, "", true);
-                    CreateFiles("/desk/desk/", "cvd", ".os", 12522, FileServerClass.PremisionEnum.OnlyAdmin, "", true);
-                    CreateFiles("/desk/desk/", "desk_des", ".os", 82522, FileServerClass.PremisionEnum.OnlyAdmin, "", true);
-                    CreateFiles("/desk/desk/", "fl", ".os", 5452, FileServerClass.PremisionEnum.OnlyAdmin, "", true);
-                    CreateFiles("/desk/desk/ns", "desk_des", ".os", 82522, FileServerClass.PremisionEnum.OnlyAdmin, "", true);
-                    CreateFiles("/desk/", "olen", ".os", 5452, FileServerClass.PremisionEnum.OnlyAdmin, "", true);
-                    CreateFiles("/apps/", "connects", ".bin", 8741, FileServerClass.PremisionEnum.AdminAndUser, "", true);
-                    CreateFiles("/apps/", "mail", ".bin", 4521, FileServerClass.PremisionEnum.AdminAndUser, "", true);
-                    CreateFiles("/apps/", "lookfile", ".bin", 4521, FileServerClass.PremisionEnum.AdminAndUser, "", true);
-                    CreateFiles("/apps/", "gb", ".bin", 2210, FileServerClass.PremisionEnum.OnlyAdmin, "", true);
-                    CreateFiles("/user/Hpro4/", "set", ".bin", 411, FileServerClass.PremisionEnum.AdminAndUser, "", true);
-                    CreateFiles("/user/Hpro4/docs", "", "", 0, FileServerClass.PremisionEnum.AdminAndUser, "", true);
-                    CreateFiles("/user/Hpro4/Download/", "", "", 0, FileServerClass.PremisionEnum.AdminUserGuest, "", true);
-                    CreateFiles("/user/Hpro4/Exploit/", "", "", 0, FileServerClass.PremisionEnum.AdminUserGuest, "", true);
-                    CreateFiles("/user/Hpro4/HDoc/", "", "", 0, FileServerClass.PremisionEnum.AdminUserGuest, "", true);
-                    CreateFiles("/user/Hpro4/Tools/", "", "", 0, FileServerClass.PremisionEnum.AdminUserGuest, "", true);
+                    CreateFiles("/", "logs", "sys error",  1500, FileServerClass.PremisionEnum.OnlyAdmin,  true);
+                    CreateFiles("/", "start", ".os", 589, FileServerClass.PremisionEnum.OnlyAdmin, true);
+                    CreateFiles("/", "pref_files_524621", ".nns", 1500, FileServerClass.PremisionEnum.OnlyAdmin, true);
+                    CreateFiles("/etc/grafics/", "gr", ".os", 58900, FileServerClass.PremisionEnum.OnlyAdmin, true);
+                    CreateFiles("/etc/grafics/", "thumbnail", ".os", 154002, FileServerClass.PremisionEnum.OnlyAdmin, true);
+                    CreateFiles("/etc/", "programm", ".os", 54200, FileServerClass.PremisionEnum.OnlyAdmin, true);
+                    CreateFiles("/", "kernel64", ".os", 89055, FileServerClass.PremisionEnum.OnlyAdmin, true);
+                    CreateFiles("/", "main", ".os", 874522, FileServerClass.PremisionEnum.OnlyAdmin, true);
+                    CreateFiles("/desk/", "cvd", ".os", 88522, FileServerClass.PremisionEnum.OnlyAdmin,  true);
+                    CreateFiles("/desk/desk/", "cvd", ".os", 12522, FileServerClass.PremisionEnum.OnlyAdmin,  true);
+                    CreateFiles("/desk/desk/", "desk_des", ".os", 82522, FileServerClass.PremisionEnum.OnlyAdmin,  true);
+                    CreateFiles("/desk/desk/", "fl", ".os", 5452, FileServerClass.PremisionEnum.OnlyAdmin,  true);
+                    CreateFiles("/desk/desk/ns", "desk_des", ".os", 82522, FileServerClass.PremisionEnum.OnlyAdmin,  true);
+                    CreateFiles("/desk/", "olen", ".os", 5452, FileServerClass.PremisionEnum.OnlyAdmin,  true);
+                    CreateFiles("/apps/", "connects", ".bin", 8741, FileServerClass.PremisionEnum.AdminAndUser,  true);
+                    CreateFiles("/apps/", "mail", ".bin", 4521, FileServerClass.PremisionEnum.AdminAndUser,  true);
+                    CreateFiles("/apps/", "lookfile", ".bin", 4521, FileServerClass.PremisionEnum.AdminAndUser,  true);
+                    CreateFiles("/apps/", "gb", ".bin", 2210, FileServerClass.PremisionEnum.OnlyAdmin,  true);
+                    CreateFiles("/user/Hpro4/", "set", ".bin", 411, FileServerClass.PremisionEnum.AdminAndUser,  true);
+                    CreateFiles("/user/Hpro4/docs", "", "", 0, FileServerClass.PremisionEnum.AdminAndUser,  true);
+                    CreateFiles("/user/Hpro4/Download/", "", "", 0, FileServerClass.PremisionEnum.AdminUserGuest,  true);
+                    CreateFiles("/user/Hpro4/Exploit/", "", "", 0, FileServerClass.PremisionEnum.AdminUserGuest,  true);
+                    CreateFiles("/user/Hpro4/HDoc/", "", "", 0, FileServerClass.PremisionEnum.AdminUserGuest,  true);
+                    CreateFiles("/user/Hpro4/Tools/", "", "", 0, FileServerClass.PremisionEnum.AdminUserGuest, true);
                     break;
                 default:
                     break;
             }
 
 
+        }
+        /// <summary>
+        /// Перезапускает сервер
+        /// </summary>
+        public void Shutdown() {
+            ActSrv = false;
+            GameEvenStruct gameEven = new GameEvenStruct
+            {
+                DataStart = App.GameGlobal.DataGM.AddMonths(1),
+                GameEvent = new GameEvenStruct.EventShutdown() { UrlServer = NameSrv }
+            };
+            App.GameGlobal.AllEventGame.Add(gameEven);
+            List<string> TextAnimation = new List<string>
+            {
+                "// Start Shutdown server ...",
+                "// 0012F741 00 11 14 44 55 84 10 36|44 82 21 22 00 95 86",
+                "// 0012F742 00 61 13 44 35 34 19 34|49 81 23 22 08 95 66",
+                "// 0012F743 01 12 14 44 53 84 20 26|44 04 51 22 03 34 66",
+                "// 0012F744 00 14 1f 44 25 34 18 86|84 76 23 22 80 35 46",
+                "// 0012F745 00 12 1f 44 f5 85 70 56|44 84 23 22 24 45 16",
+                ">   0012F742 0012F743 0012F744 0012F745",
+                ">>  0012F742 0012F743 0012F744 0012F745",
+                ">>> 0012F742 0012F743 0012F744 0012F745",
+                ">>  0012F742 0012F743 0012F744 0012F745",
+                "> Wait",
+                "> Сервер отключен " + NameSrv,
+                "= "+IP+" ="
+            };
+            App.GameGlobal.MainWindow.StartConsoleText(TextAnimation);
+            App.GameGlobal.GamerInfo.AddExp(PopularSRV / 2);
+            CheckAuditSecurity();
         }
 
         #region "Структуры и перечисления"

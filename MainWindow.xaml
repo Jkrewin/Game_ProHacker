@@ -15,7 +15,7 @@
             <RowDefinition Height="72"/>
         </Grid.RowDefinitions>
         <Grid x:Name="Grid_Menu" Visibility="Visible"  Height="365" Width="650" Background="#FF4B566A" Panel.ZIndex="2" HorizontalAlignment="Right" VerticalAlignment="Bottom" Margin="0,0,10,0" MinWidth="650" MinHeight="360">
-            <Button x:Name="Cancel" Content="Cancel" HorizontalAlignment="Center" Height="46" Margin="0,242,0,0" VerticalAlignment="Top" Width="216" Click="test" Background="#FFF10F0F" RenderTransformOrigin="0.5,0.5"></Button>
+            <Button x:Name="Cancel" Content="Cancel" HorizontalAlignment="Center" Height="46" Margin="0,242,0,0" VerticalAlignment="Top" Width="216" Click="ВыходИзПроекта" Background="#FFF10F0F" RenderTransformOrigin="0.5,0.5"></Button>
             <Button x:Name="Save" Content="Save" HorizontalAlignment="Center" Height="46" Margin="0,80,0,0" VerticalAlignment="Top" Width="216" Click="SaveGame" Background="#FF1BCB70" RenderTransformOrigin="0.5,0.5"></Button>
             <Button x:Name="Load" Content="Load" HorizontalAlignment="Center" Height="46" Margin="0,162,0,0" VerticalAlignment="Top" Width="216" Click="LoadGame" Background="#FFDABD05" RenderTransformOrigin="0.5,0.5"></Button>
             <Button x:Name="NewGame_1" Content="NewGame" HorizontalAlignment="Center" Height="46" Margin="0,10,0,0" VerticalAlignment="Top" Width="216" Click="NewGame" Background="#FF1148C8" RenderTransformOrigin="0.5,0.5"></Button>
@@ -26,7 +26,11 @@
             <Canvas.Background>
                 <ImageBrush ImageSource="\Content\Desktop\Wallpapers.png"/>
             </Canvas.Background>
-            <Label x:Name="DeskCmd" Content="Label" Canvas.Left="10" Canvas.Top="10" Foreground="#FF42B715" Width="1495" Height="545" FontSize="20" FontFamily="Consolas"/>
+            <TextBlock x:Name="DeskCmd" TextWrapping="WrapWithOverflow" Text="DeskCmd" Canvas.Left="648" Canvas.Top="10" Foreground="#FF42B715" Width="1171" Height="545" FontSize="20" FontFamily="Consolas" TextAlignment="Left">
+                <TextBlock.Effect>
+                    <DropShadowEffect      ShadowDepth="4"      Direction="330"      Color="Yellow"      Opacity="0.5"     BlurRadius="4"/>
+                </TextBlock.Effect>
+            </TextBlock>
 
 
         </Canvas>

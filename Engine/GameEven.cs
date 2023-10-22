@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Text;
 using System.Windows;
 using static PH4_WPF.Game;
 
@@ -84,9 +83,8 @@ namespace PH4_WPF.Engine
                
 
             public void Run()
-            {                
-                string s = UrlServer; // Анонимный метод без ссылки в struct, делает ссылку тут
-                App.GameGlobal.Servers.Find(x => x.NameSrv.ToLower() == s.ToLower()).ActSrv =true ;
+            {               
+                App.GameGlobal.FindServer (UrlServer).ActSrv =true ;
             }
         }
 
@@ -285,7 +283,7 @@ namespace PH4_WPF.Engine
             public FileServerClass.PremisionEnum Premision;
             public string Perfix;
             public bool SystemFile;
-            public void Run() => App.GameGlobal.MyServer.CreateFiles(Path, NameFile, Comment, Size, Premision, Perfix, SystemFile);
+            public void Run() => App.GameGlobal.MyServer.CreateFiles(Path, NameFile, Comment, Size, Premision,  SystemFile);
         }
 
         [Serializable]

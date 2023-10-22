@@ -22,10 +22,11 @@ namespace PH4_WPF.FrmSoft
     /// </summary>
     public partial class Cmd : Window
     {
-        
+        readonly List<string> FF00_ls = new List<string>(); // Ускоряет доступ к списку файлов Продвинутый уровень  
+
         private string Pwd = "/";                                // Начальный каталог
         private Engine.Server GameSrv;                           // Куда на какой сервер подключена консоль 
-        private Button[] BBSelectButton;                         // Кнопки которые нужны для меню
+        private readonly Button[] BBSelectButton;                         // Кнопки которые нужны для меню
         private readonly Brush StTextColor = Brushes.LawnGreen;  // Цвет текста по умолчанию
         private const short MAX_STRING = 110;                    // Максимальное количество символов в строке 
         private const short MAX_LINES = 37;                      // Максимальное количество строк в консоли 
@@ -36,7 +37,7 @@ namespace PH4_WPF.FrmSoft
         private Point PointOos = new Point(0, 0);                                    // Управление перетаскиванием
         private readonly List<XmlInfoCommand> XmlInfoCommandList;                    // Описание комманд
         private string ClipBoard = "";                                               // Тут текст котрый сохраняеться в буфере при нажатии Insert он выводиться 
-        private string[] VisualTimer;                                                // Виуализация работы таймера
+        private readonly string[] VisualTimer;                                                // Виуализация работы таймера
 
         /// <summary>
         /// Текст приветствие
@@ -45,12 +46,11 @@ namespace PH4_WPF.FrmSoft
         {
             get
             {
-                string r = "";
-                r = GameSrv.Premision switch
+                string r = GameSrv.Premision switch
                 {
-                    Engine.Server.PremissionServerEnum.FullControl => "admin",
-                    Engine.Server.PremissionServerEnum.UserControl => "user",
-                    Engine.Server.PremissionServerEnum.GuestControl => "guest",
+                    Server.PremissionServerEnum.FullControl => "admin",
+                    Server.PremissionServerEnum.UserControl => "user",
+                    Server.PremissionServerEnum.GuestControl => "guest",
                     _ => "web",
                 };
                 string s = GameSrv.NameSrv;
@@ -92,9 +92,9 @@ namespace PH4_WPF.FrmSoft
           
 
             // получаем информацию о командах
-            XmlSerializer xmlSerializer = new XmlSerializer(typeof(List<XmlInfoCommand>));            
-            using (FileStream fs = new FileStream(App.PatchAB+"XmlInfoCommand.xml", FileMode.OpenOrCreate)) 
-                XmlInfoCommandList= xmlSerializer.Deserialize(fs) as List<XmlInfoCommand>;          
+            XmlSerializer xmlSerializer = new XmlSerializer(typeof(List<XmlInfoCommand>));
+            using FileStream fs = new FileStream(App.PatchAB + "XmlInfoCommand.xml", FileMode.OpenOrCreate);
+            XmlInfoCommandList = xmlSerializer.Deserialize(fs) as List<XmlInfoCommand>;
 
         }
 
@@ -163,7 +163,7 @@ namespace PH4_WPF.FrmSoft
 
         //+++ Работа таймера и скрипта
         int indexText = 0;
-        Stack<Inline> lastLine = new Stack<Inline>();
+        readonly Stack<Inline> lastLine = new Stack<Inline>();
         private void Bash(Object source, ElapsedEventArgs e)
         {
             if (indexText == ScriptConsole.Count)
@@ -273,7 +273,7 @@ namespace PH4_WPF.FrmSoft
         {
             if (com.Length == 0) return;
             com = System.Text.RegularExpressions.Regex.Replace(com, @"\s+", " ");
-            var r = this.GetType().GetMethod(com.Split(' ')[0].ToLower());
+            var r = this.GetType().GetMethod("Cmd_" + com.Split(' ')[0].ToLower());
             ScriptConsole.Clear();
             if (r == null)
             {
@@ -588,7 +588,7 @@ namespace PH4_WPF.FrmSoft
     /// </summary>
     public partial class Cmd
     {
-        public  void make(string txt) {
+        public  void Cmd_make(string txt) {
             if (GameSrv.OS != Server.TypeOSEnum.Logerhead)
             {
                 AddTextConsole("Ъ`Red= \"make\" не является внутренней или внешней командой, исполняемой программой или пакетным файлом.Ъ", 1);
@@ -605,25 +605,32 @@ namespace PH4_WPF.FrmSoft
 
         }
 
-        public void openurl(string txt)
+        public void Cmd_openurl(string txt)
         {
             if (GameSrv.OS != Server.TypeOSEnum.Logerhead)
             {
                 AddTextConsole("Ъ`Red=\"openurl\" неверно введенная команда или такой исполнительный файл отсутствуетЪ", 1);
                 return;
             }
+            string[] vs = txt.Split(' ');
+            bool numr = false;
+            int i = 1;
+            if (vs.Length > 1) if (vs[1] == "-n") numr = true;
+
             AddTextConsole("Списки ресурсов открытых на вашим сервере:", 1);
             foreach (var item in App.GameGlobal.OpenUrl)
             {
                 if (item.Key.Substring(0, 10) == "localhost/")
                 {
-                    AddTextConsole("    " + item.Key + " | " + item.Value.FileName, 1);
+                    AddTextConsole(numr ? i.ToString (): " " + "    " + item.Key + " | " + item.Value.FileName, 1);
+                    i++;
                 }
             }
-            AddTextConsole("# Конец", 1);
+            AddTextConsole("------------------------", 1);
+
         }
 
-        public void wget(string txt)
+        public void Cmd_wget(string txt)
         {
             string[] vs = txt.Split(' ');
             if (!(GameSrv.OS != Server.TypeOSEnum.Linux || GameSrv.OS != Server.TypeOSEnum.Logerhead))
@@ -724,7 +731,7 @@ namespace PH4_WPF.FrmSoft
             }
         }
 
-        public void download(string txt)
+        public void Cmd_download(string txt)
         {
             string[] vs = txt.Split(' ');
 
@@ -824,7 +831,7 @@ namespace PH4_WPF.FrmSoft
             AddTextConsole("Файл скачен. ", 1, false);
         }
 
-        public void connect(string txt)
+        public void Cmd_connect(string txt)
         {
             string[] vs = txt.Split(' ');
             if (GameSrv.OS != Server.TypeOSEnum.Logerhead)
@@ -961,7 +968,7 @@ namespace PH4_WPF.FrmSoft
             }
         }       
 
-        public void pl(string txt)
+        public void Cmd_pl(string txt)
         {
 
             if (!(GameSrv.OS != Server.TypeOSEnum.Linux || GameSrv.OS != Server.TypeOSEnum.Logerhead))
@@ -1032,9 +1039,8 @@ namespace PH4_WPF.FrmSoft
             }
 
         }
-
-        List<string> FF00_ls = new List<string>(); // Ускоряет доступ к списку файлов Продвинутый уровень  
-        public void ls(string txt)
+        
+        public void Cmd_ls(string txt)
         {
             if (!(GameSrv.OS != Server.TypeOSEnum.Linux || GameSrv.OS != Server.TypeOSEnum.Logerhead))
             {
@@ -1085,7 +1091,7 @@ namespace PH4_WPF.FrmSoft
             }
         }
 
-        public void dir(string txt)
+        public void Cmd_dir(string txt)
         {
             if (GameSrv.OS != Server.TypeOSEnum.WinSrv)
             {
@@ -1126,17 +1132,22 @@ namespace PH4_WPF.FrmSoft
 
         }
 
-        public void pwd(string txt)
+        public void Cmd_pwd(string txt)
         {
             if (!(GameSrv.OS != Server.TypeOSEnum.Linux || GameSrv.OS != Server.TypeOSEnum.Logerhead))
             {
                 AddTextConsole("Ъ`Red= \"pwd\" не является внутренней или внешней командой, исполняемой программой или пакетным файлом.Ъ", 1);
                 return;
             }
-            AddTextConsole("hdd0:" + Pwd);
+            string[] vs = txt.Split(' ');
+            if (vs.Length > 1)
+            {
+                if (vs[1] == "-l") { AddTextConsole(Pwd); }
+            }
+            else { AddTextConsole("hdd0:" + Pwd); }
         }
 
-        public void exist(string txt)
+        public void Cmd_exist(string txt)
         {
             try
             {
@@ -1167,7 +1178,7 @@ namespace PH4_WPF.FrmSoft
 
         }
 
-        public void ping(string txt)
+        public void Cmd_ping(string txt)
         {
             string[] vs = txt.Split(' ');
             try
@@ -1213,7 +1224,7 @@ namespace PH4_WPF.FrmSoft
             }
         }
 
-        public void mail(string txt)
+        public void Cmd_mail(string txt)
         {
             if (GameSrv.OS != Server.TypeOSEnum.Logerhead)
             {
@@ -1259,7 +1270,7 @@ namespace PH4_WPF.FrmSoft
             }
         }
 
-        public void cd(string txt)
+        public void Cmd_cd(string txt)
         {
             string[] vs = txt.Split(' ');
             try
@@ -1297,7 +1308,7 @@ namespace PH4_WPF.FrmSoft
 
         }
 
-        public void getmoney(string txt)
+        public void Cmd_getmoney(string txt)
         {
             if (App.GameGlobal.MainWindow.CheatCode)
             {
@@ -1307,6 +1318,16 @@ namespace PH4_WPF.FrmSoft
             }
         }
 
+        public void Cmd_addextrapoint(string txt)
+        {
+            if (App.GameGlobal.MainWindow.CheatCode)
+            {
+                string[] vs = txt.Split(' ');
+                byte i =byte.Parse ( vs[2]);
+                App.GameGlobal.GamerInfo.ExtraPoint += i;
+                AddTextConsole("Вы читер!!!");
+            }
+        }
 
 
         private void OpenFileEx(string file)
@@ -1317,7 +1338,7 @@ namespace PH4_WPF.FrmSoft
             {
                 try
                 {
-                    int ii = int.Parse(file.Substring(4));
+                    int ii = int.Parse(file[4..]);
                     file = FF00_ls[ii];
                 }
                 catch (Exception)
@@ -1402,7 +1423,7 @@ namespace PH4_WPF.FrmSoft
     /// </summary>
     public partial class Cmd {
 
-        private BufferCmd BufferConsole = new BufferCmd();
+        private readonly BufferCmd BufferConsole = new BufferCmd();
         private class BufferCmd {
             public FileServerClass FileStart { get; set; }
             public string ServerName { get; set; }

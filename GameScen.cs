@@ -135,7 +135,7 @@ namespace PH4_WPF
 
             //Делаем скрипты
             scen.Script = new Dictionary<string, List<Script.IEventGame>>();
-            var ls = new List<Script.IEventGame>();
+            List<Script.IEventGame> ls;
 
             // start
             ls = new List<Script.IEventGame> {
@@ -149,9 +149,11 @@ namespace PH4_WPF
             scen.Script.Add("start", ls);
 
             // win
-            ls = new List<Script.IEventGame>();
-            ls.Add(new Script.GetExp() { Exp = 20 });
-            ls.Add(new Script.NextScen() { ScenName = "Scen_2mis" });
+            ls = new List<Script.IEventGame>
+            {
+                new Script.GetExp() { Exp = 20 },
+                new Script.NextScen() { ScenName = "Scen_2mis" }
+            };
             scen.Script.Add("win", ls);
 
             //Инцилизация сценария начальные настройки
@@ -186,7 +188,7 @@ namespace PH4_WPF
 
             //Делаем скрипты
             scen.Script = new Dictionary<string, List<Script.IEventGame>>();
-            var ls = new List<Script.IEventGame>();
+            List<Script.IEventGame> ls;
 
             // start
             ls = new List<Script.IEventGame> {
@@ -351,6 +353,7 @@ namespace PH4_WPF
                             if (str.ToLower() == StringElement.ToLower()) b = true;
                             break;
                         case ConditionEnum.ВходНаСервер:
+                            if (IntElement == i) b = false;//Test test 
                             break;
                         default:
                             break;

@@ -20,7 +20,7 @@ namespace PH4_WPF.FrmSoft
       
 
 
-        private ObservableCollection<ListViewItemsData> ListViewItemsCollections = new ObservableCollection<ListViewItemsData>();
+        private readonly ObservableCollection<ListViewItemsData> ListViewItemsCollections = new ObservableCollection<ListViewItemsData>();
         private string MyPath="/";
        
         /// <summary>
@@ -109,7 +109,7 @@ namespace PH4_WPF.FrmSoft
                 // Установка программы в App
                 if (f.FileСontents.TypeInformation == FileServerClass.ParameterClass.TypeParam.exe)
                 {
-                    App.GameGlobal.MyServer.CreateFiles("/apps/", f.FileСontents.TextCommand, "Запускает программу", (int)(f.Size * 1.2), FileServerClass.PremisionEnum.AdminAndUser, "exe", false);
+                    App.GameGlobal.MyServer.CreateFiles("/apps/", f.FileСontents.TextCommand, "Запускает программу", (int)(f.Size * 1.2), FileServerClass.PremisionEnum.AdminAndUser,  false);
                     App.GameGlobal.MainWindow.Refreh_AppDeck();
                     App.GameGlobal.Msg("Установка", "Установка программы " + f.FileName + " завершенно ", FrmError.InformEnum.УстановкаПрограммы);
                 }
