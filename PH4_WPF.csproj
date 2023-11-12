@@ -8,10 +8,14 @@
     <AssemblyVersion>0.1.0.0</AssemblyVersion>
     <FileVersion>0.1.0.0</FileVersion>
     <Version>0.1</Version>
+    <ApplicationIcon>cube.ico</ApplicationIcon>
   </PropertyGroup>
 
   <ItemGroup>    
     <None Remove="bpanel.png" />    
+    <None Remove="Content\AdminPanel\pause.png" />    
+    <None Remove="Content\AdminPanel\rackserver.png" />    
+    <None Remove="Content\AdminPanel\rackservererror.png" />    
     <None Remove="Content\chat_avators\A-Killer.gif" />    
     <None Remove="Content\chat_avators\Alaub.gif" />    
     <None Remove="Content\chat_avators\Babki.gif" />    
@@ -129,9 +133,12 @@
     <None Remove="Content\msg\download.png" />    
     <None Remove="Content\msg\error.png" />    
     <None Remove="Content\msg\inform.png" />    
+    <None Remove="Content\msg\problems.png" />    
     <None Remove="Content\msg\qest.png" />    
+    <None Remove="Content\msg\soft.png" />    
     <None Remove="Content\News.txt" />    
     <None Remove="Content\OS.txt" />    
+    <None Remove="Content\rtf\cmd.rtf" />    
     <None Remove="Content\rtf\exploit.rtf" />    
     <None Remove="Content\rtf\shell.rtf" />    
     <None Remove="Content\site\milw0rm.jpg" />    
@@ -164,6 +171,7 @@
     <None Remove="Content\soft\scaner_server\rolle.png" />    
     <None Remove="Content\soft\scaner_server\ScanerG1.png" />    
     <None Remove="Content\soft\scaner_server\win.png" />    
+    <None Remove="Content\sound\button-sound-14.mp3" />    
     <None Remove="Content\sound\buy.mp3" />    
     <None Remove="Content\sound\gameover.mp3" />    
     <None Remove="Content\sound\iqWav.mp3" />    
@@ -454,13 +462,22 @@
     <Content Include="Content\msg\inform.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
+    <Content Include="Content\msg\problems.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
     <Content Include="Content\msg\qest.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Content\msg\soft.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="Content\News.txt">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="Content\OS.txt">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Content\rtf\cmd.rtf">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="Content\rtf\exploit.rtf">
@@ -514,6 +531,9 @@
     <Content Include="Content\soft\scaner_server\PortDeactive.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
+    <Content Include="Content\sound\button-sound-14.mp3">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
     <Content Include="Content\sound\buy.mp3">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
@@ -532,6 +552,9 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Resource Include="Content\AdminPanel\pause.png" />
+    <Resource Include="Content\AdminPanel\rackserver.png" />
+    <Resource Include="Content\AdminPanel\rackservererror.png" />
     <Resource Include="Content\CmdImg\console.png" />
     <Resource Include="Content\Desktop\ambiend.bmp" />
     <Resource Include="Content\Desktop\bPanel\bpanel.png" />

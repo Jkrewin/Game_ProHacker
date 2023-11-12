@@ -127,9 +127,8 @@ namespace PH4_WPF.Engine
                 if (PrvOS == TypeOSEnum.WinSrv)
                 {
                     key = "WIN system ";
-                    string[] txt2 = App.GameGlobal.MainWindow.Firewall_TXT;
-                    string[] p = txt2[0].Split(',');
-                    FireWall = p[rand.Next(0, p.Length)];
+                    string[] txt2 = App.GameGlobal.MainWindow.Firewall_TXT;                    
+                    FireWall = txt2[rand.Next(0, txt2.Length)].Split (',')[1];
                 }
                 else if (PrvOS == TypeOSEnum.Linux) key = "BSD system ";
                 if (PopularSRV >= 40) v = "High";
@@ -230,16 +229,37 @@ namespace PH4_WPF.Engine
         /// Указывает что вы засветились в логах этого сервера
         /// </summary>
         public int LogSaver = 0;
+        /// <summary>
+        /// Виртуальные сервера
+        /// </summary>
+        public Virtualization VirtualizationServer;
 
         /// <summary>
         /// Закрывает дыры в безопасности 
         /// </summary>
         public void CheckAuditSecurity() {
             Premision = PremissionServerEnum.none;
-            /*foreach (var port in Ports)
+
+            ushort Num;
+            string NameTitle;
+            int Rationo;
+            ushort VerA;
+            string Text;
+
+            List<Port> ls = new List<Port>();
+            foreach (var port in Ports)
             {
-               
-            }*/
+                Num = port.Num;
+                NameTitle = port.NameTitle;
+                Rationo = port.Rationo;
+                VerA = port.VerA;
+                Text = port.Text;
+
+                if (port.BugPort) VerA++;
+
+                ls.Add ( new Port() { Active = true, BugPort = false, NameTitle = NameTitle, Num = Num, Rationo = Rationo, Text = Text, VerA = VerA });
+            }
+            Ports = ls;
         }
         /// <summary>
         /// создает логин и пароль или обновляет его 
@@ -248,7 +268,7 @@ namespace PH4_WPF.Engine
             string[] login = (PH4_WPF.Properties.Resources.login).Split('\n');
             string[] pass = (PH4_WPF.Properties.Resources.pwd).Split('\n');
             Random rnd = new Random();
-            LoginAndPass = login[rnd.Next(0, login.Length - 1)] + "Ъ" + pass[rnd.Next(0, pass.Length - 1)];
+            LoginAndPass = (login[rnd.Next(0, login.Length - 1)] + ":" + pass[rnd.Next(0, pass.Length - 1)]).Replace (@"\r", "");
         }
         /// <summary>
         /// Создает файл на сервере
@@ -304,7 +324,7 @@ namespace PH4_WPF.Engine
         public void CreateFiles(string patch, FileServerClass fileServer)
         {
             string perfix = fileServer.FileName.Split('.')[^1];
-            string s = fileServer.FileName.Substring(0, fileServer.FileName.Length - perfix.Length - 2);
+            string s = fileServer.FileName.Substring(0, fileServer.FileName.Length - perfix.Length-1);
             CreateFiles(patch, s, fileServer.FileСontents, (int)fileServer.Size, fileServer.Rights, perfix, fileServer.SystemFile, false);
         }
         /// <summary>
@@ -418,7 +438,7 @@ namespace PH4_WPF.Engine
                     CreateFiles("/User/User/", "IntelME.ini", "Файлы пользователей ", 245243, FileServerClass.PremisionEnum.AdminAndUser, true);
                     break;
                 case TypeOSEnum.Linux:
-                    Ports.ForEach(x => CreateFiles("/bin/", x.NameTitle, "Необходимые файлы для работы сервера" + x.ControlSS, (x.Text.Length) * 52, FileServerClass.PremisionEnum.OnlyAdmin, true));
+                    Ports.ForEach(x => CreateFiles("/bin/", x.NameTitle, "Необходимые файлы для работы сервера" + x.VerA, (x.Text.Length) * 52, FileServerClass.PremisionEnum.OnlyAdmin, true));
                     CreateDir("/", "bin", FileServerClass.PremisionEnum.AdminAndUser);
                     CreateFiles("/bin/", "ls", "Необходимые файлы для работы сервера", 521, FileServerClass.PremisionEnum.OnlyAdmin, true);
                     CreateFiles("/bin/", "kill", "Необходимые файлы для работы сервера", 521, FileServerClass.PremisionEnum.OnlyAdmin, true);
@@ -527,14 +547,16 @@ namespace PH4_WPF.Engine
             App.GameGlobal.MainWindow.StartConsoleText(TextAnimation);
             App.GameGlobal.GamerInfo.AddExp(PopularSRV / 2);
             CheckAuditSecurity();
+            // Проверка засветился в логах игрок
+            if (LogSaver != 0) {
+                App.GameGlobal.Msg("","в логах", FrmSoft.FrmError.InformEnum.Критическая_ошибка );
+            }
         }
 
         #region "Структуры и перечисления"
         [Serializable]
         public struct Port
-        {
-            private bool activ;
-
+        {     
             /// <summary>
             /// номер порта 
             /// </summary>
@@ -548,9 +570,9 @@ namespace PH4_WPF.Engine
             /// </summary>
             public int Rationo;
             /// <summary>
-            /// Тип порта управления
+            /// Версия программы
             /// </summary>
-            public int ControlSS;
+            public ushort VerA;
             /// <summary>
             ///  Коментарий к порту 
             /// </summary>
@@ -558,16 +580,21 @@ namespace PH4_WPF.Engine
             /// <summary>
             /// Работает порт или нет
             /// </summary>
-            public bool Active { get => activ; set => activ = value; }
+            public bool Active;
+            /// <summary>
+            /// Этот порт был взломан
+            /// </summary>
+            public bool BugPort; 
 
-            public Port(ushort num, string nameTitle, int rationo, int controlSS, string text, bool act)
+            public Port(ushort num, string nameTitle, int rationo, ushort verA, string text, bool act)
             {
                 Num = num;
                 NameTitle = nameTitle;
                 Rationo = rationo;
-                ControlSS = controlSS;
+                VerA = verA;
                 Text = text;
-                activ = act;
+                Active = act;
+                BugPort = false;
             }
         }
         [Serializable]

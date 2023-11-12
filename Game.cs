@@ -14,20 +14,20 @@ namespace PH4_WPF
     public class Game
     {
         private GameSpeedEnum gameSpeed = GameSpeedEnum.Pause;      // Начальный режим времени
-        private DateTime stDataGM = DateTime.Parse("01/01/01");     // Начальная дата игры
+        private DateTime stDataGM = new DateTime(2001, 1, 1);       // Начальная дата игры
 
         /// <summary>
         /// Окна/Процесс в игре
         /// </summary>
-        [NonSerialized] public Dictionary<string, Window> ActiveApp = new Dictionary<string, Window>(); 
+        [NonSerialized] public Dictionary<string, Window> ActiveApp = new Dictionary<string, Window>();
         /// <summary>
         /// Основная форма
         /// </summary>
-        [NonSerialized ] public MainWindow MainWindow;
+        [NonSerialized] public MainWindow MainWindow;
         /// <summary>
         /// Сервер игрока
         /// </summary>
-        public Server MyServer { get => Servers[0]; } 
+        public Server MyServer { get => Servers[0]; }
         /// <summary>
         /// Все сервера тут
         /// </summary>
@@ -35,7 +35,7 @@ namespace PH4_WPF
         /// <summary>
         /// Счета банков и другое
         /// </summary>
-        public BankClass  Bank = new BankClass();
+        public BankClass Bank = new BankClass();
         /// <summary>
         /// Все маршруты серверов тут
         /// </summary>
@@ -200,7 +200,31 @@ namespace PH4_WPF
         /// Добавляет в лог информацию
         /// </summary>
         /// <param name="text">Текст инф. в начале разделитель пример : <i>*тут лог</i></param>
-        public void LogAdd(string text) => News.Logs.Add(new NewsClass.LogStruct() { Text = text, Date = DataGM.ToString("dd/mm/yy") });
+        public void LogAdd(string text, LogTypeEnum logType) {
+            string str;
+            switch (logType)
+            {
+                case LogTypeEnum.Money:
+                    str = "";
+                    break;
+                case LogTypeEnum.Error:
+                    str = "";
+                    break;
+                case LogTypeEnum.Server:
+                    str = "";
+                    break;
+                case LogTypeEnum.Problem:
+                    str = "";
+                    break;
+                case LogTypeEnum.Exp:
+                    str = "";
+                    break;
+                default:
+                    str = "";
+                    break;
+            }
+            News.Logs.Add(new NewsClass.LogStruct() { Text = str + text, Date = DataGM.ToString("dd/mm/yy") }); 
+        }
         /// <summary>
         /// Звуковой сиг оповещений
         /// </summary>
@@ -210,6 +234,7 @@ namespace PH4_WPF
             //newMail - новая почта
             //gameover - игра закончена
             //buy - Покупка
+            //button-sound-14 - письмо откыто аттачь 
             if (MainWindow.SoundDisable == false)
             {
                 System.Windows.Media.MediaPlayer media = new System.Windows.Media.MediaPlayer();
@@ -252,6 +277,13 @@ namespace PH4_WPF
             msg.Activate();
             msg.Topmost = true;
         }
+        /// <summary>
+        /// Выполняет событие  
+        /// </summary>
+        /// <param name="condition"></param>
+        /// <param name="StringElemen"></param>
+        public void EventIntroduce(GameScen.ScenStruct.ConditionStruct.ConditionEnum condition, string[] StringElemen ) => this.GameScen.ActiveScen.EventIntroduce(condition, StringElemen);
+
 
         /// <summary>
         /// Находит уязвимости для серверов по портам, создает инструкции 
@@ -294,7 +326,7 @@ namespace PH4_WPF
             {
                 foreach (var tv in item.Ports) {
                     if (tv.NameTitle == "Unknown") continue;
-                    if (tv.Rationo < GamerInfo.HiTecLevel)
+                    if (tv.Rationo < GamerInfo.HiTecLevel) //Тех уровень игрока высокий он обнаружит уязвимость 
                     {
                         if (VulnerabilitiesList.Find(x => x.NameBug == tv.NameTitle & x.VerB == tv.Rationo) == null)
                         {
@@ -305,7 +337,7 @@ namespace PH4_WPF
                                 Shareware = true,
                                 Studied = true,
                                 NameBug = aa[rand.Next(0, 31)] + "_" + tv.NameTitle,
-                                VerA = 1,
+                                VerA = tv.VerA,
                                 VerB = tv.Rationo,
                                 GrantPremission = (Server.PremissionServerEnum)rand.Next(0, 4)
                             };
@@ -359,6 +391,15 @@ namespace PH4_WPF
             Speed1X,
             Speed2X,
             Speed4X
+        }
+
+        public enum LogTypeEnum
+        {
+            Money,
+            Error,
+            Server,
+            Problem,
+            Exp
         }
     }
 }

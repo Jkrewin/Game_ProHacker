@@ -19,7 +19,7 @@
         </Grid.ColumnDefinitions>
         <Rectangle Stroke="#FF2E3440" VerticalAlignment="Top" Height="434" Fill="#FF2E3440" Grid.RowSpan="2"/>
 
-        <ListView x:Name="LsFile" Grid.Column="1" Background="#FF4B566A" BorderThickness="2" BorderBrush="#FF151618" Margin="0,65,10,10" Grid.RowSpan="2" SelectionChanged="ВыделенФайл" PreviewMouseDown="КликПоЭлементу">
+        <ListView x:Name="LsFile" Grid.Column="1" Background="#FF4B566A" BorderThickness="2" BorderBrush="#FF151618" Margin="0,65,10,10" Grid.RowSpan="2" SelectionChanged="ВыделенФайл" PreviewMouseDown="КликПоЭлементу" PreviewMouseDoubleClick="ДвойнойКликПоФайлу">
             <ListView.ItemsPanel>
                 <ItemsPanelTemplate>
                     <WrapPanel Width="{Binding (FrameworkElement.ActualWidth), 

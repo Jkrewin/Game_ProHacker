@@ -1,1 +1,9 @@
-McAfee firewall,,Zone Alarm,,FirewallWin,,Symantec firewall,,AntiVirus Kaspers.,,Firewall
+McAfee firewall + Windows,McAfee firewall,WinSrv
+Zone Alarm + Windows,Zone Alarm,WinSrv
+FirewallWin + Windows,FirewallWin,WinSrv
+Symantec firewall + Windows,Symantec firewall,WinSrv
+Firewall + Windows,Firewall,WinSrv
+All + Windows,,WinSrv
+*nix ver 1,,Linux
+*nix ver2,,Linux
+Unknown,,Unknown

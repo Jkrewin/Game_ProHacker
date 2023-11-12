@@ -105,7 +105,7 @@ namespace PH4_WPF.Browser
 
         private void ИзменениеВСписке(object sender, SelectionChangedEventArgs e)
         {
-            if (RegRS.SelectedItem.ToString ()  != "") {
+            if (RegRS.SelectedItem  != null) {
                 Login.Text = App.GameGlobal.GamerInfo.GameName;
                 Pass.Password  = "XXXXXXXXXXXXXXXXX";
             }

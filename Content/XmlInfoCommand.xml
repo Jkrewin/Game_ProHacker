@@ -85,5 +85,41 @@
 		<Info>Запускает Perl скрипт, можно указать как файл, так и путь к скрипту. Пробел следует заменить на %20</Info>
 		<Menu>3</Menu>
 	</XmlInfoCommand>
+	<XmlInfoCommand NameCommand="make">
+		<Comment>
+			<string>;[путь к скрипту Perl]</string>
+		</Comment>
+		<Info>Компилирует и создает исполнительный файл под систему. Пробел следует заменить на %20</Info>
+		<Menu>3</Menu>
+	</XmlInfoCommand>
+	<XmlInfoCommand NameCommand="copy">
+		<Comment>
+			<string>;[файл для копированя] [место куда скопировать]</string>			
+		</Comment>
+		<Info>Копирует файлы. Пробел следует заменить на %20</Info>
+		<Menu>2</Menu>
+	</XmlInfoCommand>
+	<XmlInfoCommand NameCommand="ver">
+		<Comment>
+			<string>-os;[-os]Подробная информация</string>
+		</Comment>
+		<Info>Определяет версию OS для Win систем</Info>
+		<Menu>2</Menu>
+	</XmlInfoCommand>
+	<XmlInfoCommand NameCommand="id">
+		<Comment>
+			<string>-uname;[-uname]Подробная информация</string>
+		</Comment>
+		<Info>Определяет версию OS для *unix систем</Info>
+		<Menu>2</Menu>
+	</XmlInfoCommand>
+	<XmlInfoCommand NameCommand="exist">
+		<Comment>
+			<string>;[Укажите файл для проверки]</string>
+		</Comment>
+		<Info>Проверяет файл на существование</Info>
+		<Menu>2</Menu>
+	</XmlInfoCommand>
+	
 	
 </ArrayOfXmlInfoCommand>

@@ -74,6 +74,7 @@ namespace PH4_WPF.Engine
                 shell,
                 backdoor,
                 file,
+                goal_file,
                 exe,
                 dir,
                 instructions
@@ -101,7 +102,7 @@ namespace PH4_WPF.Engine
         {
             for (int i = 1; i < p.Length; i++)
             {
-                if (p[i] == "") break;
+                if (p[i] == "") continue;
                 dir = dir.Dir.Find(x => x.FileName == p[i]);
                 if (dir == null) return null;
             }

@@ -30,7 +30,7 @@ namespace PH4_WPF.Engine
             string sFile = App.PatchAB + "News.txt";
             if (System.IO.File.Exists(sFile) == false)
             {
-                App.GameGlobal.LogAdd("E Ошибка нет файла News.txt");
+                App.GameGlobal.LogAdd(" Ошибка нет файла News.txt",  Game.LogTypeEnum.Error);
             }
             else
             {
@@ -76,6 +76,9 @@ namespace PH4_WPF.Engine
         {
             public string TextNews;           
             public TopicEnum Topic;
+            /// <summary>
+            /// Новость прочитана (True)
+            /// </summary>
             public bool ReadNews;
             public string Date;
             public string Title;

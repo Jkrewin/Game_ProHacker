@@ -18,11 +18,15 @@ namespace PH4_WPF.Browser
     {
         public StartPage() => InitializeComponent();
         private void OpenFile(string s) {
-            TextRange doc = new TextRange(Rtf.Document.ContentStart, Rtf.Document.ContentEnd);
-            using (FileStream fs = new FileStream(App.PatchAB + @"\rtf\"+s+".rtf", FileMode.Open)) doc.Load(fs, DataFormats.Rtf);
+            if (File.Exists(App.PatchAB + @"\rtf\" + s + ".rtf"))
+            {
+                TextRange doc = new TextRange(Rtf.Document.ContentStart, Rtf.Document.ContentEnd);
+                using (FileStream fs = new FileStream(App.PatchAB + @"\rtf\" + s + ".rtf", FileMode.Open)) doc.Load(fs, DataFormats.Rtf);
+            }
         }
 
         private void ГайдШеллы(object sender, MouseButtonEventArgs e) => OpenFile("shell");
         private void Эксплойты(object sender, MouseButtonEventArgs e) => OpenFile("exploit");
+        private void ГайдНовичкаПоКонсоли(object sender, MouseButtonEventArgs e) => OpenFile("cmd");
     }
 }

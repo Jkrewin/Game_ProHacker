@@ -84,7 +84,7 @@
             </ListView.Resources>
         </ListView>
 
-        <TextBlock x:Name="MailText"  Grid.Column="1" HorizontalAlignment="Center" Margin="0,27,0,0" VerticalAlignment="Top" Width="482" Height="400" Grid.RowSpan="2"/>
+        <TextBlock x:Name="MailText" TextWrapping="WrapWithOverflow" Grid.Column="1" HorizontalAlignment="Center" Margin="0,27,0,0" VerticalAlignment="Top" Width="482" Height="400" Grid.RowSpan="2"/>
         <Ellipse x:Name="RedButton" HorizontalAlignment="Left" Height="20" Margin="467,0,0,0" Stroke="#FF06256E" VerticalAlignment="Center" Width="20" Fill="#FF097134" MouseEnter="КурсорНадКраснымКружком" MouseLeave="КурсорСошелСкрасногоКружка" MouseDown="НажатКрасный" Grid.Column="1"/>
         <Button Content="" Margin="268,0,4,0" Grid.Row="2" VerticalAlignment="Center" Height="22" Click="УдалениеКнопка">
             <Button.Background>

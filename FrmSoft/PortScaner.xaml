@@ -45,6 +45,7 @@ Background="Transparent"
                 <Button Content="Найти exploit" HorizontalAlignment="Left" Height="32" Margin="430,197,0,0" VerticalAlignment="Top" Width="134" Background="#FF1B2026" BorderBrush="#FFDADADA" Foreground="#FFDADADA" Click="СкачатьСплойт"/>
             </Grid>
         </Border>
+        <Label x:Name="L_ИнформацияОбОС" Content="ОС" HorizontalAlignment="Left" Margin="440,0,0,0" Grid.Row="1" VerticalAlignment="Center" Foreground="#FF7EA1E8" FontWeight="Bold" Width="363"/>
     </Grid>
 
 </Window>

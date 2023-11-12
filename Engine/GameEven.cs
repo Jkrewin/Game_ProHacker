@@ -20,30 +20,60 @@ namespace PH4_WPF.Engine
         /// </summary>
         public IEventGame GameEvent;
 
+        public GameEvenStruct(DateTime dataStart, IEventGame gameEven) {
+            DataStart = dataStart;
+            GameEvent = gameEven;
+        }
+
         /// <summary>
         /// Реализует патрен стратеджи 
         /// </summary>
         public interface IEventGame
-        {
-            public string NameEvent { get; }
+        {            
             public void Run();
         }
 
+        public struct UpgradeSoft : IEventGame
+        {
+            /// <summary>
+            /// Для какого сервера это работает
+            /// </summary>
+            public string  ServerName;
+            /// <summary>
+            /// Это новый инсанс который заменит текущий
+            /// </summary>
+            public Virtualization.InstaceClass Instace;
 
+            public void Run() {
+                Server srv = App.GameGlobal.FindServer(ServerName);
+                if (srv == null) return;
+
+                int i;
+                for ( i = 0; i < srv.VirtualizationServer.Instance.Count; i++)
+                {
+                    if (srv.VirtualizationServer.Instance[i].InstaceType == Instace.InstaceType) break;
+                }
+                srv.VirtualizationServer.Instance[i] = Instace;
+                srv.VirtualizationServer.ServiceControl();
+            }
+        }
+
+        /// <summary>
+        /// Отправка почты
+        /// </summary>
         [Serializable]
         public struct SendMail : IEventGame
-        {
-            public string NameEvent => "Отправка почты";
+        {            
             public MailInBox Mail;
 
             public void Run() => MailInBox.NewMail(Mail);
         }
-
+        /// <summary>
+        /// Добавить свою уязвимость
+        /// </summary>
         [Serializable]
         public struct VulnerabilitiesAdd : IEventGame
-        {
-            public string NameEvent => "Добавить свою уязвимость";
-
+        {           
             public string CName;           
             public string NameBug;           
             public bool Shareware;
@@ -71,27 +101,28 @@ namespace PH4_WPF.Engine
               if (NewsInform)  App.GameGlobal.News.AddNews(NewsClass.NewsСlass.TopicEnum.Найдены_Баги, "Обнаружена необычная уязвимость " + NameBug + " Важно уделить ей внимание", "Bug");
             }
         }
-
+        /// <summary>
+        /// Событие на включение сервера, после сбоя
+        /// </summary>
         [Serializable]
         public struct EventShutdown : IEventGame
-        {
-            public string NameEvent => "Событие на включение сервера, после сбоя";
+        {           
             /// <summary>
-            /// На каком сервере происходит перезагрузка
+            /// На этом сервере происходит перезагрузка
             /// </summary>
             public string UrlServer;           
                
-
             public void Run()
-            {               
-                App.GameGlobal.FindServer (UrlServer).ActSrv =true ;
+            {
+                App.GameGlobal.FindServer(UrlServer).Shutdown();
             }
         }
-
+        /// <summary>
+        /// "Создает порт на сервере
+        /// </summary>
         [Serializable]
         public struct CreatePort : IEventGame
-        {
-            public string NameEvent => "Создает порт на сервере";
+        {           
             /// <summary>
             /// На каком сервере создать порт 
             /// </summary>
@@ -109,12 +140,13 @@ namespace PH4_WPF.Engine
                 App.GameGlobal.Servers.Find(x => x.NameSrv.ToLower() == s.ToLower()).Ports.Add(port);
             }
         }
-
+        /// <summary>
+        /// Показать сообщение на экран
+        /// </summary>
         [Serializable]
         public struct MessageWin : IEventGame
         {
-            public string NameEvent => "Показать сообщение на экран";
-
+           
             public string Title;
             public string Text;
             public FrmSoft.FrmError.InformEnum Inform;
@@ -124,11 +156,12 @@ namespace PH4_WPF.Engine
                 App.GameGlobal.Msg(Title, Text, Inform);
             }
         }
-
+        /// <summary>
+        /// Запуск нового игрового сценария
+        /// </summary>
         [Serializable]
         public struct NextScen : IEventGame
-        {
-            public string NameEvent => "Запуск нового игрового сценария";
+        {           
             /// <summary>
             /// Название колекции скриптов  из ActiveScenario
             /// </summary>
@@ -146,11 +179,12 @@ namespace PH4_WPF.Engine
                 }
             }
         }
-
+        /// <summary>
+        /// Запуск скриптов  из ActiveScenario
+        /// </summary>
         [Serializable]
         public struct RunScript : IEventGame
-        {
-            public string NameEvent => "Запуск скриптов";
+        {            
             /// <summary>
             /// Название колекции скриптов  из ActiveScenario
             /// </summary>
@@ -161,11 +195,12 @@ namespace PH4_WPF.Engine
                 script.ForEach(x => x.Run());
             }
         }
-
+        /// <summary>
+        /// Запускает чат
+        /// </summary>
         [Serializable]
         public struct StartChat : IEventGame
-        {
-            public string NameEvent => "Запускает чат";
+        {           
             /// <summary>
             /// Название чата из ActiveScenario
             /// </summary>
@@ -176,23 +211,25 @@ namespace PH4_WPF.Engine
                 App.GameGlobal.GameChat.InLoadChat();
             }
         }
-
+        /// <summary>
+        /// Игра закончена
+        /// </summary>
         [Serializable]
         public struct GameOver : IEventGame
         {
-            public string NameEvent => "Игра закончена";
-
+           
             public void Run()
             {
                 App.GameGlobal.SoundSignal("gameover");
 
             }
         }
-
+        /// <summary>
+        /// Получить новую новость
+        /// </summary>
         [Serializable]
         public struct GetNews : IEventGame
         {
-            public string NameEvent => "Получить новую новость";
             public string Text;
             public Engine.NewsClass.NewsСlass.TopicEnum Topic;
             /// <summary>
@@ -214,24 +251,26 @@ namespace PH4_WPF.Engine
                 }
             }
         }
-
+        /// <summary>
+        /// Получен опыт
+        /// </summary>
         [Serializable]
         public struct GetExp : IEventGame
         {
-            public string NameEvent => "Получен опыт";
             public int Exp;
 
             public void Run()
             {
                 App.GameGlobal.GamerInfo.AddExp(Exp);
-                App.GameGlobal.LogAdd("*Вы получили опыт +" + Exp);
+                App.GameGlobal.LogAdd("Вы получили опыт +" + Exp, LogTypeEnum.Exp);
             }
         }
-
+        /// <summary>
+        /// Получение дене
+        /// </summary>
         [Serializable]
         public struct GetMoney : IEventGame
         {
-            public string NameEvent => "Получение денег";
             public int Money;
             public Engine.BankClass.BankAccount.TypeMoneyEnum TypeMoney;
 
@@ -267,15 +306,16 @@ namespace PH4_WPF.Engine
                 if (CheckLogik(ref txt))
                 {
                     App.GameGlobal.Bank.DefaultBankAccount.Money += Money;
-                    App.GameGlobal.LogAdd("#Вы получили деньги +" + Money + " на счет " + App.GameGlobal.Bank.DefaultBankAccount.Rs);
+                    App.GameGlobal.LogAdd("Вы получили деньги +" + Money + " на счет " + App.GameGlobal.Bank.DefaultBankAccount.Rs, LogTypeEnum.Money );
                 }
             }
         }
-
+        /// <summary>
+        /// Создан файл
+        /// </summary>
         [Serializable]
         public struct CreateFile : IEventGame
         {
-            public string NameEvent => "Создан файл";
             public string Path;
             public string NameFile;
             public string Comment;
@@ -285,11 +325,12 @@ namespace PH4_WPF.Engine
             public bool SystemFile;
             public void Run() => App.GameGlobal.MyServer.CreateFiles(Path, NameFile, Comment, Size, Premision,  SystemFile);
         }
-
+        /// <summary>
+        /// Создает это событие во времени игры
+        /// </summary>
         [Serializable]
         public struct CreateGameEven : IEventGame
         {
-            public string NameEvent => "Создает это событие во времени игры";
             public IEventGame GameEvent;
             public DateTime DataStart;
             

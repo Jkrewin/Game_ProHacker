@@ -44,7 +44,12 @@ namespace PH4_WPF.FrmSoft
                     SetupBar.Visibility = Visibility.Visible;
                     SetupTimer.Start();
                     break;
+                case InformEnum.СообщениеОтПрограмимы :
+                    Img.Source = new BitmapImage(new Uri(App.PatchAB + @"msg\soft.png"));
+                    break;
+                case InformEnum.ЕстьПроблемы:
                 default:
+                    Img.Source = new BitmapImage(new Uri(App.PatchAB + @"msg\problems.png"));
                     break;
             }            
         }
@@ -76,7 +81,9 @@ namespace PH4_WPF.FrmSoft
         public enum InformEnum { 
          Информация,
          Критическая_ошибка,
-         УстановкаПрограммы
+         УстановкаПрограммы,
+         СообщениеОтПрограмимы,
+         ЕстьПроблемы
         }
 
         private void КнопкаОК(object sender, RoutedEventArgs e)

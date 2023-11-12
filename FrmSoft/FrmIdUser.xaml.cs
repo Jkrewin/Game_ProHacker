@@ -17,10 +17,10 @@ namespace PH4_WPF.FrmSoft
 
     public partial class FrmIdUser : Window
     {
-        string[,] DefecerInfo = new string[10,2];
-        string[,] CrackerInfo = new string[10,2];
-        string[,] VirInfo = new string[10,2];
-        string[,] CorderInfo = new string[10,2];
+        readonly string[,] DefecerInfo = new string[10,2];
+        readonly string[,] CrackerInfo = new string[10,2];
+        readonly string[,] VirInfo = new string[10,2];
+        readonly string[,] CorderInfo = new string[10,2];
 
         byte SelectK = 0; 
         const char STARS = '';
@@ -96,7 +96,7 @@ namespace PH4_WPF.FrmSoft
             VirInfo[8, 1] = "";
             VirInfo[9, 1] = "";
 
-            CorderInfo[0, 0] = "";
+            CorderInfo[0, 0] = "НАВЫК: Писать код, улучшать программы ";
             CorderInfo[1, 0] = "";
             CorderInfo[2, 0] = "";
             CorderInfo[3, 0] = "";
@@ -107,7 +107,7 @@ namespace PH4_WPF.FrmSoft
             CorderInfo[8, 0] = "";
             CorderInfo[9, 0] = "";
 
-            CorderInfo[0, 1] = "";
+            CorderInfo[0, 1] = "Вы можете писать программы, это поможет вам обновлять программы дописывая код в Админ Панели.";
             CorderInfo[1, 1] = "";
             CorderInfo[2, 1] = "";
             CorderInfo[3, 1] = "";
@@ -166,6 +166,10 @@ namespace PH4_WPF.FrmSoft
             L_Craker.Background = null;
             L_Defecer.Background = null;
             L_Vir.Background = null;
+            L_CoderB.Background = null;
+            L_CrakerB.Background = null;
+            L_DefecerB.Background = null;
+            L_VirB.Background = null;
 
             sender.Background = Brushes.CornflowerBlue;           
             
@@ -246,11 +250,9 @@ namespace PH4_WPF.FrmSoft
 
         private void ВыборНавыкаСписка(object sender, SelectionChangedEventArgs e)
         {
-            var label = LB_Info.SelectedItem as Label;
-            if (label != null)
+            if (LB_Info.SelectedItem is Label label)
             {
                 InfoLabel.Text = label.Tag.ToString();
-
             }
         }
 

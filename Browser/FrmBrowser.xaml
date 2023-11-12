@@ -25,10 +25,10 @@
         <Ellipse x:Name="BlueButton" Height="20" Margin="896,0,43,0" Stroke="#FF092165" VerticalAlignment="Center" Fill="#FF118AD3" MouseEnter="КурсорНадСиним" MouseLeave="КурсорУшелСинего" MouseDown="НажатСиний"/>
         <Label Content="TBrowser" HorizontalAlignment="Left" Margin="10,0,0,0" VerticalAlignment="Top" FontSize="14" FontWeight="Bold" FontFamily="Arial Black" Foreground="#FF1D26D3"/>
 
-        <Label Cursor="Hand"  HorizontalAlignment="Left" Margin="10,0,0,0" Grid.Row="1" VerticalAlignment="Center" Width="90" Foreground="#FF2F10FF" PreviewMouseDown="ПереходБанк">
+        <Label Cursor="Hand"  HorizontalAlignment="Left" Margin="56,0,0,0" Grid.Row="1" VerticalAlignment="Center" Width="90" Foreground="#FF2F10FF" PreviewMouseDown="ПереходБанк">
             <TextBlock TextDecorations="Underline" FontSize="16">Bank.com</TextBlock>
         </Label>
-        <Label Cursor="Hand"  HorizontalAlignment="Left" Margin="118,0,0,0" Grid.Row="1" VerticalAlignment="Bottom" Width="90" Foreground="#FF2F10FF" PreviewMouseDown="Переход_explot">
+        <Label Cursor="Hand"  HorizontalAlignment="Left" Margin="158,0,0,0" Grid.Row="1" VerticalAlignment="Center" Width="90" Foreground="#FF2F10FF" PreviewMouseDown="Переход_explot">
             <TextBlock TextDecorations="Underline" FontSize="16"><Run Text="Explot.in"/></TextBlock>
         </Label>
         <Button Content="&#xE159;" HorizontalAlignment="Left" Margin="101,0,0,0" VerticalAlignment="Center" Background="#FF4CA8D1" Foreground="#FF1D26D3" BorderBrush="#FF1D26D3" Width="22" FontFamily="Segoe MDL2 Assets" Height="20" FontSize="16" Click="ОткрытьПапкуЗагрузки"/>
@@ -36,10 +36,13 @@
             <ProgressBar x:Name="ProgressDownload" HorizontalAlignment="Left" Height="20" VerticalAlignment="Center" Width="150" Background="#FF4192B6" BorderBrush="#FF232997" Foreground="#FF1D26D3"/>
             <Label Content="Download" HorizontalAlignment="Left" VerticalAlignment="Center" FontWeight="Bold" FontFamily="Arial" Foreground="#FFD5D5DF" Margin="150,0,0,0"/>
         </Grid>
-        <Label Cursor="Hand"  HorizontalAlignment="Left" Margin="223,0,0,0" Grid.Row="1" VerticalAlignment="Center" Width="147" Foreground="#FF2F10FF" PreviewMouseDown="Переход_milw0rm">
+        <Label Cursor="Hand"  HorizontalAlignment="Left" Margin="262,0,0,0" Grid.Row="1" VerticalAlignment="Center" Width="147" Foreground="#FF2F10FF" PreviewMouseDown="Переход_milw0rm">
             <TextBlock TextDecorations="Underline" FontSize="16"><Run Text="www.milw0rm.com"/></TextBlock>
         </Label>
-        
+        <Label Cursor="Hand"  HorizontalAlignment="Left" Margin="10,0,0,0" Grid.Row="1" VerticalAlignment="Center" Width="32" Foreground="#FF2F10FF" PreviewMouseDown="Переход_Стартовая" FontFamily="Segoe MDL2 Assets" Content="&#xE10F;" FontSize="22" FontWeight="Bold"/>
+
+
+
 
     </Grid>
 </Window>

@@ -56,7 +56,6 @@ namespace PH4_WPF.FrmSoft
           
         }
 
-
         private  class ListViewItemsData
         {
             public string GridViewColumnName_ImageSource { get; set; }
@@ -145,6 +144,7 @@ namespace PH4_WPF.FrmSoft
                     FrmError frm = new FrmError("Ошибка", txt, FrmError.InformEnum.Информация);                   
                 }
                 else {
+                    App.GameGlobal.SoundSignal("button-sound-14");
                     t.Run();
                     AttachMail.CommandList  = null;
                     OpenAtch.Visibility = Visibility.Hidden ;

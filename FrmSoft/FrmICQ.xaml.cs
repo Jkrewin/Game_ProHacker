@@ -80,7 +80,8 @@ namespace PH4_WPF.FrmSoft
                         XTimer.Start();
                         break;
                     case Message.Answer.CommandAnswerEnum.ВыходЗапуститьСкрипт:
-                        List<Engine.GameEvenStruct.IEventGame> script = App.GameGlobal.GameScen.ActiveScen.Script[r.StrArgument];
+                        App.GameGlobal.GameChat = null;
+                       List <Engine.GameEvenStruct.IEventGame> script = App.GameGlobal.GameScen.ActiveScen.Script[r.StrArgument];
                         script.ForEach(x => x.Run());
                         App.GameGlobal.MainWindow.MessageIcon.Opacity = 50;                        
                         this.Close();

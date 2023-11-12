@@ -90,7 +90,7 @@ namespace PH4_WPF.Engine
                 expNext *= 2;
                 level++;
                 ExtraPoint++;
-                App.GameGlobal.LogAdd("!Новый левел lvl:" + level );
+                App.GameGlobal.LogAdd("Новый левел lvl:" + level ,   Game.LogTypeEnum.Exp );
             }
             // Обновить пункты если окно открыто со статусом левела 
             var s = typeof(FrmSoft.FrmIdUser).FullName;

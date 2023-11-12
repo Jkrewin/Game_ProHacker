@@ -200,11 +200,11 @@ namespace PH4_WPF.FrmSoft
                 }     
             }
             chImg = !chImg;
-            LastImage.Source = (chImg) ? Img1Port : Img2Port;
+            LastImage.Source = chImg ? Img1Port : Img2Port;
             LastProgressBar.Value++;
         }
 
-        private Engine.Vulnerabilities FindVulnerabilities(string txt) {
+        private Vulnerabilities FindVulnerabilities(string txt) {
             foreach (var item in App.GameGlobal.VulnerabilitiesList )
             {
                 if (item.CName == txt) {
@@ -231,6 +231,9 @@ namespace PH4_WPF.FrmSoft
                 App.GameGlobal.Msg( "Ошибка", "Сервер не отвечает на запросы.", FrmError.InformEnum.Информация );
                 return;
             }
+
+            if (App.GameGlobal.GamerInfo.HiTecLevel >= SelectServer.PopularSRV) L_ИнформацияОбОС.Content = "На сервере вероятно " + SelectServer.OSName;
+            else L_ИнформацияОбОС.Content = "Не удалось определить ОС ";
 
             UIerrorTab.Visibility = Visibility.Hidden;
             PossPort = 0;

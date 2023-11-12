@@ -69,7 +69,7 @@ namespace PH4_WPF.Engine
         /// <summary>
         /// Нужен для обновления нотификации
         /// </summary>
-        private static void RfMail() { 
+        public static void RfMail() { 
          // обновляет список почты
             if (App.GameGlobal.ActiveApp.ContainsKey(typeof(FrmSoft.Mail).FullName))
             {

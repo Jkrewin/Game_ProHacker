@@ -37,9 +37,9 @@
             </StackPanel>
         </Grid >
         <DockPanel HorizontalAlignment="Center" Height="21" LastChildFill="False" Margin="0,30,0,0" VerticalAlignment="Top" Width="800" Background="#FF382121">
-            <Button Content="Сетивые комманды F1" Width="161" Background="#FF495726" BorderBrush="Black" Foreground="#FF479A1A" FontWeight="Bold" Padding="1,0,1,1" Grid.IsSharedSizeScope="True" Click="Button_Click"/>
-            <Button Content="Системные комманды F2" Background="#FF495726" BorderBrush="Black" Foreground="#FF479A1A" FontWeight="Bold" Padding="1,0,1,1" Grid.IsSharedSizeScope="True" Width="161 " Click="СистемКлик"/>
-            <Button Content="Общие комманды F3" Background="#FF495726" BorderBrush="Black" Foreground="#FF479A1A" FontWeight="Bold" Padding="1,0,1,1" Grid.IsSharedSizeScope="True" Click="ОбщиеКлик" Width="161"/>
+            <Button x:Name="Button01" Content="Сетивые комманды F1" Width="161" Background="#FF495726" BorderBrush="Black" Foreground="#FF479A1A" FontWeight="Bold" Padding="1,0,1,1" Grid.IsSharedSizeScope="True" Click="Button_Click"/>
+            <Button x:Name="Button02" Content="Системные комманды F2" Background="#FF495726" BorderBrush="Black" Foreground="#FF479A1A" FontWeight="Bold" Padding="1,0,1,1" Grid.IsSharedSizeScope="True" Width="161 " Click="СистемКлик"/>
+            <Button x:Name="Button03" Content="Общие комманды F3" Background="#FF495726" BorderBrush="Black" Foreground="#FF479A1A" FontWeight="Bold" Padding="1,0,1,1" Grid.IsSharedSizeScope="True" Click="ОбщиеКлик" Width="161"/>
         </DockPanel>
         <Ellipse x:Name="RedButton" HorizontalAlignment="Left" Height="20" Margin="765,4,0,0" Stroke="#FF650909" VerticalAlignment="Top" Width="20" Fill="#FFD31F11" MouseEnter="КурсорНадКраснымКружком" MouseLeave="КурсорСошелСкрасногоКружка" MouseDown="НажатКрасный"/>
         <Ellipse x:Name="BlueButton" HorizontalAlignment="Left" Height="20" Margin="737,4,0,0" Stroke="#FF092165" VerticalAlignment="Top" Width="20" Fill="#FF118AD3" MouseEnter="КурсорНадСиним" MouseLeave="КурсорУшелСинего" MouseDown="НажатСиний"/>

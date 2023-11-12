@@ -33,7 +33,7 @@ namespace PH4_WPF
 
         public ScenStruct Scen_start()
         {
-            ScenStruct scen = new ScenStruct() { Title = "Завершите задание в почтовом ящике" };
+            ScenStruct scen = new ScenStruct("Завершите задание в почтовом ящике") ;
 
             scen.CreateNewICQChat("icq", "Cheterman", "DDC.jpg");
             scen.AddNewMessage(1, "Привет. Я нашёл для тебя работу, которую ты долго искал. Эта самая суперская работа которую ты можешь найти для себя. Вот один чувак хочет открыть свой сервер и ему нужен админ. Ну вот, работа по управлению сервером удалённо.", 6);
@@ -122,10 +122,10 @@ namespace PH4_WPF
 
             scen.AddNewMessage(14, "Это просто некоторые команды понимает windows семейство, другие Unix системы. Ls -la аналог win команды dir чтобы просмотреть файлы. Для скачки файла wget или download - win систем", 10);
             scen.AddAnswer("Ага", Com.Переход, 15);
-            scen.AddAnswer("Все спасибо, давай связь с боссом", Com.ВыходЗапуститьСкрипт, 0,"win");
+            scen.AddAnswer("Все спасибо, давай связь с боссом", Com.ВыходЗапуститьСкрипт, 0, "start");
 
             scen.AddNewMessage(15, "Ты быстро учишься, хочешь поговорить с Алексанкиным", 4);
-            scen.AddAnswer("Да", Com.ВыходЗапуститьСкрипт, 0, "win");
+            scen.AddAnswer("Да", Com.ВыходЗапуститьСкрипт, 0, "start");
 
             scen.AddNewMessage(16, "Все прочитал, ну и хорошо. Надо верно выбрать номер порта и нужный сплойт к нему, далее шело ты можеш конектится к серверу", 4);
             scen.AddAnswer("Понятно", Com.Переход, 15);
@@ -139,36 +139,29 @@ namespace PH4_WPF
 
             // start
             ls = new List<Script.IEventGame> {
-            new   Script.SendMail(){Mail = new Engine.MailInBox (){
+            new   Script.SendMail(){
+                Mail = new Engine.MailInBox (){
                 Title ="Знакомство",
                 BodyText ="Сюда приходит почта. Мы благодарим что вы использовали наш клиент.",
                 Mailto ="boticq@q.com"  } },
                 new Script.GetNews (){ Text ="В последнее время образовалась очень высокая хакерская активность.", Topic = Engine.NewsClass.NewsСlass.TopicEnum.НовостиКасательноИгрока  },
-                new Script.NextScen (){ ScenName ="2mis" }
+                new Script.NextScen (){ ScenName ="Scen_2mis" },
+                new Script.GetExp() { Exp = 20 }
             };
             scen.Script.Add("start", ls);
-
-            // win
-            ls = new List<Script.IEventGame>
-            {
-                new Script.GetExp() { Exp = 20 },
-                new Script.NextScen() { ScenName = "Scen_2mis" }
-            };
-            scen.Script.Add("win", ls);
-
+                     
             //Инцилизация сценария начальные настройки
             ls = new List<Script.IEventGame> { new Script.StartChat() { NameChat = "icq" } };
             ls.Add(new Script.CreatePort() { UrlServer = "www.test.ru", NameTitle = "Redis 0.2", PortNumber = 665, Rationo = 1, Text = "" });
-            ls.Add(new Script.VulnerabilitiesAdd() { CName = "Redis 0.2", Exploid = true, GrantPremission = Engine.Server.PremissionServerEnum.FullControl, NameBug = "ExRedis 0.2", NewsInform = true, Shareware = false, VerA = 0, VerB = 50 });
+            ls.Add(new Script.VulnerabilitiesAdd() { CName = "Redis 0.2", Exploid = true, GrantPremission = Server.PremissionServerEnum.FullControl, NameBug = "ExRedis 0.2", NewsInform = true, Shareware = false, VerA = 0, VerB = 50 });
             scen.Script.Add("Инцилизация", ls);
-
             
             return scen;
         }
         
         public ScenStruct Scen_2mis()
         {
-            ScenStruct scen = new ScenStruct() { Title = "Украть файл winer.rar с сервера primer.ru и открыть у себя на компе" };
+            ScenStruct scen = new ScenStruct("Украсть файл winer.rar с сервера www.test.ru и открыть у себя на компе");
 
             scen.CreateNewICQChat("start", "Алексанкин", "job05.gif");
 
@@ -180,7 +173,7 @@ namespace PH4_WPF
             scen.AddAnswer("Какая будет у меня зарплата???", Com.Переход, 3);
             scen.AddAnswer("Согласен", Com.Переход, 4);
 
-            scen.AddNewMessage(3, "Пока 100 баксов в месяц затем посмотрим как будешь работать", 5);
+            scen.AddNewMessage(3, "Я буду тебе платить за задание 100 баксов", 5);
             scen.AddAnswer("Согласен", Com.Переход, 4);
 
             scen.AddNewMessage(4, "Задание высылаю по почте. Ты уже не первый кандидат, думаю что у тебя получится.", 10);
@@ -192,14 +185,10 @@ namespace PH4_WPF
 
             // start
             ls = new List<Script.IEventGame> {
-            new   Script.SendMail(){Mail = new Engine.MailInBox (){
+            new   Script.SendMail(){Mail = new MailInBox (){
                 Title ="Задание от Алексанкина",
                 BodyText ="Твоя цель взломать сервер primer.ru и похитить файл winer.rar (для завершение задания запусти файл у себе на компе) если ты сможешь то ты победил",
-                Mailto ="alex@mail.ru"  } },
-            new   Script.SendMail(){Mail = new Engine.MailInBox (){
-                Title ="* подсказка *",
-                BodyText ="Для доступа на сервер тебе нужен будет шелл за 231$ потратишь деньги на другое, ищи их потом сам (Вам придеться создать счет в банке через браузер и установить его по умолчанию как основной)",
-                Mailto ="alex@mail.ru", CommandList = new Script.GetMoney (){ Money =231, TypeMoney = Engine.BankClass.BankAccount.TypeMoneyEnum.Dollar  }  } },
+                Mailto ="alex@mail.ru"  } },           
             new Script.GetNews (){ FromFile =true  }
             };
             scen.Script.Add("start", ls);
@@ -208,15 +197,103 @@ namespace PH4_WPF
             ls = new List<Script.IEventGame>
             {
                 new Script.GetExp () { Exp =25 },
-                new Script.MessageWin (){ Inform = FrmSoft.FrmError.InformEnum.Информация , Text ="Ты прошёл тест", Title ="Сообщение" }
+                 new   Script.SendMail(){Mail = new MailInBox (){
+                Title ="Оплата",
+                BodyText ="Ваши деньги за работу 100$.",
+                Mailto ="alex@mail.ru", CommandList = new Script.GetMoney (){ Money =100, TypeMoney = BankClass.BankAccount.TypeMoneyEnum.Dollar  }  } },
+                new Script.MessageWin (){ Inform = FrmSoft.FrmError.InformEnum.Информация , Text ="Ты прошёл тест", Title ="Сообщение" },
+                new Script.NextScen (){ ScenName ="Scen_3mis" }
             };
             scen.Script.Add("win", ls);
 
             // lose
             ls = new List<Script.IEventGame> { new Script.GameOver() };
+            scen.Script.Add("loser", ls);           
+
+            //Инцилизация сценария начальные настройки
+            ls = new List<Script.IEventGame> { new Script.StartChat() { NameChat = "start" } };
+            scen.Script.Add("Инцилизация", ls);
+
+            scen.NewCondition_FileDownload ("winer.rar", new Script.RunScript() { NameScript = "win" });
+
+            Server server = App.GameGlobal.FindServer("www.test.ru");
+            if (server != null) server.CreateFiles("/", new FileServerClass()
+            {
+                FileName = "winer",
+                Perfix = "rar",
+                Rights = FileServerClass.PremisionEnum.AdminUserGuest,
+                Size = 52441,
+                SystemFile = false,
+                FileСontents = new FileServerClass.ParameterClass() { TypeInformation = FileServerClass.ParameterClass.TypeParam.goal_file }
+            });
+
+            return scen;
+        }
+
+        public ScenStruct Scen_3mis() {
+            ScenStruct scen = new ScenStruct("Пройти курс молодого бойца по серверам") ;
+
+            scen.CreateNewICQChat("start", "Spuler", "Pajero.gif");
+
+            scen.AddNewMessage(1, "OK моя задача расказать вам о сервере, к вашему управлению переходит сервер www.ddospell.com. Консольная программа connect, логин и пароль я пришлю по почте", 10);
+            scen.AddAnswer("Давай я жду", Com.Переход, 2);
+            scen.AddAnswer("Переходим к делу", Com.Переход, 2);
+
+            scen.AddNewMessage(2, "Также вы можете подобрать пароль и логин, но это уже навыки. В вашем профиле вы можете прокачивать свои способности вам нужны экстра очки вы их получите после нового уровня.", 10);
+            scen.AddAnswer("Теперь я могу прокачаться", Com.Переход, 3);
+
+            scen.AddNewMessage(3, "Установим бекдор теперь. Тебе нужно ввести коммаду id или ver когда конектишся к серверу", 10);
+            scen.AddAnswer("Какая именно команда id или ver ?", Com.Переход, 3);
+            scen.AddAnswer("Потом что ?", Com.Переход, 3);
+
+            scen.AddNewMessage(4, "Ты увидишь название OS, теперь через браузер ты можешь скачать нужный тебе бекдор", 10);
+            scen.AddAnswer("С какого сайта качать ?", Com.Переход, 3);
+            scen.AddAnswer("Да я скачал уже ", Com.Переход, 3);
+            scen.AddAnswer("Зачем нужен бекдор ", Com.Переход, 3);
+
+            scen.AddNewMessage(5, "Бекдор(Backdoor) приводиться как задняя дверь поможет тебе получить доступ к серверу. Повысить права доступа или получить доступ к админ панели как сейчас ", 10);
+            scen.AddAnswer("Все понял", Com.Переход, 3);
+
+            scen.AddNewMessage(6, "Скаченному Бекдору открываем общий доступ к файлу ", 10);
+            scen.AddAnswer("С какого сайта качать ?", Com.Переход, 3);
+            scen.AddAnswer("Да я скачал уже ", Com.Переход, 3);
+            scen.AddAnswer("Зачем нужен бекдор ", Com.Переход, 3);
+
+            //Делаем скрипты
+            scen.Script = new Dictionary<string, List<Script.IEventGame>>();
+            List<Script.IEventGame> ls;
+
+            // start
+            ls = new List<Script.IEventGame> {            
+            new   Script.SendMail(){Mail = new MailInBox (){
+                Title ="Пароль доступа.",
+                BodyText ="Доступ к www.ddospell.com. Логин:login Пароль:passwd",
+                Mailto ="alex@mail.ru", CommandList =null  } },
+            new Script.GetNews (){ FromFile =true  }
+            };
+            scen.Script.Add("start", ls);
+
+            // win
+            ls = new List<Script.IEventGame>
+            {
+                new Script.GetExp () { Exp =25 },               
+                new Script.NextScen (){ ScenName ="Scen_serveredit" }
+            };
+            scen.Script.Add("win", ls);
+
+            // lose
+            ls = new List<Script.IEventGame> { new Script.GameOver() };
+            scen.Script.Add("lose", ls);
+
+            ls = new List<Script.IEventGame>
+            {
+                new Script.GetExp () { Exp =5 },
+                new Script.NextScen (){ ScenName ="Scen_serveredit" }                
+            };
             scen.Script.Add("loser", ls);
 
-            scen.CreateCondition("winer.rar", new Script.RunScript() { NameScript = "win" });
+            Server server = App.GameGlobal.FindServer("www.ddospell.com");
+            if (server != null)  server.LoginAndPass = "login:passwd";
 
             //Инцилизация сценария начальные настройки
             ls = new List<Script.IEventGame> { new Script.StartChat() { NameChat = "start" } };
@@ -225,8 +302,46 @@ namespace PH4_WPF
             return scen;
         }
 
+        public ScenStruct Scen_serveredit() {
+            ScenStruct scen = new ScenStruct("Создай форум или чат") ;
 
-        [Serializable]
+            scen.CreateNewICQChat("start", "Алексанкин", "job05.gif");
+
+
+            //несломать сервер
+
+            //Делаем скрипты
+            scen.Script = new Dictionary<string, List<Script.IEventGame>>();
+            List<Script.IEventGame> ls;
+
+            ls = new List<Script.IEventGame> {
+            
+            };
+            scen.Script.Add("start", ls);
+
+            // win
+            ls = new List<Script.IEventGame>
+            {
+                new Script.GetExp () { Exp =30 },
+                new   Script.SendMail(){Mail = new Engine.MailInBox (){
+                Title ="Ваши деньги",
+                BodyText ="В расчете",
+                Mailto ="alex@mail.ru", CommandList = new Script.GetMoney (){ Money =100, TypeMoney = Engine.BankClass.BankAccount.TypeMoneyEnum.Dollar  }  } },
+                new Script.NextScen (){ ScenName ="Scen_tourmode" }
+            };
+            scen.Script.Add("win", ls);
+
+            Server server = App.GameGlobal.FindServer("www.ddospell.com");
+            if (server != null) server.LoginAndPass = "login:passwd";
+
+            //Инцилизация сценария начальные настройки
+            ls = new List<Script.IEventGame> { new Script.StartChat() { NameChat = "start" } };
+            scen.Script.Add("Инцилизация", ls);
+
+            return scen;
+        }
+
+       [Serializable]
         public struct ScenStruct
         {
             public string Title;
@@ -236,10 +351,36 @@ namespace PH4_WPF
             /// <summary>
             /// Условия установленные сценарием
             /// </summary>
-            public List<ConditionStruct> GameCondition;
-
+            readonly private List<ConditionStruct> GameCondition;
             private ICQ lastChat;
             private ICQ.Message lastMessage;
+
+            public ScenStruct(string title)
+            {
+                Title = title;
+                Chat = new Dictionary<string, ICQ>();
+                Script = new Dictionary<string, List<Script.IEventGame>>();
+                GameCondition = new List<ConditionStruct>();
+                lastChat = new ICQ();
+                lastMessage = new ICQ.Message();
+            }
+
+            public void EventIntroduce(GameScen.ScenStruct.ConditionStruct.ConditionEnum condition, string[] StringElemen)
+            {
+                int  forDel;
+                for (int i = 0; i < GameCondition.Count; i++)
+                {
+                    if (GameCondition[i].CheckCondition(condition, StringElemen))
+                    {
+                        GameCondition[i].Action.Run();
+                        forDel = i;
+                        goto del;
+                    }
+                }
+                return;
+            del:;
+                GameCondition.RemoveAt(forDel);
+            }
 
             /// <summary>
             /// Создать новый чат
@@ -272,15 +413,42 @@ namespace PH4_WPF
             /// <summary>
             /// Создает Условие при котором <b >файл скачан </b>
             /// </summary>
-            public void CreateCondition(string file_name_download, Script.IEventGame act)
+            public void NewCondition_FileDownload(string file_name_download, Script.IEventGame act)
             {
                 ConditionStruct condition = new ConditionStruct()
                 {
                     Action = act,
-                    StringElement = file_name_download,
+                    StringElement = new string[] { file_name_download },
                     Condition = ConditionStruct.ConditionEnum.ФайлСкачан
-                };
-                if (GameCondition == null) { GameCondition = new List<ConditionStruct>(); }
+                };               
+                GameCondition.Add(condition);
+            }
+
+            /// <summary>
+            /// Создает Условие при котором <b >Сервак отключен, перезапущен</b>
+            /// </summary>
+            public void NewCondition_SrvDown(string url, Script.IEventGame act)
+            {
+                ConditionStruct condition = new ConditionStruct()
+                {
+                    Action = act,
+                    StringElement = new string[] { url },
+                    Condition = ConditionStruct.ConditionEnum.СерверОтключен
+                };               
+                GameCondition.Add(condition);
+            }
+
+            /// <summary>
+            /// Создает Условие при котором <b >Сервер успешно запустил службу</b>
+            /// </summary>
+            public void NewCondition_RoleWork(string url, Engine.Virtualization.InstaceTypeEnum instaceType , Script.IEventGame act)
+            {
+                ConditionStruct condition = new ConditionStruct()
+                {
+                    Action = act,
+                    StringElement = new string[] { url, instaceType.ToString() },
+                    Condition = ConditionStruct.ConditionEnum.ЗапущенаСлужбаНаСервере
+                };               
                 GameCondition.Add(condition);
             }
 
@@ -318,8 +486,9 @@ namespace PH4_WPF
                 }
             }
 
+            [Serializable]
             public struct ConditionStruct
-            {
+            {           
                 /// <summary>
                 /// Это действие совершиться
                 /// </summary>
@@ -327,15 +496,11 @@ namespace PH4_WPF
                 /// <summary>
                 /// Текст для условия должно равняться ему
                 /// </summary>
-                public string StringElement;
-                /// <summary>
-                /// Число для условия должно равняться ему
-                /// </summary>
-                public int IntElement;
+                public string[] StringElement;               
                 /// <summary>
                 /// Тут условие 
                 /// </summary>
-                public ConditionEnum Condition;
+                public ConditionEnum Condition;               
 
                 /// <summary>
                 /// Проверяет на выполнение условия
@@ -344,27 +509,24 @@ namespace PH4_WPF
                 /// <param name="str">текствое значения которое должно быть равно StringElement</param>
                 /// <param name="i">числовое значение = IntElement</param>
                 /// <returns>True - соотвует</returns>
-                public bool CheckCondition(ConditionEnum condition, string str, int i)
-                {
-                    bool b = false;
+                public bool CheckCondition(ConditionEnum condition, string[] str)
+                {              
                     switch (condition)
                     {
                         case ConditionEnum.ФайлСкачан:
-                            if (str.ToLower() == StringElement.ToLower()) b = true;
+                            if (str[0].ToLower() == StringElement[0].ToLower()) return  true;
+                            break;
+                        case ConditionEnum.ЗапущенаСлужбаНаСервере :
+                            if (str[0].ToLower() == StringElement[0].ToLower() & str[1] == StringElement[1]) return true;
                             break;
                         case ConditionEnum.ВходНаСервер:
-                            if (IntElement == i) b = false;//Test test 
-                            break;
+                            return false;//Test test 
+                           
                         default:
-                            break;
+                            return false;
                     }
-                    return b;
-                }
-                /// <summary>
-                /// Выполняет условие если оно верное
-                /// </summary>               
-                public void ActionCondition(ConditionEnum condition, string str, int i)
-                { if (CheckCondition(condition, str, i)) Action.Run(); }
+                    return false;
+                }              
 
                 /// <summary>
                 /// Событие при котором случаеться действие
@@ -372,7 +534,9 @@ namespace PH4_WPF
                 public enum ConditionEnum
                 {
                     ФайлСкачан,
-                    ВходНаСервер
+                    ВходНаСервер,
+                    ЗапущенаСлужбаНаСервере,
+                    СерверОтключен
                 }
             }
         }

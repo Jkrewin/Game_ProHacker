@@ -9,7 +9,7 @@ using System.Windows.Data;
 using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Media;
-using System.Windows.Media.Imaging;
+using System.Linq;
 using System.Windows.Shapes;
 
 namespace PH4_WPF.FrmSoft
@@ -52,11 +52,11 @@ namespace PH4_WPF.FrmSoft
 
         
         private void RefFiles() {
-            var ls = Engine.FileServerClass.GetInfoFiles(MyPath, App.GameGlobal.MyServer);
+            var ls = FileServerClass.GetInfoFiles(MyPath, App.GameGlobal.MyServer);
             ListViewItemsCollections.Clear();
             foreach (var item in ls  )
             {
-                ListViewItemsData data = new ListViewItemsData() { File = item, GridViewColumnName_LabelContent = item.FileName };
+                ListViewItemsData data = new ListViewItemsData() { File = item, GridViewColumnName_LabelContent = item.FileName };                            
 
                 if (item.Dir != null)
                 {
@@ -69,12 +69,20 @@ namespace PH4_WPF.FrmSoft
                 {
                     data.GridViewColumnName_ImageSource = App.PatchAB + @"\soft\fileManager\etc.png";
                 }
-
-                ListViewItemsCollections.Add(data);
+                ListViewItemsCollections.Add(data);                
             }   
         }
 
-
+        private void FileUrlOffLink(FileServerClass f) {
+            // проверить если файл расшарен то отключить его 
+            foreach (var item in App.GameGlobal.OpenUrl)
+            {
+                if (item.Value.FileName == f.FileName) {
+                    App.GameGlobal.OpenUrl.Remove (item.Key );
+                    return;
+                }
+            }
+        }
 
 
         private void ФормаЗакрыта(object sender, EventArgs e)
@@ -106,29 +114,24 @@ namespace PH4_WPF.FrmSoft
                 //это файл
                 var f = Engine.FileServerClass.GetFile(MyPath + l.File.FileName, App.GameGlobal.MyServer);
 
-                // Установка программы в App
-                if (f.FileСontents.TypeInformation == FileServerClass.ParameterClass.TypeParam.exe)
+                               // Переместить сполйт
+                 if (f.FileСontents.TypeInformation == FileServerClass.ParameterClass.TypeParam.exploit & MyPath == "/user/Hpro4/Download/")
                 {
-                    App.GameGlobal.MyServer.CreateFiles("/apps/", f.FileСontents.TextCommand, "Запускает программу", (int)(f.Size * 1.2), FileServerClass.PremisionEnum.AdminAndUser,  false);
-                    App.GameGlobal.MainWindow.Refreh_AppDeck();
-                    App.GameGlobal.Msg("Установка", "Установка программы " + f.FileName + " завершенно ", FrmError.InformEnum.УстановкаПрограммы);
-                }
-                // Переместить сполйт
-                else if ( f.FileСontents.TypeInformation == FileServerClass.ParameterClass.TypeParam.exploit & MyPath == "/user/Hpro4/Download/")
-                {                    
-                     var h = Engine.FileServerClass.GetFile("/user/Hpro4/Exploit/", App.GameGlobal.MyServer);
-                    if (h.Dir.Find(x => x.FileName == f.FileName) == null) {
+                    var h = Engine.FileServerClass.GetFile("/user/Hpro4/Exploit/", App.GameGlobal.MyServer);
+                    if (h.Dir.Find(x => x.FileName == f.FileName) == null)
+                    {
 
-                        FrmSoft.FrmError msg = new FrmSoft.FrmError("Перемещение файла", "Переместить файл " + h.FileName + " в папку exploit ?", delegate {
+                        FrmSoft.FrmError msg = new FrmError("Перемещение файла", "Переместить файл " + h.FileName + " в папку exploit ?", delegate
+                        {
                             h.Dir.Add(f);
                             Engine.FileServerClass.GetFile("/user/Hpro4/Download/", App.GameGlobal.MyServer).Dir.Remove(f);
                             Папкаexploit(null, null);
                         });
                         msg.Show();
                         msg.Activate();
-                        msg.Topmost = true;                        
-                    }               
-                }
+                        msg.Topmost = true;
+                    }
+                }               
 
             }
             else {
@@ -169,6 +172,7 @@ namespace PH4_WPF.FrmSoft
             if (f.File.SystemFile == false)
             {
                 f.File.FileDel();
+                FileUrlOffLink(f.File);
                 RefFiles();
             }
             else {
@@ -222,7 +226,7 @@ namespace PH4_WPF.FrmSoft
             }
             else {
                 var bc = new BrushConverter();
-                ButtonCut.Background=(System.Windows.Media.Brush)bc.ConvertFrom("#FF2E3440");
+                ButtonCut.Background=(Brush)bc.ConvertFrom("#FF2E3440");
 
                 string[] sf = MyPath.Split('/');
                 var sel= App.GameGlobal.MyServer.FileSys.Dir ;
@@ -247,7 +251,8 @@ namespace PH4_WPF.FrmSoft
                     }
 
                 }
-                sel.Remove(CutFile);
+                FileUrlOffLink(CutFile);
+                sel.Remove(CutFile);               
             }            
         }
 
@@ -290,6 +295,7 @@ namespace PH4_WPF.FrmSoft
             }
 
             string url = "localhost/" + f.File.FileName;
+            url = url.Replace(" ", "%20");
             if (App.GameGlobal.OpenUrl.ContainsKey(url))
             {
                 App.GameGlobal.Msg("Ошибка", "Этот файл с таким названием уже ранее был добавлен в общедоступный список", FrmError.InformEnum.Критическая_ошибка);
@@ -300,6 +306,44 @@ namespace PH4_WPF.FrmSoft
             App.GameGlobal.OpenUrl.Add(url,f.File) ;
             SharedFile.Background = (System.Windows.Media.Brush)bc.ConvertFrom("#FF98A6C2");
 
+        }
+
+        private void ДвойнойКликПоФайлу(object sender, MouseButtonEventArgs e)
+        {
+            ListViewItemsData l = (ListViewItemsData)LsFile.SelectedItem;
+            if (l == null) return;
+            if (l.File.Dir == null)
+            {
+                //это файл
+                var f = Engine.FileServerClass.GetFile(MyPath + l.File.FileName, App.GameGlobal.MyServer);
+               
+                if (f.FileСontents.TypeInformation == FileServerClass.ParameterClass.TypeParam.exe)
+                {
+                    // Установка программы в App
+                    if (FileServerClass.Exist("/apps/", f.FileСontents.TextCommand, App.GameGlobal.MyServer))
+                    {
+                        App.GameGlobal.Msg("Программа", "Эта программа была ранее установлена", FrmError.InformEnum.СообщениеОтПрограмимы );
+                    }
+                    else
+                    {
+                        App.GameGlobal.MyServer.CreateFiles("/apps/", f.FileСontents.TextCommand, "Запускает программу", (int)(f.Size * 1.2), FileServerClass.PremisionEnum.AdminAndUser, false);
+                        App.GameGlobal.MainWindow.Refreh_AppDeck();
+                        App.GameGlobal.Msg("Установка", "Установка программы " + f.FileName + " завершенно ", FrmError.InformEnum.УстановкаПрограммы);
+                    }
+                }
+                else if (f.FileСontents.TypeInformation == FileServerClass.ParameterClass.TypeParam.exploit)
+                {
+                    App.GameGlobal.Msg("Файл", "Это файл эксплойта. Запустите его в консоли чтобы взломать сервер", FrmError.InformEnum.Информация);
+                }
+                else if (f.FileСontents.TypeInformation == FileServerClass.ParameterClass.TypeParam.backdoor)
+                {
+                    App.GameGlobal.Msg("Файл", "Backdoor файл загрузите его на другой сервер, затем запустите консольную комманду Make чтобы повысит права доступа ", FrmError.InformEnum.Информация);
+                }
+                else if (f.FileСontents.TypeInformation == FileServerClass.ParameterClass.TypeParam.shell)
+                {
+                    App.GameGlobal.Msg("Файл", "Это файл Shell необходим для подключении к серверу через комманду connect ", FrmError.InformEnum.Информация);
+                }
+            }
         }
     }
 }

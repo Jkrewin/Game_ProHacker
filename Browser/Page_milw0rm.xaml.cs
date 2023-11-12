@@ -93,20 +93,19 @@ namespace PH4_WPF.Browser
             LsGoods.Items.Clear();
             string[] txt = App.GameGlobal.MainWindow.Firewall_TXT;
             DownloadText download;
-
+            int i = -1;
             foreach (var tv in txt)
             {
-                string[] vs = tv.Split(',');
-                foreach (var item in vs)
-                {
+                string[] vs = tv.Split(',');              
 
-                    if (item != "")
+                    if (tv != "")
                     {
                         int s = (int)(100 * App.GameGlobal.GamerInfo.MultiplierPrices);
+                            i++;
                         download = new DownloadText
                         {
-                            ID = "",
-                            NameBug = item,
+                            ID = i.ToString (),
+                            NameBug = tv.Split (',')[0].Replace (" + ", "_"),
                             Price = s.ToString(),
                             TypeProg = Engine.FileServerClass.ParameterClass.TypeParam.backdoor
                         };
@@ -122,7 +121,7 @@ namespace PH4_WPF.Browser
                         };
                         LsGoods.Items.Add(label);
                     }
-                }
+               
             }
 
         }

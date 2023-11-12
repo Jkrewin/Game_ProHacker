@@ -66,13 +66,14 @@
                         Color="GreenYellow"/>
                 </Label.Effect>
             </Label>
-            <Button Content="Закрыть ленту" HorizontalAlignment="Left" Margin="383,12,0,0" Grid.Row="2" VerticalAlignment="Top" Height="32" Width="228" FontWeight="Bold" FontSize="22" Background="#FF414D63" Foreground="#FF819CB7" Click="ЗакрытьЛенту" BorderBrush="#FF35373D" Padding="1,0,1,0"/>
+            <Button Content="Закрыть ленту" HorizontalAlignment="Left" Margin="383,7,0,0" Grid.Row="2" VerticalAlignment="Top" Height="32" Width="228" FontWeight="Bold" FontSize="22" Background="#FF414D63" Foreground="#FF819CB7" Click="ЗакрытьЛенту" BorderBrush="#FF35373D" Padding="1,0,1,0"/>
             <ListBox  BorderThickness="1" x:Name="ListNewsLog" Grid.Row="1" ScrollViewer.HorizontalScrollBarVisibility="Disabled" Background="#FF4B566A" BorderBrush="#FF35373D" PreviewMouseDoubleClick="ДвойнойПоНовости" SelectionChanged="ВыборЭлементаНовостей"/>
+            <Button Content="Все прочитано" HorizontalAlignment="Left" Margin="383,45,0,0" Grid.Row="2" VerticalAlignment="Top" Height="32" Width="228" FontWeight="Bold" FontSize="22" Background="#FF414D63" Foreground="#FF819CB7" Click="ВсеПрочитанно" BorderBrush="#FF35373D" Padding="1,0,1,0"/>
 
         </Grid>
 
-        <Grid x:Name="SpeedPanel" Height="87" Canvas.Top="920" Width="322" Canvas.Left="7" Margin="-4,920,1602,1" >
-            <Image HorizontalAlignment="Center" Height="88" VerticalAlignment="Top" Width="324" Source="/Content/Desktop/bPanel/spPanel.png" Stretch="UniformToFill" Margin="0,1,0,0"/>
+        <Grid x:Name="SpeedPanel" Height="87" Canvas.Top="920" Width="322" Canvas.Left="7" Margin="-4,920,1602,1" HorizontalAlignment="Left" VerticalAlignment="Bottom" >
+            <Image HorizontalAlignment="Left" Height="88" VerticalAlignment="Bottom" Width="324" Source="/Content/Desktop/bPanel/spPanel.png" Stretch="UniformToFill" Margin="0,1,0,0"/>
             <Image x:Name="Img1x" HorizontalAlignment="Left" Height="71" Margin="93,-1,0,0" VerticalAlignment="Top" Width="84" Source="/Content/Desktop/bPanel/spPanel1X.png"/>
             <Image x:Name="PauseImg" HorizontalAlignment="Left" Height="73" Margin="56,29,0,0" VerticalAlignment="Top" Width="85" Source="/Content/Desktop/bPanel/spPanelii.png"/>
             <Image x:Name="Img2x" HorizontalAlignment="Left" Height="78" Margin="173,1,0,0" VerticalAlignment="Top" Width="76" Source="/Content/Desktop/bPanel/spPanel2X.png" />
@@ -136,10 +137,10 @@
             <ProgressBar x:Name="PopularBar" HorizontalAlignment="Center" Height="31" Margin="0,127,0,0" VerticalAlignment="Top" Width="354" BorderBrush="#FF071C43" Background="#FF4B566A" Value="50" Foreground="#FF066AB0"/>
             <Label Content="Популярность сервера" HorizontalAlignment="Center" Margin="0,128,0,0" VerticalAlignment="Top" Foreground="#FFCDC8C8" FontSize="14" Width="335" FontWeight="Bold" HorizontalContentAlignment="Center"/>
             <TextBlock x:Name="L_StatusLine" TextWrapping="WrapWithOverflow" Text="У вас нет доступа к этому серверу, сервер не был взломан." HorizontalAlignment="Center" VerticalAlignment="Center" Width="341" Height="79" FontSize="14" FontWeight="Normal" Foreground="#FFEFF476" TextAlignment="Center"/>
-
-
-            <ListBox Visibility="Hidden"  x:Name="LB_FindEl" Background="#FF4B566A" FontSize="14" Foreground="#FF599F84" SelectionChanged="ВыделенниеЭлементаПоиска"/>
             <Button x:Name="ShutdownServer" Content="Перезапуск сервера" HorizontalAlignment="Center" Height="31" Margin="0,248,0,0" VerticalAlignment="Top" Width="342" Click="Перезапустить_сервер" Background="#FF3F4B62" RenderTransformOrigin="0.5,0.5" Foreground="#FFCDC8C8" BorderBrush="#FF2B2929"/>
+            <Button x:Name="AdminPanel" Content="Панель Администратора" HorizontalAlignment="Center" Height="31" Margin="0,284,0,0" VerticalAlignment="Top" Width="342" Click="ОткрАдминПанел" Background="#FF623C38" RenderTransformOrigin="0.5,0.5" Foreground="White" BorderBrush="#FF0E1E34" FontSize="14"/>
+            <!-- Сюда ниже не лезь тут список поверх кнопок-->
+                <ListBox Visibility="Hidden"  x:Name="LB_FindEl" Background="#FF4B566A" FontSize="14" Foreground="#FF599F84" SelectionChanged="ВыделенниеЭлементаПоиска"/>
 
         </Grid>
 
