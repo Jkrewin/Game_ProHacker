@@ -8,7 +8,7 @@ namespace PH4_WPF.Engine
     /// Профиль игрока
     /// </summary>
     [Serializable]
-    public class GamerInfoClass
+    public sealed class GamerInfoClass
     {
         private int exp;
         private int expNext = 100;
@@ -90,7 +90,7 @@ namespace PH4_WPF.Engine
                 expNext *= 2;
                 level++;
                 ExtraPoint++;
-                App.GameGlobal.LogAdd("Новый левел lvl:" + level ,   Game.LogTypeEnum.Exp );
+                App.GameGlobal.LogAdd("Новый левел lvl:" + level , Enums.LogTypeEnum.Exp );
             }
             // Обновить пункты если окно открыто со статусом левела 
             var s = typeof(FrmSoft.FrmIdUser).FullName;

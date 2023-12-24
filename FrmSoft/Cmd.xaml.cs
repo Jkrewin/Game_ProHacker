@@ -12,14 +12,12 @@ using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
-using System.Windows.Shapes;
+using EventEnum= PH4_WPF.Enums.ConditionEnum;
 using System.Xml.Serialization;
 
 namespace PH4_WPF.FrmSoft
 {
-    /// <summary>
-    /// Логика взаимодействия для Cmd.xaml
-    /// </summary>
+   
     public partial class Cmd : Window
     {
         readonly List<string> FF00_ls = new List<string>(); // Ускоряет доступ к списку файлов Продвинутый уровень  
@@ -32,12 +30,13 @@ namespace PH4_WPF.FrmSoft
         private const short MAX_LINES = 37;                      // Максимальное количество строк в консоли 
         private readonly List<string> StoresList = new List<string>();               // История ввода текста 
         private List<ConsoleText> ScriptConsole = new List<ConsoleText>();           // Скрипт для консоли
-        private readonly System.Timers.Timer ConsoleTimer = new Timer(100);          // Таймер для ввода текста
+        private readonly Timer ConsoleTimer = new Timer(100);                        // Таймер для ввода текста
         private readonly System.Windows.Threading.DispatcherTimer CursorTimer;       // Мигающий курсор
         private Point PointOos = new Point(0, 0);                                    // Управление перетаскиванием
         private readonly List<XmlInfoCommand> XmlInfoCommandList;                    // Описание комманд
         private string ClipBoard = "";                                               // Тут текст котрый сохраняеться в буфере при нажатии Insert он выводиться 
-        private readonly string[] VisualTimer;                                                // Виуализация работы таймера
+        private readonly string[] VisualTimer;                                       // Виуализация работы таймера
+       
 
         /// <summary>
         /// Текст приветствие
@@ -152,6 +151,15 @@ namespace PH4_WPF.FrmSoft
         }
 
         /// <summary>
+        ///  Добавляет сразу в ScriptConsole и выполяет действие 
+        /// </summary>      
+        private void AddTextConsole(string text, Action action, int timer = 0, bool jumpLine = true)
+        {
+            if (ScriptConsole == null) ScriptConsole = new List<ConsoleText>();
+            ScriptConsole.Add(TextConsole(text, timer, jumpLine, action));
+        }
+
+        /// <summary>
         /// Запустить обработчик сценария
         /// </summary>
         public void BashConsole()
@@ -226,7 +234,6 @@ namespace PH4_WPF.FrmSoft
                     indexText = 0;
                     ScriptConsole.Clear();
 
-
                 }
                 else
                 {
@@ -238,12 +245,14 @@ namespace PH4_WPF.FrmSoft
                     }
                     CmdText.Inlines.Add(new Run("\r\n"));
                     lastLine.Push(CmdText.Inlines.LastInline);
-                    ClearUpperText();// Удаляет переизбыток строк 
-
+                    ClearUpperText();                                       // Удаляет переизбыток строк 
+                    if (ScriptConsole[indexText].TiggerAction != null)
+                    {
+                        ScriptConsole[indexText].TiggerAction.Invoke();// Выполяен действие если оно есть 
+                    }   
                 }
             });
             indexText++;
-
         }
 
         //+++ обновление курсора
@@ -297,7 +306,7 @@ namespace PH4_WPF.FrmSoft
         /// <param name="timer">Таймер задержки по умолчанию это 0</param>
         /// <param name="jumpLine">Следует прыгнутиь на новую строку или заменить текущию по умолчанию это True</param>
         /// <returns>AddTextConsole</returns>
-        public ConsoleText TextConsole(string text, int timer = 0, bool jumpLine = true)
+        public ConsoleText TextConsole(string text, int timer = 0, bool jumpLine = true, Action action =null)
         {
             List<Inline> txt = new List<Inline>();
             var bc = new BrushConverter();
@@ -314,7 +323,7 @@ namespace PH4_WPF.FrmSoft
                     txt.Add(new Run(item) { Foreground = StTextColor });
                 }
             }
-            return new ConsoleText() { Delay = timer, JumpNewLine = jumpLine, Text = txt.ToArray() };
+            return new ConsoleText() { Delay = timer, JumpNewLine = jumpLine, Text = txt.ToArray(), TiggerAction =action };
         }
 
         public void TextConsoleOpenBuffer(string command, int timer = 0)
@@ -332,13 +341,15 @@ namespace PH4_WPF.FrmSoft
             public bool JumpNewLine;
             public bool OpenBufferIN = false;
             public string CommandText;
-
-
+            /// <summary>
+            /// Выполняет действие в момент выполеннеия строк в консоли 
+            /// </summary>
+            public Action TiggerAction;  
         }
 
 
 
-        #region "Кнопки Синий и красный кружок"
+                    #region "Кнопки Синий и красный кружок"
         Brush SaveColor;
         private void КурсорНадКраснымКружком(object sender, MouseEventArgs e)
         {
@@ -368,9 +379,9 @@ namespace PH4_WPF.FrmSoft
         {
             this.WindowState = WindowState.Minimized;
         }
-        #endregion
+                    #endregion
 
-        #region "Консоль текста ввод"    
+                    #region "Консоль текста ввод"    
 
         int cellText = 0;
         int linesText = 0;
@@ -528,7 +539,7 @@ namespace PH4_WPF.FrmSoft
             CommandInfo.Inlines.Clear();
         }
 
-        #endregion
+                    #endregion
 
         /// <summary>
         /// структура содержания комманд и описания
@@ -587,6 +598,11 @@ namespace PH4_WPF.FrmSoft
             ShowMenu(3, 317);
             Button03.Focusable = false;
         }
+
+        private void TestSub(object sender, RoutedEventArgs e)
+        {
+            Cmd_route("r localhost www.test.ru");
+        }
     }
 
 
@@ -613,105 +629,13 @@ namespace PH4_WPF.FrmSoft
                 AddTextConsole("Ъ`Red=Вы не указали путь к файлу или файл Ъ");
                 return;
             }
-            OpenFileEx(txt[5..]);
-            if (BufferConsole.FileStart.FileСontents.TypeInformation == FileServerClass.ParameterClass.TypeParam.backdoor)
-            {
-                string t = App.GameGlobal.MainWindow.Firewall_TXT[BufferConsole.FileStart.FileСontents.IntParam];
-                string os = Enum.GetName(typeof(Server.TypeOSEnum), GameSrv.OS);
+            FileServerClass fileServer = OpenFileEx(txt[5..]);
+            if (fileServer == null) return;
 
-                AddTextConsole("exec make " + BufferConsole.FileStart.FileName + " clean", 4);
-                AddTextConsole("----- making target " + GameSrv.OSName + " [new preregs] -----", 4);
-                AddTextConsole(".config script/b", 4);
-                AddTextConsole(".config script/a", 1);
-                AddTextConsole(".config param 1", 1);
-                AddTextConsole(".config include/config", 1);
-                if (GameSrv.OS == Server.TypeOSEnum.WinSrv)
-                {
-                    AddTextConsole("win.exe script", 1);
-                    if (t.Split(',')[2] == os)
-                    {
-                        if (GameSrv.FireWall == t.Split(',')[1])
-                        {
-                            // если разница большая между хай теком и популярностью в 10 ьл сервер не получиться взломать 
-                            if ((GameSrv.PopularSRV - App.GameGlobal.GamerInfo.HiTecLevel) > 10)
-                            {
-                                AddTextConsole("SET Win/ $dir$", 4);
-                                AddTextConsole("NoDriveTypeAutoRun = dword:000000ff", 1);
-                                AddTextConsole("label=Inc_drive", 1);
-                                AddTextConsole(@"DriverPath=drivers\ 0", 1);
-                                AddTextConsole(@"HKEY_LOCAL_MACHINE\Software\Microsoft\Windows\ false", 1);
-                                AddTextConsole("Ъ`OrangeRed= Вы получили полный доступ Ъ", 8);
-                                GameSrv.Premision = Server.PremissionServerEnum.FullControl;
-                            }
-                            else
-                            {
-                                AddTextConsole("_", 1);
-                                AddTextConsole(" ", 3, false);
-                                AddTextConsole("_", 3, false);
-                                AddTextConsole(" ", 3, false);
-                                AddTextConsole("_", 3, false);
-                                AddTextConsole("Ъ`OrangeRed= Администратор смог определить вас он более продвинутый чем ваш текущий скилл Ъ", 8, false);
-                            }
-                        }
-                        else
-                        {
-                            AddTextConsole("_", 1);
-                            AddTextConsole(" ", 3, false);
-                            AddTextConsole("_", 3, false);
-                            AddTextConsole(" ", 3, false);
-                            AddTextConsole("Ъ`OrangeRed= Фаервол заблокировал работу программы Ъ", 8, false);
-                        }
-                    }
-                    else
-                    {
-                        AddTextConsole("script err #11 Ъ`OrangeRed= Операционная система не соотвествует текущей Ъ", 1);
-                    }
-                }
-                // =>> linux
-                else
-                {
-                    AddTextConsole("pl script", 1);
-                    bool b20 = t.Split(',')[0].IndexOf("20") == -1 ? false : true;
-                    if (t.Split(',')[2] == os)
-                    {
-                        //В зависимости от популярности сервера и версии бекдора будет доступ
-                        if (b20 == true & (GameSrv.PopularSRV - App.GameGlobal.GamerInfo.HiTecLevel) > 10)
-                        {
-                            AddTextConsole("sudo apt-get install dialog", 4);
-                            AddTextConsole("add-apt-repository", 1);
-                            AddTextConsole("choices=$Inc_drive", 1);
-                            AddTextConsole("apt-get update && sudo apt-get upgrade -y", 1);
-                            AddTextConsole("Ъ`OrangeRed= Вы повысили уровень доступа Ъ", 8);
-                            GameSrv.Premision = Server.PremissionServerEnum.FullControl;
-                        }
-                        else if (b20 == true & (GameSrv.PopularSRV - App.GameGlobal.GamerInfo.HiTecLevel) > 5)
-                        {
-                            AddTextConsole("DNS=192.168.0.13", 4);
-                            AddTextConsole("add-apt-repository", 1);
-                            AddTextConsole("apt-key adv --keyserver keyserver.", 1);
-                            AddTextConsole("if [[ $EUID -ne 0 ]]; ", 1);
-                            AddTextConsole("Ъ`OrangeRed=Вы повысили уровень доступа Ъ", 8);
-                            GameSrv.Premision = Server.PremissionServerEnum.FullControl;
-                        }
-                        else
-                        {
-                            AddTextConsole("_", 1);
-                            AddTextConsole(" ", 3, false);
-                            AddTextConsole("_", 3, false);
-                            AddTextConsole("Ъ`OrangeRed= Сервер отказал вам в доступе, так как выполнил комманды Ъ", 8, false);
-                        }
-                    }
-                    else
-                    {
-                        AddTextConsole("script mds1 - error ", 1);
-                        AddTextConsole("Ъ`OrangeRed=Несовместимая ОСЪ", 1);
-                    }
-                }
-            }
-            else
-            {
+           
+           
                 AddTextConsole("Ъ`OrangeRed=Файл не соотвествует рабочему исполнительному файлу", 1);
-            }
+            
         }
 
         public void Cmd_copy(string txt)
@@ -721,16 +645,16 @@ namespace PH4_WPF.FrmSoft
             Server serverOUT = GameSrv;
             Server serverIn = GameSrv;
 
-            OpenFileEx(vs[1]);
-            if (BufferConsole.FileStart != null)
+           FileServerClass fileServer= OpenFileEx(vs[1]);
+            if (fileServer != null)
             {
                 if (vs[2] == "download")
                 {
                     serverIn = App.GameGlobal.MyServer;
                     vs[2] = "/user/Hpro4/Download/";
                 }
-                var ls = Engine.FileServerClass.GetInfoFiles(vs[2], serverIn);
-                if (ls.Find(x => x.FileName == BufferConsole.FileStart.FileName) != null)
+                var ls = FileServerClass.GetInfoFiles(vs[2], serverIn);
+                if (ls.Find(x => x.FileName == fileServer.FileName) != null)
                 {
                     AddTextConsole("Ъ`Red= Такой файл тут уже существует в папке: " + serverIn.NameSrv + "://" + vs[2] + "Ъ", 1);
                     return;
@@ -751,10 +675,8 @@ namespace PH4_WPF.FrmSoft
                     AddTextConsole("Download: [==========]", 3, false);
                     AddTextConsole("Download: [  = ok=   ]", 3, false);
                 }
-                Engine.FileServerClass.GetFile(vs[2], serverIn).Dir.Add(BufferConsole.FileStart);
-                AddTextConsole("Файл скопирован успешно в каталог " + serverIn.NameSrv + "://" + vs[2], 1);
-                App.GameGlobal.EventIntroduce(GameScen.ScenStruct.ConditionStruct.ConditionEnum.ФайлСкачан,
-                    new string[] { BufferConsole.FileStart.FileName });
+                AddTextConsole("Файл скопирован успешно в каталог " + serverIn.NameSrv + "://" + vs[2], () => serverIn.CreateFiles(vs[2], fileServer),  1);
+                App.GameGlobal.EventIntroduce(EventEnum.ФайлСкачан, fileServer.FileName);
             }
         }
 
@@ -770,7 +692,7 @@ namespace PH4_WPF.FrmSoft
             int i = 1;
             if (vs.Length > 1) if (vs[1] == "-n") numr = true;
 
-            AddTextConsole("Списки ресурсов открытых на вашим сервере:", 1);
+            AddTextConsole("Списки ресурсов открытых на сервере:", 1);
             foreach (var item in App.GameGlobal.OpenUrl)
             {
                 if (item.Key.Substring(0, 10) == "localhost/")
@@ -784,10 +706,59 @@ namespace PH4_WPF.FrmSoft
 
         }
 
+        public void Cmd_logclear(string txt)
+        {           
+            string[] vs = txt.Split(' ');
+            if (GameSrv.OS == Server.TypeOSEnum.Logerhead)
+            {
+                AddTextConsole("На этом сервер запись логов отключена. ", 4);
+                return;
+            }
+            if (vs.Length == 0) {
+                AddTextConsole("Вы должны указать ключ -l или -w", 1);
+                return;
+            }
+
+            if (vs[1] == "-w" & GameSrv.OS == Server.TypeOSEnum.WinSrv)
+            {
+                AddTextConsole("Exe -- 01", 2);
+                AddTextConsole("FF45 2200 mov", 1);
+                AddTextConsole("Started 2202", 3);
+                AddTextConsole("--> kernel.dll", 5);
+            }
+            else if (vs[1] == "-l" & GameSrv.OS != Server.TypeOSEnum.WinSrv)
+            {
+                AddTextConsole(".logs server ", 1);
+                AddTextConsole("open /", 5);
+                AddTextConsole(@"open \.logs", 1, false);
+            }
+            else {
+                AddTextConsole("Подключение к логам сервера ...", 5);
+                AddTextConsole("Нет доступа или нет ключа", 1);
+                return;
+            }
+            AddTextConsole("Clear Logs | Process...", 3);
+            GameSrv.LogSaver = 0;
+            AddTextConsole("Clear Logs | End process.", 4);
+            AddTextConsole("Exit Server | Выход из сервера", Off_Server, 2);
+        }
+
+        public void Cmd_mkdir(string txt) {
+            string[] vs = txt.Split(' ');
+            if (vs.Length == 0)
+            {
+                AddTextConsole("Вы должны указать название папки ", 1);
+                return;
+            }
+
+            GameSrv.CreateDir(Pwd, vs[1], FileServerClass.PremisionEnum.AdminUserGuest);
+
+        }
+
         public void Cmd_wget(string txt)
         {
             string[] vs = txt.Split(' ');
-            if (!(GameSrv.OS != Server.TypeOSEnum.Linux || GameSrv.OS != Server.TypeOSEnum.Logerhead))
+            if (GameSrv.OS != Server.TypeOSEnum.Linux & GameSrv.OS != Server.TypeOSEnum.Logerhead)
             {
                 AddTextConsole("Ъ`Red= \"wget\" не является внутренней или внешней командой, исполняемой программой или пакетным файлом.Ъ", 1);
                 return;
@@ -800,10 +771,12 @@ namespace PH4_WPF.FrmSoft
                     return;
                 }
                 AddTextConsole("Подключаюсь к узлу", 1);
+                FileServerClass file;
+                Action action = null;
                 // скачка из сетевого ресурса
                 if (vs[1] == "-u")
                 {
-                    FileServerClass file = App.GameGlobal.OpenUrl[vs[2]];
+                    file = App.GameGlobal.OpenUrl[vs[2]];
 
                     // Проверка доступа к файлу
                     if (FileServerClass.CheckAccess(Pwd, GameSrv) == false)
@@ -811,76 +784,89 @@ namespace PH4_WPF.FrmSoft
                         AddTextConsole("Ъ`Red=Нет доступа к файлу: " + Pwd + " Ъ");
                         return;
                     }
-
-                    AddTextConsole("Передача данных.", 5, false);
-                    switch (file.Size.ToString().Length)
+                    if (FileServerClass.Exist(Pwd, file.FileName, GameSrv) == false) action = () => GameSrv.CreateFiles(Pwd, file);
+                }
+                else if (vs[1] == "-d")
+                {
+                    file = OpenFileEx(vs[2]);
+                    if (FileServerClass.CheckAccess(Pwd + "/" + file.FileName, GameSrv) == false)
                     {
-                        case 1:
-                            AddTextConsole("               13%", 1, false);
-                            AddTextConsole("               56%", 7, false);
-                            AddTextConsole("               89%", 9, false);
-                            AddTextConsole("               96%", 11, false);
-                            break;
-                        case 2:
-                            AddTextConsole("               8 %", 1, false);
-                            AddTextConsole("               22%", 8, false);
-                            AddTextConsole("               58%", 4, false);
-                            AddTextConsole("               71%", 6, false);
-                            AddTextConsole("               86%", 7, false);
-                            AddTextConsole("               99%", 12, false);
-                            break;
-                        case 3:
-                            AddTextConsole("               11%", 1, false);
-                            AddTextConsole("               24%", 8, false);
-                            AddTextConsole("               31%", 4, false);
-                            AddTextConsole("               45%", 6, false);
-                            AddTextConsole("               69%", 7, false);
-                            AddTextConsole("               80%", 5, false);
-                            AddTextConsole("               93%", 10, false);
-                            break;
-                        case 4:
-                            AddTextConsole("               5 %", 1, false);
-                            AddTextConsole("               17%", 8, false);
-                            AddTextConsole("               24%", 4, false);
-                            AddTextConsole("               39%", 6, false);
-                            AddTextConsole("               51%", 7, false);
-                            AddTextConsole("               72%", 5, false);
-                            AddTextConsole("               86%", 10, false);
-                            AddTextConsole("               98%", 6, false);
-                            break;
-                        case 5:
-                            AddTextConsole("               9 %", 1, false);
-                            AddTextConsole("               20%", 4, false);
-                            AddTextConsole("               37%", 7, false);
-                            AddTextConsole("               49%", 5, false);
-                            AddTextConsole("               60%", 9, false);
-                            AddTextConsole("               70%", 5, false);
-                            AddTextConsole("               86%", 5, false);
-                            AddTextConsole("               91%", 10, false);
-                            AddTextConsole("               98%", 12, false);
-                            break;
-                        default:
-                            AddTextConsole("               10%", 1, false);
-                            AddTextConsole("               24%", 4, false);
-                            AddTextConsole("               42%", 6, false);
-                            AddTextConsole("               57%", 8, false);
-                            AddTextConsole("               67%", 11, false);
-                            AddTextConsole("               73%", 5, false);
-                            AddTextConsole("               84%", 5, false);
-                            AddTextConsole("               89%", 7, false);
-                            AddTextConsole("               95%", 8, false);
-                            AddTextConsole("               99%", 10, false);
-                            break;
+                        AddTextConsole("Статус: Доступ к файлу закрыт.");
+                        return;
                     }
-                    AddTextConsole("               100%", 2, false);
-
-                    if (FileServerClass.Exist(Pwd, file.FileName, GameSrv) == false) GameSrv.CreateFiles(Pwd, file);
-                    AddTextConsole("Скопировано 1 файл(ов)", 1);
+                    if (FileServerClass.Exist("/user/Hpro4/Download/", file.FileName, GameSrv) == false) action = () =>
+                    {
+                        App.GameGlobal.MyServer.CreateFiles("/user/Hpro4/Download/", file);
+                        App.GameGlobal.EventIntroduce(EventEnum.ФайлСкачан, file.FileName );
+                    };
                 }
                 else
                 {
                     AddTextConsole("Неверно указан ключ " + vs[1], 1);
+                    return;
                 }
+                AddTextConsole("Передача данных.", 5, false);
+                switch (file.Size.ToString().Length)
+                {
+                    case 1:
+                        AddTextConsole("               13%", 1, false);
+                        AddTextConsole("               56%", 7, false);
+                        AddTextConsole("               89%", 9, false);
+                        AddTextConsole("               96%", 11, false);
+                        break;
+                    case 2:
+                        AddTextConsole("               8 %", 1, false);
+                        AddTextConsole("               22%", 8, false);
+                        AddTextConsole("               58%", 4, false);
+                        AddTextConsole("               71%", 6, false);
+                        AddTextConsole("               86%", 7, false);
+                        AddTextConsole("               99%", 12, false);
+                        break;
+                    case 3:
+                        AddTextConsole("               11%", 1, false);
+                        AddTextConsole("               24%", 8, false);
+                        AddTextConsole("               31%", 4, false);
+                        AddTextConsole("               45%", 6, false);
+                        AddTextConsole("               69%", 7, false);
+                        AddTextConsole("               80%", 5, false);
+                        AddTextConsole("               93%", 10, false);
+                        break;
+                    case 4:
+                        AddTextConsole("               5 %", 1, false);
+                        AddTextConsole("               17%", 8, false);
+                        AddTextConsole("               24%", 4, false);
+                        AddTextConsole("               39%", 6, false);
+                        AddTextConsole("               51%", 7, false);
+                        AddTextConsole("               72%", 5, false);
+                        AddTextConsole("               86%", 10, false);
+                        AddTextConsole("               98%", 6, false);
+                        break;
+                    case 5:
+                        AddTextConsole("               9 %", 1, false);
+                        AddTextConsole("               20%", 4, false);
+                        AddTextConsole("               37%", 7, false);
+                        AddTextConsole("               49%", 5, false);
+                        AddTextConsole("               60%", 9, false);
+                        AddTextConsole("               70%", 5, false);
+                        AddTextConsole("               86%", 5, false);
+                        AddTextConsole("               91%", 10, false);
+                        AddTextConsole("               98%", 12, false);
+                        break;
+                    default:
+                        AddTextConsole("               10%", 1, false);
+                        AddTextConsole("               24%", 4, false);
+                        AddTextConsole("               42%", 6, false);
+                        AddTextConsole("               57%", 8, false);
+                        AddTextConsole("               67%", 11, false);
+                        AddTextConsole("               73%", 5, false);
+                        AddTextConsole("               84%", 5, false);
+                        AddTextConsole("               89%", 7, false);
+                        AddTextConsole("               95%", 8, false);
+                        AddTextConsole("               99%", 10, false);
+                        break;
+                }
+                AddTextConsole("               100%", 2, false);
+                AddTextConsole("Скопировано 1 файл(ов)", action, 1);
             }
             catch
             {
@@ -905,17 +891,46 @@ namespace PH4_WPF.FrmSoft
             AddTextConsole("$client = new- object System.Net.WebClient", 5);
             AddTextConsole("$client.DownloadFile(" + vs[1] + ", " + Pwd + ")", 5);
             AddTextConsole("===============================(download)============================", 1);
-            AddTextConsole("                                   (c)Dmitrev Aleksea 2008", 1);
+            AddTextConsole("                                   (c)Dmitrev Aleksea 2000", 1);
             AddTextConsole("                                   download files for windows", 1);
-            if (App.GameGlobal.OpenUrl.ContainsKey(vs[1]) == false)
+
+            Action action;
+            FileServerClass file;
+
+            if (vs[1] == "/d")
             {
-                AddTextConsole("Удалённый адрес [" + vs[1] + "]", 15);
-                AddTextConsole("Ошибка: Файл не найден на сервере.", 4);
-                return;
-            }
-            try
+                if (vs.Length == 2)
+                {
+                    AddTextConsole("Ъ`Red=Вы не указали название файла для скачки Ъ", 1);
+                    return;
+                }
+                file = OpenFileEx(vs[2]);
+                if (file == null) return;
+                if (FileServerClass.CheckAccess(Pwd + "/" + file.FileName, GameSrv) == false)
+                {
+                    AddTextConsole("Статус: Доступ к файлу закрыт.");
+                    return;
+                }
+                if (FileServerClass.Exist("/user/Hpro4/Download/", file.FileName, GameSrv))
+                {
+                    AddTextConsole("Статус: Такой файл уже существует " + Pwd + "/" + file.FileName);
+                    return;
+                }
+                action = () =>
+                {
+                    App.GameGlobal.MyServer.CreateFiles("/user/Hpro4/Download/", file);
+                    App.GameGlobal.EventIntroduce(EventEnum.ФайлСкачан, file.FileName);
+                };
+            } else
             {
-                FileServerClass file = App.GameGlobal.OpenUrl[vs[1]];
+                if (App.GameGlobal.OpenUrl.ContainsKey(vs[1]) == false)
+                {
+                    AddTextConsole("Удалённый адрес [" + vs[1] + "]", 15);
+                    AddTextConsole("Ошибка: Файл не найден на сервере.", 4);
+                    return;
+                }
+
+                file = App.GameGlobal.OpenUrl[vs[1]];
 
                 // Проверка доступа к файлу
                 if (FileServerClass.CheckAccess(Pwd, GameSrv) == false)
@@ -929,74 +944,70 @@ namespace PH4_WPF.FrmSoft
                     AddTextConsole("Статус: Такой файл уже существует");
                     return;
                 }
-                AddTextConsole("Статус: Переход в состояние закачки.", 5);
-                switch (file.Size.ToString().Length)
-                {
-                    case 1:
-                        AddTextConsole("( ) ( ) ( )", 1, false);
-                        AddTextConsole("(X) ( ) ( )", 7, false);
-                        AddTextConsole("(X) (X) ( )", 9, false);
-                        AddTextConsole("(X) (X) (X)", 11, false);
-                        break;
-                    case 2:
-                        AddTextConsole("( ) ( ) ( ) ( ) ( )", 1, false);
-                        AddTextConsole("(X) ( ) ( ) ( ) ( )", 8, false);
-                        AddTextConsole("(X) (X) ( ) ( ) ( )", 4, false);
-                        AddTextConsole("(X) (X) (X) ( ) ( )", 6, false);
-                        AddTextConsole("(X) (X) (X) (X) ( )", 7, false);
-                        AddTextConsole("(X) (X) (X) (X) (X)", 12, false);
-                        break;
-                    case 3:
-                        AddTextConsole("( ) ( ) ( ) ( ) ( ) ( )", 1, false);
-                        AddTextConsole("(X) ( ) ( ) ( ) ( ) ( )", 8, false);
-                        AddTextConsole("(X) (X) ( ) ( ) ( ) ( )", 4, false);
-                        AddTextConsole("(X) (X) (X) ( ) ( ) ( )", 6, false);
-                        AddTextConsole("(X) (X) (X) (X) ( ) ( )", 7, false);
-                        AddTextConsole("(X) (X) (X) (X) (X) ( )", 5, false);
-                        AddTextConsole("(X) (X) (X) (X) (X) (X)", 10, false);
-                        break;
-                    case 4:
-                        AddTextConsole("( ) ( ) ( ) ( ) ( ) ( ) ( )", 1, false);
-                        AddTextConsole("(X) ( ) ( ) ( ) ( ) ( ) ( )", 8, false);
-                        AddTextConsole("(X) (X) ( ) ( ) ( ) ( ) ( )", 4, false);
-                        AddTextConsole("(X) (X) (X) ( ) ( ) ( ) ( )", 6, false);
-                        AddTextConsole("(X) (X) (X) (X) ( ) ( ) ( )", 7, false);
-                        AddTextConsole("(X) (X) (X) (X) (X) ( ) ( )", 5, false);
-                        AddTextConsole("(X) (X) (X) (X) (X) (X) ( )", 10, false);
-                        AddTextConsole("(X) (X) (X) (X) (X) (X) (X)", 6, false);
-                        break;
-                    case 6:
-                        AddTextConsole("( ) ( ) ( ) ( ) ( ) ( ) ( ) ( )", 1, false);
-                        AddTextConsole("(X) ( ) ( ) ( ) ( ) ( ) ( ) ( )", 4, false);
-                        AddTextConsole("(X) (X) ( ) ( ) ( ) ( ) ( ) ( )", 7, false);
-                        AddTextConsole("(X) (X) (X) ( ) ( ) ( ) ( ) ( )", 5, false);
-                        AddTextConsole("(X) (X) (X) (X) ( ) ( ) ( ) ( )", 9, false);
-                        AddTextConsole("(X) (X) (X) (X) (X) ( ) ( ) ( )", 5, false);
-                        AddTextConsole("(X) (X) (X) (X) (X) (X) ( ) ( )", 5, false);
-                        AddTextConsole("(X) (X) (X) (X) (X) (X) (X) ( )", 10, false);
-                        AddTextConsole("(X) (X) (X) (X) (X) (X) (X) (X)", 12, false);
-                        break;
-                    default:
-                        AddTextConsole("( ) ( ) ( ) ( ) ( ) ( ) ( ) ( ) ( )", 1, false);
-                        AddTextConsole("(X) ( ) ( ) ( ) ( ) ( ) ( ) ( ) ( )", 4, false);
-                        AddTextConsole("(X) (X) ( ) ( ) ( ) ( ) ( ) ( ) ( )", 6, false);
-                        AddTextConsole("(X) (X) (X) ( ) ( ) ( ) ( ) ( ) ( )", 8, false);
-                        AddTextConsole("(X) (X) (X) (X) ( ) ( ) ( ) ( ) ( )", 11, false);
-                        AddTextConsole("(X) (X) (X) (X) (X) ( ) ( ) ( ) ( )", 5, false);
-                        AddTextConsole("(X) (X) (X) (X) (X) (X) ( ) ( ) ( )", 5, false);
-                        AddTextConsole("(X) (X) (X) (X) (X) (X) (X) ( ) ( )", 7, false);
-                        AddTextConsole("(X) (X) (X) (X) (X) (X) (X) (X) ( )", 8, false);
-                        AddTextConsole("(X) (X) (X) (X) (X) (X) (X) (X) (X)", 10, false);
-                        break;
-                }
-
-                GameSrv.CreateFiles(Pwd, file);
+                action = () => GameSrv.CreateFiles(Pwd, file);
             }
-            catch (Exception)
+            AddTextConsole("Статус: Переход в состояние закачки.", 5);
+            switch (file.Size.ToString().Length)
             {
-                AddTextConsole("Ошибка при скачивание файла", 1);
+                case 1:
+                    AddTextConsole("( ) ( ) ( )", 1, false);
+                    AddTextConsole("(X) ( ) ( )", 7, false);
+                    AddTextConsole("(X) (X) ( )", 9, false);
+                    AddTextConsole("(X) (X) (X)", 11, false);
+                    break;
+                case 2:
+                    AddTextConsole("( ) ( ) ( ) ( ) ( )", 1, false);
+                    AddTextConsole("(X) ( ) ( ) ( ) ( )", 8, false);
+                    AddTextConsole("(X) (X) ( ) ( ) ( )", 4, false);
+                    AddTextConsole("(X) (X) (X) ( ) ( )", 6, false);
+                    AddTextConsole("(X) (X) (X) (X) ( )", 7, false);
+                    AddTextConsole("(X) (X) (X) (X) (X)", 12, false);
+                    break;
+                case 3:
+                    AddTextConsole("( ) ( ) ( ) ( ) ( ) ( )", 1, false);
+                    AddTextConsole("(X) ( ) ( ) ( ) ( ) ( )", 8, false);
+                    AddTextConsole("(X) (X) ( ) ( ) ( ) ( )", 4, false);
+                    AddTextConsole("(X) (X) (X) ( ) ( ) ( )", 6, false);
+                    AddTextConsole("(X) (X) (X) (X) ( ) ( )", 7, false);
+                    AddTextConsole("(X) (X) (X) (X) (X) ( )", 5, false);
+                    AddTextConsole("(X) (X) (X) (X) (X) (X)", 10, false);
+                    break;
+                case 4:
+                    AddTextConsole("( ) ( ) ( ) ( ) ( ) ( ) ( )", 1, false);
+                    AddTextConsole("(X) ( ) ( ) ( ) ( ) ( ) ( )", 8, false);
+                    AddTextConsole("(X) (X) ( ) ( ) ( ) ( ) ( )", 4, false);
+                    AddTextConsole("(X) (X) (X) ( ) ( ) ( ) ( )", 6, false);
+                    AddTextConsole("(X) (X) (X) (X) ( ) ( ) ( )", 7, false);
+                    AddTextConsole("(X) (X) (X) (X) (X) ( ) ( )", 5, false);
+                    AddTextConsole("(X) (X) (X) (X) (X) (X) ( )", 10, false);
+                    AddTextConsole("(X) (X) (X) (X) (X) (X) (X)", 6, false);
+                    break;
+                case 6:
+                    AddTextConsole("( ) ( ) ( ) ( ) ( ) ( ) ( ) ( )", 1, false);
+                    AddTextConsole("(X) ( ) ( ) ( ) ( ) ( ) ( ) ( )", 4, false);
+                    AddTextConsole("(X) (X) ( ) ( ) ( ) ( ) ( ) ( )", 7, false);
+                    AddTextConsole("(X) (X) (X) ( ) ( ) ( ) ( ) ( )", 5, false);
+                    AddTextConsole("(X) (X) (X) (X) ( ) ( ) ( ) ( )", 9, false);
+                    AddTextConsole("(X) (X) (X) (X) (X) ( ) ( ) ( )", 5, false);
+                    AddTextConsole("(X) (X) (X) (X) (X) (X) ( ) ( )", 5, false);
+                    AddTextConsole("(X) (X) (X) (X) (X) (X) (X) ( )", 10, false);
+                    AddTextConsole("(X) (X) (X) (X) (X) (X) (X) (X)", 12, false);
+                    break;
+                default:
+                    AddTextConsole("( ) ( ) ( ) ( ) ( ) ( ) ( ) ( ) ( )", 1, false);
+                    AddTextConsole("(X) ( ) ( ) ( ) ( ) ( ) ( ) ( ) ( )", 4, false);
+                    AddTextConsole("(X) (X) ( ) ( ) ( ) ( ) ( ) ( ) ( )", 6, false);
+                    AddTextConsole("(X) (X) (X) ( ) ( ) ( ) ( ) ( ) ( )", 8, false);
+                    AddTextConsole("(X) (X) (X) (X) ( ) ( ) ( ) ( ) ( )", 11, false);
+                    AddTextConsole("(X) (X) (X) (X) (X) ( ) ( ) ( ) ( )", 5, false);
+                    AddTextConsole("(X) (X) (X) (X) (X) (X) ( ) ( ) ( )", 5, false);
+                    AddTextConsole("(X) (X) (X) (X) (X) (X) (X) ( ) ( )", 7, false);
+                    AddTextConsole("(X) (X) (X) (X) (X) (X) (X) (X) ( )", 8, false);
+                    AddTextConsole("(X) (X) (X) (X) (X) (X) (X) (X) (X)", 10, false);
+                    break;
             }
-            AddTextConsole("Файл скачен. ", 1, false);
+            
+            AddTextConsole("Файл скачен. ",action, 1, false);
         }
 
         public void Cmd_connect(string txt)
@@ -1009,10 +1020,7 @@ namespace PH4_WPF.FrmSoft
                 switch (vs[1])
                 {
                     case "-off":
-                        GameSrv = App.GameGlobal.MyServer;
-                        Pwd = "/";
-                        TimerAdminLog.Content = "---";
-                        TimerAdminStr.Content = "";
+                        Off_Server();
                         AddTextConsole("Вы отключились от сервера. ", 1);
                         return;
                     case "-ip":
@@ -1030,29 +1038,13 @@ namespace PH4_WPF.FrmSoft
                 }
 
                 if (vs[3] == "-shell")
-                {
-                    vs[4] = vs[4].Replace("%20", " ");
-                    FileServerClass file;
-                    if (FileServerClass.Exist(Pwd, FileServerClass.PatchToFileNamePerfix(vs[4]), GameSrv) == false)
-                    {
-                        if (FileServerClass.Exist(FileServerClass.PatchOnly(vs[4]), FileServerClass.PatchToFileNamePerfix(vs[4]), GameSrv) == false)
-                        {
-                            AddTextConsole("Ъ`Red=Файл указан не верно: нет такого файла по пути " + vs[4] + " Ъ");
-                            return;
-                        }
-                        else
-                        {
-                            file = FileServerClass.GetFile(vs[4], GameSrv);
-                        }
-                    }
-                    else
-                    {
-                        file = FileServerClass.GetFile(Pwd + vs[4], GameSrv);
-                    }
+                {                   
+                   FileServerClass fileServer= OpenFileEx(vs[4]);
+                    if (fileServer == null) return;
                     // Тут работа и проверка шелла
-                    if (file.FileСontents.TypeInformation == FileServerClass.ParameterClass.TypeParam.shell)
+                    if (fileServer.FileСontents.TypeInformation == Enums.TypeParam.shell)
                     {
-                        if (file.FileName.ToLower().Contains(srv.OSName.ToLower()) == false)
+                        if (fileServer.FileСontents.TextCommand.ToLower() == srv.OSName.ToLower() == false)
                         {
                             AddTextConsole("Ъ`CornflowerBlue=error: 451  Object.Module._extensions Ъ", 2);
                             AddTextConsole("Ъ`CornflowerBlue=error: tryModuleLoad (internal/modules/)/ Ъ", 2);
@@ -1134,8 +1126,7 @@ namespace PH4_WPF.FrmSoft
 
         public void Cmd_pl(string txt)
         {
-
-            if (!(GameSrv.OS != Server.TypeOSEnum.Linux || GameSrv.OS != Server.TypeOSEnum.Logerhead))
+            if (GameSrv.OS != Server.TypeOSEnum.Linux & GameSrv.OS != Server.TypeOSEnum.Logerhead)
             {
                 AddTextConsole("Ъ`Red= \"pl\" не является внутренней или внешней командой, исполняемой программой или пакетным файлом.", 1);
                 return;
@@ -1154,22 +1145,22 @@ namespace PH4_WPF.FrmSoft
                 return;
             }
             vs[1] = txt[3..]; // объеденяет все строки в одну
-            OpenFileEx(vs[1]);
-
+            FileServerClass fileServer = OpenFileEx(vs[1]);
+            if (fileServer == null) return;
             // Сплойты или нет 
-            if (BufferConsole.FileStart.FileСontents.TypeInformation == FileServerClass.ParameterClass.TypeParam.exploit)
+            if (fileServer.FileСontents.TypeInformation == Enums.TypeParam.exploit)
             {
                 Random rnd = new Random();
                 int se = rnd.Next(0, 10);
 
                 // тип оформления работы
-                if (BufferConsole.FileStart.FileСontents.ByteParam == 0)
+                if (fileServer.FileСontents.ByteParam == 0)
                 {
-                    BufferConsole.FileStart.FileСontents.ByteParam = (byte)se;
+                    fileServer.FileСontents.ByteParam = (byte)se;
                 }
                 else
                 {
-                    se = BufferConsole.FileStart.FileСontents.ByteParam;
+                    se = fileServer.FileСontents.ByteParam;
                 }
 
                 UpperTxt(se);
@@ -1195,6 +1186,117 @@ namespace PH4_WPF.FrmSoft
                     BashConsole();
                 };
             }
+            else  if (fileServer.FileСontents.TypeInformation == Enums.TypeParam.backdoor)  {
+                    string t = App.GameGlobal.MainWindow.Firewall_TXT[fileServer.FileСontents.IntParam];
+                    string os = Enum.GetName(typeof(Server.TypeOSEnum), GameSrv.OS);
+
+                    AddTextConsole("exec make " + fileServer.FileName + " clean", 4);
+                    AddTextConsole("----- making target " + GameSrv.OSName + " [new preregs] -----", 4);
+                    AddTextConsole(".config script/b", 4);
+                    AddTextConsole(".config script/a", 1);
+                    AddTextConsole(".config param 1", 1);
+                    AddTextConsole(".config include/config", 1);
+
+                    // универсальный доступ
+                    if (fileServer.FileСontents.TextCommand.Contains("url="))
+                    {
+                        if (fileServer.FileСontents.TextCommand.Contains(GameSrv.NameSrv))
+                        {
+                            AddTextConsole("System Configuration....", 4);
+                            AddTextConsole("Authentication", 15);
+                            AddTextConsole("Вы получили доступ к серверу!", 12);
+                            GameSrv.Premision = Server.PremissionServerEnum.FullControl;
+                        }
+                        else { AddTextConsole("Вам отказанно в доступе !", 12); }
+                        goto end_p;
+                    }
+                    // стандартный доступ
+                    if (GameSrv.OS == Server.TypeOSEnum.WinSrv)
+                    {
+                        AddTextConsole("win.exe script", 1);
+                        if (t.Split(',')[2] == os)
+                        {
+                            if (GameSrv.FireWall == t.Split(',')[1])
+                            {
+                                // если разница большая между хай теком и популярностью в 10 ьл сервер не получиться взломать 
+                                if ((GameSrv.PopularSRV - App.GameGlobal.GamerInfo.HiTecLevel) > 10)
+                                {
+                                    AddTextConsole("SET Win/ $dir$", 4);
+                                    AddTextConsole("NoDriveTypeAutoRun = dword:000000ff", 1);
+                                    AddTextConsole("label=Inc_drive", 1);
+                                    AddTextConsole(@"DriverPath=drivers\ 0", 1);
+                                    AddTextConsole(@"HKEY_LOCAL_MACHINE\Software\Microsoft\Windows\ false", 1);
+                                    AddTextConsole("Ъ`OrangeRed= Вы получили полный доступ Ъ", 8);
+                                    GameSrv.Premision = Server.PremissionServerEnum.FullControl;
+                                }
+                                else
+                                {
+                                    AddTextConsole("_", 1);
+                                    AddTextConsole(" ", 3, false);
+                                    AddTextConsole("_", 3, false);
+                                    AddTextConsole(" ", 3, false);
+                                    AddTextConsole("_", 3, false);
+                                    AddTextConsole("Ъ`OrangeRed= Администратор смог определить вас он более продвинутый чем ваш текущий скилл Ъ", 8, false);
+                                }
+                            }
+                            else
+                            {
+                                AddTextConsole("_", 1);
+                                AddTextConsole(" ", 3, false);
+                                AddTextConsole("_", 3, false);
+                                AddTextConsole(" ", 3, false);
+                                AddTextConsole("Ъ`OrangeRed= Фаервол заблокировал работу программы Ъ", 8, false);
+                            }
+                        }
+                        else
+                        {
+                            AddTextConsole("script err #11 Ъ`OrangeRed= Операционная система не соотвествует текущей Ъ", 1);
+                        }
+                    }
+                    // =>> linux
+                    else
+                    {
+                        AddTextConsole("pl script", 1);
+                        bool b20 = t.Split(',')[0].IndexOf("20") != -1;
+                        if (t.Split(',')[2] == os)
+                        {
+                            //В зависимости от популярности сервера и версии бекдора будет доступ
+                            if (b20 & (GameSrv.PopularSRV - App.GameGlobal.GamerInfo.HiTecLevel) > 10)
+                            {
+                                AddTextConsole("sudo apt-get install dialog", 4);
+                                AddTextConsole("add-apt-repository", 1);
+                                AddTextConsole("choices=$Inc_drive", 1);
+                                AddTextConsole("apt-get update && sudo apt-get upgrade -y", 1);
+                                AddTextConsole("Ъ`OrangeRed= Вы повысили уровень доступа Ъ", 8);
+                                GameSrv.Premision = Server.PremissionServerEnum.FullControl;
+                            }
+                            else if (b20 & (GameSrv.PopularSRV - App.GameGlobal.GamerInfo.HiTecLevel) > 5)
+                            {
+                                AddTextConsole("DNS=192.168.0.13", 4);
+                                AddTextConsole("add-apt-repository", 1);
+                                AddTextConsole("apt-key adv --keyserver keyserver.", 1);
+                                AddTextConsole("if [[ $EUID -ne 0 ]]; ", 1);
+                                AddTextConsole("Ъ`OrangeRed=Вы повысили уровень доступа Ъ", 8);
+                                GameSrv.Premision = Server.PremissionServerEnum.FullControl;
+                            }
+                            else
+                            {
+                                AddTextConsole("_", 1);
+                                AddTextConsole(" ", 3, false);
+                                AddTextConsole("_", 3, false);
+                                AddTextConsole("Ъ`OrangeRed= Сервер отказал вам в доступе, так как выполнил комманды Ъ", 8, false);
+                            }
+                        }
+                        else
+                        {
+                            AddTextConsole("script mds1 - error ", 1);
+                            AddTextConsole("Ъ`OrangeRed=Несовместимая ОСЪ", 1);
+                        }
+                    }
+
+                end_p:
+                    App.GameGlobal.EventIntroduce(EventEnum.ВходНаСервер,  GameSrv.NameSrv );
+                }
             else
             {
                 AddTextConsole("Ъ`Red=Undefined subroutine &main::insertUser called at      " + vs[1] + " Ъ", 5);
@@ -1206,7 +1308,7 @@ namespace PH4_WPF.FrmSoft
 
         public void Cmd_ls(string txt)
         {
-            if (!(GameSrv.OS != Server.TypeOSEnum.Linux || GameSrv.OS != Server.TypeOSEnum.Logerhead))
+            if (GameSrv.OS != Server.TypeOSEnum.Linux & GameSrv.OS != Server.TypeOSEnum.Logerhead)
             {
                 AddTextConsole("Ъ`Red= \"ls\" не является внутренней или внешней командой, исполняемой программой или пакетным файлом.Ъ", 1);
                 return;
@@ -1230,25 +1332,54 @@ namespace PH4_WPF.FrmSoft
                 FF00_ls.Add(item.FileName);
                 string col = item.Rights switch
                 {
-                    Engine.FileServerClass.PremisionEnum.OnlyAdmin => "Red",
-                    Engine.FileServerClass.PremisionEnum.AdminAndUser => "Yellow",
+                    FileServerClass.PremisionEnum.OnlyAdmin => "Red",
+                    FileServerClass.PremisionEnum.AdminAndUser => "Yellow",
                     _ => StTextColor.ToString(),
                 };
                 if (num == true) p = i.ToString() + ":  ";
+
+                string txtR;
+                string color;
+                switch (item.Rights)
+                {
+                    case FileServerClass.PremisionEnum.none:
+                        txtR = "--- ---";
+                        color = "Gold";
+                        break;
+                    case FileServerClass.PremisionEnum.OnlyAdmin:
+                        txtR = "adm ---";
+                        color = "Red";
+                        break;
+                    case FileServerClass.PremisionEnum.AdminAndUser:
+                        color = "Yellow";
+                        txtR = "adm use";
+                        break;
+                    case FileServerClass.PremisionEnum.AdminUserGuest:
+                    default:
+                        color = "White";
+                        txtR = "all usr";
+                        break;
+                }
+
                 if (item.Dir == null)
                 {
                     if (full == true)
                     {
-                        AddTextConsole(p + "Ъ`" + col + "=" + item.Rights.ToString() + " Файл " + item.FileName + " " + item.Size + " " + item.Perfix + "Ъ");
+                        txtR = "- " + txtR;
+                        AddTextConsole(p + "Ъ`" + color + "=" + txtR + " " + item.FileName + " " + item.Size + "Ъ Файл");
                     }
-                    else { AddTextConsole(p + item.FileName); }
+                    else { AddTextConsole(p + item.FileName.Replace (" ","%20")); }
                 }
                 else
                 {
-                    if (full == true) { AddTextConsole(p + "Ъ`Gold=" + item.Rights.ToString() + " Папка " + item.FileName + " Ъ"); }
+                    if (full == true) {
+                        txtR = "d " + txtR;
+                        AddTextConsole(p + "Ъ`"+ color + "=" + txtR + " " + item.FileName + " 0 Ъ Папка"); 
+                    
+                    }
                     else
                     {
-                        AddTextConsole(p + "Ъ`Gold={" + item.FileName + "}Ъ");
+                        AddTextConsole(p + "Ъ`Gold={" + item.FileName.Replace(" ", "%20") + "}Ъ");
                     }
                 }
                 i++;
@@ -1298,7 +1429,7 @@ namespace PH4_WPF.FrmSoft
 
         public void Cmd_pwd(string txt)
         {
-            if (!(GameSrv.OS != Server.TypeOSEnum.Linux || GameSrv.OS != Server.TypeOSEnum.Logerhead))
+            if (GameSrv.OS != Server.TypeOSEnum.Linux & GameSrv.OS != Server.TypeOSEnum.Logerhead)
             {
                 AddTextConsole("Ъ`Red= \"pwd\" не является внутренней или внешней командой, исполняемой программой или пакетным файлом.Ъ", 1);
                 return;
@@ -1313,7 +1444,7 @@ namespace PH4_WPF.FrmSoft
 
         public void Cmd_id(string txt)
         {
-            if (!(GameSrv.OS != Server.TypeOSEnum.Linux || GameSrv.OS != Server.TypeOSEnum.Logerhead))
+            if (GameSrv.OS != Server.TypeOSEnum.Linux & GameSrv.OS != Server.TypeOSEnum.Logerhead)
             {
                 AddTextConsole("Ъ`Red= \"id\" не является внутренней или внешней командой, исполняемой программой или пакетным файлом.Ъ", 1);
                 return;
@@ -1344,7 +1475,7 @@ namespace PH4_WPF.FrmSoft
                 AddTextConsole("Брандмауер:    " + GameSrv.FireWall);
             }
         }
-
+            
         public void Cmd_exist(string txt)
         {
             try
@@ -1424,14 +1555,20 @@ namespace PH4_WPF.FrmSoft
 
         public void Cmd_mail(string txt)
         {
-            if (GameSrv.OS != Server.TypeOSEnum.Logerhead)
-            {
-                AddTextConsole("Эта команда доступна только на вашем сервере!", 1);
-                return;
-            }
-
             string[] vs = txt.Split(' ');
+            MailInBox w = null;
 
+            // Проверка на сущ. id 
+            Func<bool> chk = () =>
+            {
+                if (vs.Length < 2) { AddTextConsole("Ошибка синтаксиса комманды, не указан id"); return false; }
+                if (int.TryParse(vs[2], out int id) == false) { AddTextConsole("Ошибка синтаксиса комманды, нет значения " + vs[2]); return false; }
+                if (GameSrv.Mails.Count - 1 < id || id <= -1) { AddTextConsole("Ошибка синтаксиса комманды, почта с таким id не найден!"); return false; }
+                w = GameSrv.Mails[id];
+                return true;
+            };
+
+            // выборка комманд
             switch (vs[1])
             {
                 case "open":
@@ -1450,17 +1587,19 @@ namespace PH4_WPF.FrmSoft
                     }
                     break;
                 case "read":
-                    int id;
-                    if (vs.Length < 2) { AddTextConsole("Ошибка синтаксиса комманды, не указан id"); return; }
-                    if (int.TryParse(vs[2], out id) == false) { AddTextConsole("Ошибка синтаксиса комманды, нет значения " + vs[2]); return; }
-                    if (GameSrv.Mails.Count < id || id <= -1) { AddTextConsole("Ошибка синтаксиса комманды, почта с таким id не найден!"); return; }
-
-                    MailInBox w = GameSrv.Mails[id];
+                    if (chk() == false) return;
                     AddTextConsole("Сообщение от : Ъ`CadetBlue=" + w.Mailto + "Ъ");
                     AddTextConsole("Сообщение для : Ъ`CadetBlue=user@local.comЪ");
                     AddTextConsole("Тема письма : Ъ`Green=" + w.Title + "Ъ");
-                    AddTextConsole(w.BodyText.Substring(0, Math.Min(w.BodyText.Length, MAX_STRING)));
+                    string[] body = w.BodyText.Split('\n');
+                    foreach (var item in body) AddTextConsole("Ъ`White=" + item.Substring(0, Math.Min(item.Length, MAX_STRING)) + "Ъ");
                     w.ReadMail = true;
+                    break;
+                case "action":
+                case "act":
+                    if (chk() == false) return;
+                    if (w.CommandList == null) AddTextConsole("Нет прикреплений к этому письму", 5);
+                    else w.CommandList.Run();
                     break;
                 default:
                     AddTextConsole("Не найден такой параметор!");
@@ -1506,33 +1645,93 @@ namespace PH4_WPF.FrmSoft
 
         }
 
+        public void Cmd_route(string txt)
+        {
+            string[] vs = txt.Split(' ');
+            if (vs.Length > 3)
+            {
+                AddTextConsole("Ъ`Red=Вы не указали название сервера или серверов Ъ");
+                return;
+            }
+
+            Server server1 = App.GameGlobal.FindServer(vs[1]);
+            Server server2 = App.GameGlobal.FindServer(vs[2]);
+            Action action = ()=>{ };
+
+            AddTextConsole(vs[1]+"=>", 2);
+            if (server1 == null)
+            {
+                AddTextConsole("Ъ`Red=Этот сервер не доступен Ъ" + vs[1]);
+                return;
+            }
+            else if (server2 == null)
+            {
+                AddTextConsole("Ъ`Red=Сервер к которому нужно подключиться не найден  Ъ" + vs[2]);
+                return;
+            }
+            AddTextConsole(vs[1] + "=>"+ vs[2], 4,false);
+            AddTextConsole(server1.IP + "port 11" , 4);
+            AddTextConsole(server2.IP + "port 11", 4);
+            AddTextConsole("Создание маршрута: Ъ`White=[" + server1.IP + "]Ъ >> Ъ`White=[" + server2.IP + "]Ъ", 8);
+
+            if (server1.Premision == Server.PremissionServerEnum.none) {
+                AddTextConsole("Невозможно установить соеденение с сервером " + server1.NameSrv,2);
+                AddTextConsole("Нет права доступа к настройкам сервера",2);
+                AddTextConsole("Cancel Route: Ъ`White=[" + server1.IP + "]Ъ >> Ъ`White=[" + server2.IP + "]Ъ", 2);
+                return;
+            }
+            AddTextConsole("Маршрут ...",5);
+            var f = App.GameGlobal.Routers.Find(x => x.FirstServer.NameSrv == server1.NameSrv & x.EndServer.NameSrv == server2.NameSrv);
+            if (f == null)
+            {                
+                AddTextConsole("Маршрут Ъ`Green= создан новый маршрутЪ", 15,false);
+               action = ()=> App.GameGlobal.AddRouter(server1, server2);                                 
+            }
+            else AddTextConsole("Маршрут Ъ`Red= уже существуетЪ", 15, false);
+            AddTextConsole("Завершение сценария (0) Exit", action, 1);
+        }
+
         public void Cmd_getmoney(string txt)
         {
-            if (App.GameGlobal.MainWindow.CheatCode)
+            if (App.CheatCode)
             {
-                string[] vs = txt.Split(' ');
-                App.GameGlobal.Bank.DefaultBankAccount.Money += int.Parse(vs[1]);
-                AddTextConsole("Вы читер!!!");
+                try
+                {
+                    string[] vs = txt.Split(' ');
+                    App.GameGlobal.Bank.DefaultBankAccount.Money += int.Parse(vs[1]);
+                    AddTextConsole("Вы читер!!!");
+                }
+                catch
+                {
+                    AddTextConsole("");
+                }
             }
         }
 
         public void Cmd_addextrapoint(string txt)
         {
-            if (App.GameGlobal.MainWindow.CheatCode)
+            if (App.CheatCode)
             {
-                string[] vs = txt.Split(' ');
-                byte i = byte.Parse(vs[2]);
-                App.GameGlobal.GamerInfo.ExtraPoint += i;
-                AddTextConsole("Вы читер!!!");
+                try
+                {
+                    string[] vs = txt.Split(' ');
+                    byte i = byte.Parse(vs[2]);
+                    App.GameGlobal.GamerInfo.ExtraPoint += i;
+                    AddTextConsole("Вы читер!!!");
+                }
+                catch
+                {
+                    AddTextConsole("");
+                }
             }
         }
 
         public void Cmd_openscen(string txt)
         {
-            if (App.GameGlobal.MainWindow.CheatCode)
+            if (App.CheatCode)
             {
                 string[] vs = txt.Split(' ');
-                var r = App.GameGlobal.GameScen.GetType().GetMethod(vs[1]);
+                var r = App.GameGlobal.GameScen.GetType().GetMethod("Scen_"+vs[1]);
                 if (r == null)
                 {
                     MessageBox.Show("Нет такого сценария " + vs[1]);
@@ -1545,11 +1744,55 @@ namespace PH4_WPF.FrmSoft
             }
         }
 
-        private void OpenFileEx(string file)
+        public void Cmd_servercontrol(string txt)
+        {
+            if (App.CheatCode)
+            {
+                string[] vs = txt.Split(' ');
+                Server srv = App.GameGlobal.FindServer(vs[1]);
+                srv.Premision = Server.PremissionServerEnum.FullControl;
+                AddTextConsole("Вы читер!!!");
+            }
+        }
+
+        public void Cmd_opensrv(string txt)
+        {
+            if (App.CheatCode)
+            {
+                string[] vs = txt.Split(' ');
+                Server srv = App.GameGlobal.FindServer(vs[1]);
+                ConnectServer(srv);
+                AddTextConsole("Вы читер!!!");
+            }
+        }
+
+        public void Cmd_enter(string txt)
+        {
+            if (App.CheatCode)
+            {
+                string[] vs = txt.Split(' ');
+                App.GameGlobal.MainWindow.ОткрАдминПанел( null,null);
+                AddTextConsole("Вы читер!!! " + vs[0]);
+            }
+        }
+
+        public void Cmd_eventlist(string txt)
+        {
+            if (App.CheatCode)
+            {
+                string[] vs = txt.Split(' ');
+                foreach (var item in App.GameGlobal.AllEventGame )
+                {
+                    AddTextConsole(item .ToString () + vs[0]);
+                }
+               
+            }
+        }
+
+        private FileServerClass OpenFileEx(string file)
         {
             try
-            {
-                // тестовая функция
+            {               
                 if (file.Substring(0, 5) == "~FF00")
                 {
                     try
@@ -1571,29 +1814,26 @@ namespace PH4_WPF.FrmSoft
                     if (FileServerClass.Exist(FileServerClass.PatchOnly(file), FileServerClass.PatchToFileNamePerfix(file), GameSrv) == false)
                     {
                         AddTextConsole("Ъ`Red=Файл указан не верно: нет такого файла по пути " + file + " Ъ");
-                        return;
-                    }
-                    else
-                    {
-                        BufferConsole.FileStart = FileServerClass.GetFile(file, GameSrv);
+                        return null;
                     }
                 }
                 else
                 {
-                    BufferConsole.FileStart = FileServerClass.GetFile(Pwd + file, GameSrv);
+                    file = Pwd + file;
                 }
 
                 // Проверка доступа к файлу
                 if (FileServerClass.CheckAccess(file, GameSrv) == false)
                 {
-                    AddTextConsole("Ъ`Red=Нет доступа к файлу." + file + " Ъ");
-                    return;
+                    AddTextConsole("Ъ`Red=(OpenFileEx) Нет доступа к файлу." + file + " Ъ");
+                    return null;
                 }
+                return FileServerClass.GetFile(file, GameSrv);
             }
             catch
             {
                 AddTextConsole("Ъ`Red=Ошибка к обращению файлу " + file + " Ъ");
-                BufferConsole.FileStart = null;
+                return null;
             }
         }
         private void ExploidRun()
@@ -1613,7 +1853,7 @@ namespace PH4_WPF.FrmSoft
                     // Успех в работе
                     SuccessTxt(BufferConsole.FileStart.FileСontents.ByteParam);
                     BufferConsole.Srv.Premision = v.GrantPremission;
-                    App.GameGlobal.LogAdd("Сервер взломан " + BufferConsole.ServerName + " Теперь у вас есть новые привилегии", Game.LogTypeEnum.Server);
+                    App.GameGlobal.LogAdd("Сервер взломан " + BufferConsole.ServerName + " Теперь у вас есть новые привилегии", Enums.LogTypeEnum.Server);
                 }
                 else
                 {
@@ -1623,6 +1863,12 @@ namespace PH4_WPF.FrmSoft
             }
             BashConsole();
         }
+        private void Off_Server() {
+            GameSrv = App.GameGlobal.MyServer;
+            Pwd = "/";
+            TimerAdminLog.Content = "---";
+            TimerAdminStr.Content = "";            
+        }
         private void ConnectServer(Server srv)
         {
             AddTextConsole("Ъ`BlueViolet= ***************************************************************** Ъ", 1);
@@ -1631,10 +1877,11 @@ namespace PH4_WPF.FrmSoft
 
             GameSrv = srv;
             Pwd = "/";
-            TimerLog = 500 - srv.PopularSRV;
+            TimerLog = 10000 - (srv.PopularSRV*100);        // Устанавливает начальный таймер время нахождения на серваке
             AddTextConsole("Ъ`BlueViolet= Вход в сервер выполнен. Ъ", 1);
             AddTextConsole("Ъ`BlueViolet= Важно: Оставаясь подключенным к серверу вам могут вычислить  Выход из сервера connect -off Ъ", 1);
             AddTextConsole("Ъ`BlueViolet=   Выход из сервераЪ Ъ`White=connect -off Ъ", 1);
+            App.GameGlobal.EventIntroduce(EventEnum.ВходНаСервер,  GameSrv.NameSrv );
         }
     }
     //***************************************************************************************************************************************************************************

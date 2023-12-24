@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Text;
 using System.Windows.Media.Imaging;
 
 namespace PH4_WPF.Engine
@@ -9,7 +8,7 @@ namespace PH4_WPF.Engine
     /// Новости в игре и логи
     /// </summary>
     [Serializable]
-    public  class NewsClass
+    public sealed class NewsClass
     {
         private int NextNews = 0; //следующая новость                                
 
@@ -30,7 +29,7 @@ namespace PH4_WPF.Engine
             string sFile = App.PatchAB + "News.txt";
             if (System.IO.File.Exists(sFile) == false)
             {
-                App.GameGlobal.LogAdd(" Ошибка нет файла News.txt",  Game.LogTypeEnum.Error);
+                App.GameGlobal.LogAdd(" Ошибка нет файла News.txt", Enums.LogTypeEnum.Error);
             }
             else
             {
@@ -41,7 +40,7 @@ namespace PH4_WPF.Engine
                     NewsСlass news = new NewsСlass()
                     {
                         Title = f[0],
-                        Topic = (NewsСlass.TopicEnum)Enum.Parse(typeof(NewsСlass.TopicEnum), f[2]),
+                        Topic = (Enums.TopicEnum)Enum.Parse(typeof(Enums.TopicEnum), f[2]),
                         TextNews = f[1],
                         ReadNews = false,
                         Date = App.GameGlobal.DataGM.ToString("dd/mm/yy")
@@ -61,12 +60,14 @@ namespace PH4_WPF.Engine
         /// <param name="Topic"></param>
         /// <param name="Text"></param>
         /// <param name="Title"></param>
-        public void AddNews(NewsСlass.TopicEnum Topic,string Text, string Title) {
-           News.Add(new NewsClass.NewsСlass(Topic, Text, App.GameGlobal.DataGM.ToString("dd/mm/yy")) {  Title =Title});
+        public void AddNews(Enums.TopicEnum Topic, string Text, string Title)
+        {
+            News.Add(new NewsClass.NewsСlass(Topic, Text, App.GameGlobal.DataGM.ToString("dd/mm/yy")) { Title = Title });
         }
 
         [Serializable]
-        public struct LogStruct {
+        public struct LogStruct
+        {
             public string Text;
             public string Date;
         }
@@ -75,7 +76,7 @@ namespace PH4_WPF.Engine
         public class NewsСlass
         {
             public string TextNews;           
-            public TopicEnum Topic;
+            public Enums.TopicEnum Topic;
             /// <summary>
             /// Новость прочитана (True)
             /// </summary>
@@ -88,7 +89,7 @@ namespace PH4_WPF.Engine
             /// <summary>
             /// Содержит в себе нотификацию
             /// </summary>          
-            public NewsСlass(TopicEnum topic, string text, string date) {
+            public NewsСlass(Enums.TopicEnum topic, string text, string date) {
                 Topic = topic;
                 TextNews = text;
                 Date = date;
@@ -99,14 +100,7 @@ namespace PH4_WPF.Engine
                     new BitmapImage(new Uri(App.PatchAB + @"\Desktop\bPanel\sel news.png"));
             }
 
-            public enum TopicEnum { 
-                Общие_Новости=0,
-                Найдены_Баги=1,
-                Новости_Шлак=2,
-                Разное=3,
-                Важное=4,
-                НовостиКасательноИгрока=5
-            }
+            
         }
     }
 }

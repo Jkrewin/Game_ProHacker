@@ -124,7 +124,7 @@ namespace PH4_WPF.FrmSoft
         private void Загруженно(object sender, RoutedEventArgs e)
         {
             if (System.IO.File.Exists(App.PatchAB + GamerInfo.Ava))
-                ElipsAva.Fill = new ImageBrush() { ImageSource = new BitmapImage(new Uri(App.PatchAB + GamerInfo.Ava)) };
+                ElipsAva.Fill = new ImageBrush() { ImageSource = new BitmapImage(new Uri(App.PatchAB + @"face\" + GamerInfo.Ava)) };
 
             NickName.Content = GamerInfo.GameName;
             AgeUser.Content = GamerInfo.Age;

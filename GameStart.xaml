@@ -85,7 +85,7 @@
         </Grid>
         <TextBlock x:Name="TextHack" HorizontalAlignment="Stretch" Margin="250,0,0,0" VerticalAlignment="Stretch" Foreground="#FF13DD2B" Text="0202121541" FontWeight="Bold" FontSize="16" FontFamily="Orator Std"/>
 
-        <Grid x:Name="StartPanel" Margin="245,0,0,0" Visibility="Visible" HorizontalAlignment="Left" VerticalAlignment="Top" Width="545" Height="430">
+        <Grid x:Name="StartPanel" Margin="245,0,0,0" Visibility="Hidden" HorizontalAlignment="Left" VerticalAlignment="Top" Width="545" Height="430">
             <Grid.Background>
                 <ImageBrush ImageSource="/Content/Desktop/ambiend.bmp"/>
             </Grid.Background>
@@ -155,7 +155,7 @@
 
         </Grid>
 
-        <Grid x:Name="LoadList" Margin="286,0,0,0" HorizontalAlignment="Left" VerticalAlignment="Top" Width="474" Height="440" Visibility="Hidden">
+        <Grid x:Name="LoadList" Margin="286,0,0,0" HorizontalAlignment="Left" VerticalAlignment="Top" Width="474" Height="440" Visibility="Visible">
             <Grid.Background>
                 <ImageBrush ImageSource="/Content/Desktop/ambiend.bmp"/>
             </Grid.Background>

@@ -7,7 +7,7 @@ namespace PH4_WPF.Engine
     /// Файл на сервере
     /// </summary>
     [Serializable]
-    public class FileServerClass
+    public sealed class FileServerClass
     {
         private string fileName;
         private bool hasDel = false;
@@ -61,24 +61,11 @@ namespace PH4_WPF.Engine
         public class ParameterClass
         {
             public string TextCommand;
-            public TypeParam TypeInformation = TypeParam.file ;
+            public Enums.TypeParam TypeInformation = Enums.TypeParam.file ;
             public int IntParam = 0;
             public byte ByteParam = 0;
 
-            /// <summary>
-            /// Тип запуска файла
-            /// </summary>
-            public enum TypeParam
-            {
-                exploit,
-                shell,
-                backdoor,
-                file,
-                goal_file,
-                exe,
-                dir,
-                instructions
-            }
+           
         }
 
         /// <summary>
@@ -131,7 +118,7 @@ namespace PH4_WPF.Engine
         public static bool ExistDir(string patch, Server srv)
         {
             FileServerClass dir = EnFileSys(srv.FileSys, patch.Split('/'));
-            return dir == null ? false : true;
+            return dir != null;
         }
         /// <summary>
         /// Существует файл или нет 
@@ -206,7 +193,7 @@ namespace PH4_WPF.Engine
         public static bool CheckAccess(string patch, Server srv)
         {
             var tv = GetFile(patch, srv);
-            int pr = 0;
+            int pr = 1;
             if (srv.Premision == Server.PremissionServerEnum.FullControl) { pr = 3; }
             else if (srv.Premision == Server.PremissionServerEnum.UserControl)            { pr = 2; }
             else if (srv.Premision == Server.PremissionServerEnum.GuestControl) { pr = 1; }
@@ -215,7 +202,7 @@ namespace PH4_WPF.Engine
             if (tv.Rights == PremisionEnum.OnlyAdmin) { fl = 3; }
             else if (tv.Rights == PremisionEnum.AdminAndUser) { fl = 2; }
             else if (tv.Rights == PremisionEnum.AdminUserGuest) { fl = 1; }
-
+            
             return pr >= fl;
         }
         /// <summary>

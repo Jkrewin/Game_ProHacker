@@ -19,7 +19,12 @@ Background="Transparent"
             <ImageBrush ImageSource="/Content/soft/scaner_server/win.png"/>
         </Grid.Background>
         <StackPanel x:Name="MapGm" HorizontalAlignment="Center" Height="500" Margin="0,10,0,0" Grid.Row="2" VerticalAlignment="Top" Width="808" Background="#FF1B2026"/>
-        <TextBox x:Name="Search" HorizontalAlignment="Left" Height="22" Margin="99,0,0,0" Grid.Row="1" Text="www.test.ru" TextWrapping="Wrap" VerticalAlignment="Center" Width="281" Background="{x:Null}" Foreground="#FFD9D9D9" SelectionTextBrush="#FF449638" HorizontalContentAlignment="Center" KeyDown="КнопкаЕнтер"/>
+        <TextBox x:Name="Search" HorizontalAlignment="Left" Height="22" Margin="99,0,0,0" Grid.Row="1" Text="www.test.ru" TextWrapping="Wrap" VerticalAlignment="Center" Width="281" Background="{x:Null}" Foreground="#FFD9D9D9" SelectionTextBrush="#FF449638" HorizontalContentAlignment="Center" KeyDown="КнопкаЕнтер">
+            <TextBox.ContextMenu>
+                <ContextMenu Visibility="Collapsed">
+                </ContextMenu>
+            </TextBox.ContextMenu>
+        </TextBox>
         <Label Content="Server name:" HorizontalAlignment="Left" Margin="10,0,0,0" Grid.Row="1" VerticalAlignment="Center" Foreground="#FF7EA1E8" FontWeight="Bold"/>
         <Button x:Name="ButtonSearch"  HorizontalAlignment="Left" Grid.Row="1" VerticalAlignment="Center" Width="38" Margin="385,0,0,0" Height="22" Click="НачатьПоиск" BorderBrush="Gray" Background="#FF1B2026" BorderThickness="1">
             <StackPanel>

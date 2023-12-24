@@ -1,18 +1,10 @@
 ﻿using PH4_WPF.Engine;
 using System;
-using System.Collections.Generic;
 using System.Drawing;
 using System.IO;
 using System.Reflection;
-using System.Text;
 using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
 using System.Windows.Media.Imaging;
-using System.Windows.Shapes;
 using Color = System.Drawing.Color;
 using Size = System.Drawing.Size;
 
@@ -20,7 +12,8 @@ namespace PH4_WPF
 {
    
     public partial class GameStart : Window
-    {
+    {       
+        private readonly string DirSaveGame = System.AppDomain.CurrentDomain.BaseDirectory + @"Save\";
         int MyIndex = 0;
         string[] Ava;
         int My_char = 0;
@@ -38,20 +31,32 @@ namespace PH4_WPF
           // this.Topmost = true;
             AnimationTimer.Tick += new EventHandler(AnimationTick);
             AnimationTimer.Interval = TimeSpan.FromMilliseconds(50);
-            AnimationTimer.Start();
+            AnimationTimer.Stop();
 
             StartPanel.Visibility = Visibility.Hidden;
-
-            var dir = System.AppDomain.CurrentDomain.BaseDirectory + "Save";
-            if (System.IO.Directory.Exists(dir) == false) System.IO.Directory.CreateDirectory(dir);
-
-
+                        
+            if (System.IO.Directory.Exists(DirSaveGame) == false) System.IO.Directory.CreateDirectory(DirSaveGame);
+                       
+            App.GameGlobal.MainWindow = new MainWindow ();
+            App.LoadConfig();
+                       
         }
+          
 
         private void SelectAva() {
             if (MyIndex == -1) MyIndex = Ava.Length - 1;
             if (MyIndex == Ava.Length) MyIndex =0;
             ImageAva.Source = new BitmapImage(new Uri(Ava [MyIndex]));
+        }
+
+        private void Refreh_FileSav() {
+            string[] ls = System.IO.Directory.GetFiles(DirSaveGame, "*.sav");
+            ListFile.Items.Clear();
+            foreach (var item in ls)
+            {
+                FileInfo f = new FileInfo(item);
+                ListFile.Items.Add(f.LastAccessTime.ToString("dd/mm/yy") + " - " + f.Name.Substring(0, f.Name.Length - 4));
+            }
         }
 
         private  Bitmap ResizeImage(Bitmap imgToResize, Size size)
@@ -107,7 +112,15 @@ namespace PH4_WPF
 
         private void Загруженно(object sender, RoutedEventArgs e)
         {
-            if (this.Height< 970) { TextHack.FontSize = 13; }
+            if (App.StartUP)
+            {
+                App.GameGlobal.MainWindow.Show();
+                App.GameGlobal.MainWindow.LoadGame(AppDomain.CurrentDomain.BaseDirectory + @"Save\1.sav");
+                this.Hide();
+                return;
+            }            
+            
+            if (this.Height< 970)  TextHack.FontSize = 13; 
             Bitmap sourceImage = new Bitmap(App.PatchAB + @"Desktop\1696525559492.png");
             sourceImage = ResizeImage(sourceImage, new Size(55, 180));
             grayScaleImage = new Bitmap(sourceImage.Width, sourceImage.Height);
@@ -123,19 +136,16 @@ namespace PH4_WPF
                 }
             }
 
+            AnimationTimer.Start();
+
+
         }
 
         private void СписокИгры(object sender, RoutedEventArgs e)
         {
             LoadList.Visibility = Visibility.Visible;
             StartPanel.Visibility = Visibility.Hidden;
-            string[] ls = System.IO.Directory.GetFiles(System.AppDomain.CurrentDomain.BaseDirectory + @"Save\", "*.sav");
-            ListFile.Items.Clear();
-            foreach (var item in ls)
-            {
-                FileInfo f = new FileInfo(item);
-                ListFile.Items.Add(f.Name + "   " + f.LastAccessTime.ToString ("dd/mm/yyyy"));
-            }
+            Refreh_FileSav();
 
         }
 
@@ -149,12 +159,17 @@ namespace PH4_WPF
 
         private void ЗагрузитьИгру(object sender, RoutedEventArgs e)
         {
-
+            string sfile= ListFile.SelectedItem.ToString().Split (" - ")[1] + ".sav";
+            App.GameGlobal.MainWindow.Show();
+            App.GameGlobal.MainWindow.LoadGame(DirSaveGame + sfile);            
+            this.Hide();
         }
 
         private void УдалитьИгру(object sender, RoutedEventArgs e)
         {
-
+            string sfile = ListFile.SelectedItem.ToString().Split(" - ")[1] + ".sav";
+           if (System.IO.File.Exists (DirSaveGame + sfile)) System.IO.File.Delete(DirSaveGame + sfile);
+            Refreh_FileSav();
         }
 
         private void ПереместитьВПраво(object sender, RoutedEventArgs e)
@@ -182,10 +197,12 @@ namespace PH4_WPF
             if (RB1.IsChecked == true) gamer.Gender = 1;
             else if (RB2.IsChecked == true) gamer.Gender = 0;
             else gamer.Gender = 2;
+                        
+            App.GameGlobal.MainWindow.Show();
+            App.GameGlobal.MainWindow.NewGame();
+            App.GameGlobal.GamerInfo = gamer;
+            this.Hide();
 
-            var frm = new MainWindow();
-            frm.Show();
-            
         }
     }
 }

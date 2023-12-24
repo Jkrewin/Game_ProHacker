@@ -26,7 +26,7 @@ namespace PH4_WPF.Browser
         private void СкачатьПрограммуF(object sender, MouseButtonEventArgs e)
         {
             ((FrmBrowser)App.GameGlobal.ActiveApp["PH4_WPF.Browser.FrmBrowser"]).StartDownload("PortScaner",
-                new FileServerClass.ParameterClass() { TypeInformation = FileServerClass.ParameterClass.TypeParam.exe, TextCommand = "portScaner" },
+                new FileServerClass.ParameterClass() { TypeInformation = Enums.TypeParam.exe, TextCommand = "portScaner" },
                 540, "exe");
         }
 
@@ -119,7 +119,7 @@ namespace PH4_WPF.Browser
             var rand = new Random();
             string v = (string)((Button)sender).CommandParameter;
             ((FrmBrowser)App.GameGlobal.ActiveApp["PH4_WPF.Browser.FrmBrowser"]).StartDownload(v.Split('Ъ')[0] + ".txt", 
-                new FileServerClass.ParameterClass() { TypeInformation = FileServerClass.ParameterClass.TypeParam.instructions , IntParam = int.Parse ( v.Split('Ъ')[1]) }              , 
+                new FileServerClass.ParameterClass() { TypeInformation = Enums.TypeParam.instructions , IntParam = int.Parse ( v.Split('Ъ')[1]) }              , 
                 rand.Next(150, 800), "txt");
         }
 

@@ -13,28 +13,19 @@ using System.Windows.Shapes;
 namespace PH4_WPF
 {
     /// <summary>
-    /// Логика взаимодействия для Window1.xaml
+    /// Логика взаимодействия для GameOver.xaml
     /// </summary>
-    public partial class Window1 : Window
+    public partial class GameOver : Window
     {
-        public Window1()
+        public GameOver()
         {
             InitializeComponent();
         }
 
-        private void doen(object sender, KeyEventArgs e)
+        public GameOver(string msg)
         {
-           
-        }
-
-        private void ВыборНовости(object sender, RoutedEventArgs e)
-        {
-
-        }
-
-        private void загрузка(object sender, RoutedEventArgs e)
-        {
-           
+            InitializeComponent();
+            L_Msg.Content = msg;           
         }
     }
 }

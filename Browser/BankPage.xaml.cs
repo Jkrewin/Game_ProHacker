@@ -82,7 +82,7 @@ namespace PH4_WPF.Browser
                     MyCash = true,
                     Pass = "XXXXXXXXXXXXXXX",
                     Rs = RSNew.Text ,
-                    TypeMoney = (BankAccount.TypeMoneyEnum)Enum .Parse (typeof(BankAccount .TypeMoneyEnum ), CBTypeMoney.Text.Substring (0,1) )
+                    TypeMoney = (Enums.TypeMoneyEnum)Enum .Parse (typeof(Enums.TypeMoneyEnum ), CBTypeMoney.Text.Substring (0,1) )
                 };
                 App.GameGlobal.Bank.Accounts.Add(account);
                 RegRS.Items.Clear();

@@ -61,7 +61,7 @@ namespace PH4_WPF.Browser
                             ID = item.ID.ToString(),
                             NameBug = item.NameBug,
                             Price = str,
-                            TypeProg = Engine.FileServerClass.ParameterClass.TypeParam.exploit
+                            TypeProg = Enums.TypeParam.exploit
                         },
                         Foreground = (Brush)bc.ConvertFrom("#FF31EE41")
                     };
@@ -107,7 +107,7 @@ namespace PH4_WPF.Browser
                             ID = i.ToString (),
                             NameBug = tv.Split (',')[0].Replace (" + ", "_"),
                             Price = s.ToString(),
-                            TypeProg = Engine.FileServerClass.ParameterClass.TypeParam.backdoor
+                            TypeProg = Enums.TypeParam.backdoor
                         };
 
                         Label label = new Label()
@@ -149,7 +149,8 @@ namespace PH4_WPF.Browser
                             ID = "",
                             NameBug = item2,
                             Price = s.ToString(),
-                            TypeProg = Engine.FileServerClass.ParameterClass.TypeParam.shell
+                            TypeProg = Enums.TypeParam.shell,
+                            ValueString =item2
                         };
 
                         Label label = new Label()
@@ -172,7 +173,7 @@ namespace PH4_WPF.Browser
                 ID = "",
                 NameBug = "Unknown",
                 Price = (150 * App.GameGlobal.GamerInfo.MultiplierPrices).ToString(),
-                TypeProg = Engine.FileServerClass.ParameterClass.TypeParam.shell
+                TypeProg = Enums.TypeParam.shell
             };
             Label label2 = new Label()
             {

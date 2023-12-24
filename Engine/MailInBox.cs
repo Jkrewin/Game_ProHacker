@@ -9,7 +9,7 @@ namespace PH4_WPF.Engine
     /// Почтовое сообщение
     /// </summary>
     [Serializable]
-    public class MailInBox
+    public sealed class MailInBox
     {
         /// <summary>
         /// Заголовок письма
@@ -67,9 +67,24 @@ namespace PH4_WPF.Engine
             RfMail();
         }
         /// <summary>
+        /// Проверяет если новая почта или нет и показывает иконку на раб. столе
+        /// </summary>
+        public static void MailNotification() {
+            if (App.GameGlobal.MyServer.Mails.FindAll(x => x.ReadMail == false).Count == 0)
+            {
+                App.GameGlobal.MainWindow.MailIndicator.Source =
+            new BitmapImage(new Uri(App.PatchAB + @"\Desktop\bPanel\Mail.png"));
+            }
+            else
+            {
+                App.GameGlobal.MainWindow.MailIndicator.Source =
+                new BitmapImage(new Uri(App.PatchAB + @"\Desktop\bPanel\sel mail.png"));
+            }
+        }
+        /// <summary>
         /// Нужен для обновления нотификации
         /// </summary>
-        public static void RfMail() { 
+        private static void RfMail() { 
          // обновляет список почты
             if (App.GameGlobal.ActiveApp.ContainsKey(typeof(FrmSoft.Mail).FullName))
             {
@@ -77,8 +92,7 @@ namespace PH4_WPF.Engine
                 frm.Refreh_Mail();
             }
             // нотификация прихода почты
-            App.GameGlobal.MainWindow.MailIndicator.Source =
-                new BitmapImage(new Uri(App.PatchAB + @"\Desktop\bPanel\sel mail.png"));
+            MailNotification();
             App.GameGlobal.SoundSignal("newMail");
         }
         #endregion

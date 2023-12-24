@@ -19,7 +19,7 @@
         </Grid.ColumnDefinitions>
         <Rectangle Stroke="#FF2E3440" VerticalAlignment="Top" Height="434" Fill="#FF2E3440" Grid.RowSpan="2"/>
 
-        <ListView x:Name="LsFile" Grid.Column="1" Background="#FF4B566A" BorderThickness="2" BorderBrush="#FF151618" Margin="0,65,10,10" Grid.RowSpan="2" SelectionChanged="ВыделенФайл" PreviewMouseDown="КликПоЭлементу" PreviewMouseDoubleClick="ДвойнойКликПоФайлу">
+        <ListView x:Name="LsFile" Background="#FF4B566A" BorderThickness="2" BorderBrush="#FF151618" Margin="63,65,11,10" Grid.RowSpan="2" SelectionChanged="ВыделенФайл" PreviewMouseDown="КликПоЭлементу" PreviewMouseDoubleClick="ДвойнойКликПоФайлу" Grid.ColumnSpan="2">
             <ListView.ItemsPanel>
                 <ItemsPanelTemplate>
                     <WrapPanel Width="{Binding (FrameworkElement.ActualWidth), 
@@ -83,10 +83,22 @@
                     </Style.Triggers>
                 </Style>
             </ListView.Resources>
-        </ListView>
 
+
+        </ListView>
+        <Grid x:Name="RenamePanel" Visibility="Hidden"  Background="#FF1D2738" Grid.Column="1" Margin="0,345,11,12" Grid.Row="1">
+            <TextBox x:Name="RenameTexBox" HorizontalAlignment="Left" Margin="161,0,0,0" Text="TextBox" TextWrapping="Wrap" VerticalAlignment="Center" Width="201" Foreground="White" Background="#FF4B566A" LostFocus="ИзменитьНазваниеФайла" MaxLength="32"/>
+            <Label Content="Переименовать файл:" HorizontalAlignment="Left" Margin="25,0,0,0" VerticalAlignment="Center" Foreground="Gainsboro"/>
+            <Button  Content="&#xE106;" HorizontalAlignment="Left" Margin="693,0,0,0" VerticalAlignment="Center" Height="26" Click="ОК_ПереименоватьФайл" FontFamily="Segoe MDL2 Assets" FontSize="14" Width="26" Background="{x:Null}" Foreground="#FF4066E8" ToolTip="Расшарить файл, с возможность скачать его " BorderBrush="#FF4066E8"/>
+
+        </Grid>
         <Rectangle x:Name="ExitButton" Grid.Column="1" HorizontalAlignment="Left" Height="16" Margin="663,0,0,0" Stroke="#FF5C0F0F" VerticalAlignment="Top" Width="63" Fill="DarkRed" MouseEnter="Выделяет_кнопку_выход" MouseLeave="ПрекращаетВыделение" MouseDown="УдалениеКнопка"/>
-        <TextBox x:Name="SPatch" BorderThickness="2" Grid.Column="1" HorizontalAlignment="Left" Margin="10,33,0,0" Text="/" TextWrapping="Wrap" VerticalAlignment="Top" Width="637" UndoLimit="500" FontSize="14" FontWeight="Normal" TextDecorations="{x:Null}" Background="{x:Null}" Foreground="AliceBlue" Height="24                 "/>
+        <TextBox x:Name="SPatch" BorderThickness="2" Grid.Column="1" HorizontalAlignment="Left" Margin="10,33,0,0" Text="/" TextWrapping="Wrap" VerticalAlignment="Top" Width="637" UndoLimit="500" FontSize="14" FontWeight="Normal" TextDecorations="{x:Null}" Background="{x:Null}" Foreground="AliceBlue" Height="24">
+            <TextBox.ContextMenu>
+                <ContextMenu Visibility="Collapsed">
+                </ContextMenu>
+            </TextBox.ContextMenu>
+        </TextBox>
         <Button Content="" BorderThickness="2" Margin="694,33,10,0" VerticalAlignment="Top" Height="27"  Grid.Column="1" BorderBrush="#FF1F1A1A" Foreground="#FFC04C4C" Click="ВерхДиректорияКлик">
             <Button.Background>
                 <ImageBrush ImageSource="/Content/soft/FileManager/uprow.png"/>
@@ -100,8 +112,9 @@
         <Button Content="&#xE975;" BorderThickness="1" Margin="5,101,5,0" VerticalAlignment="Top" Height="57" BorderBrush="#FF151517" Foreground="#FF12161F" Click="Папкаexploit" Grid.Row="1" Background="#FF2E3440" FontFamily="Segoe MDL2 Assets" FontSize="48"/>
         <Button x:Name="ButtonCut" Content="&#xE16B;" HorizontalAlignment="Left" Margin="33,339,0,0" Grid.Row="1" VerticalAlignment="Top" Height="26" Click="ВыризатьФайл" FontFamily="Segoe MDL2 Assets" FontSize="14" Width="26" Background="#FF2E3440" Foreground="#FF2A9BB1" ToolTip="Вырезать файл"/>
         <Button Content="&#xE16D;" HorizontalAlignment="Left" Margin="5,339,0,0" Grid.Row="1" VerticalAlignment="Top" Height="26" Click="ВставитьФайл" FontFamily="Segoe MDL2 Assets" FontSize="14" Width="26" Background="#FF2E3440" Foreground="#FF2A9BB1" ToolTip="Вставить файл"/>
-        <Button Content="&#xED25;" HorizontalAlignment="Left" Margin="5,312,0,0" Grid.Row="1" VerticalAlignment="Top" Height="26" Click="ВставитьФайл" FontFamily="Segoe MDL2 Assets" FontSize="14" Width="26" Background="#FF2E3440" Foreground="#FF14A95B" ToolTip="Создать папку"/>
-        <Button x:Name="SharedFile" Content="&#xE17B;" HorizontalAlignment="Left" Margin="5,285,0,0" Grid.Row="1" VerticalAlignment="Top" Height="26" Click="Расшарить" FontFamily="Segoe MDL2 Assets" FontSize="14" Width="26" Background="{x:Null}" Foreground="#FF4066E8" ToolTip="Расшарить файл, с возможность скачать его "/>
+        <Button Content="&#xED25;" HorizontalAlignment="Left" Margin="5,312,0,0" Grid.Row="1" VerticalAlignment="Top" Height="26" Click="СоздаемПапку" FontFamily="Segoe MDL2 Assets" FontSize="14" Width="26" Background="#FF2E3440" Foreground="#FF14A95B" ToolTip="Создать папку"/>
+        <Button x:Name="SharedFile" Content="&#xE17B;" HorizontalAlignment="Left" Margin="5,258,0,0" Grid.Row="1" VerticalAlignment="Top" Height="26" Click="Расшарить" FontFamily="Segoe MDL2 Assets" FontSize="14" Width="26" Background="{x:Null}" Foreground="#FF4066E8" ToolTip="Расшарить файл, с возможность скачать его "/>
+        <Button Content="&#xE18F;" HorizontalAlignment="Left" Margin="5,285,0,0" Grid.Row="1" VerticalAlignment="Top" Height="26" Click="ПереименоватьФайл" FontFamily="Segoe MDL2 Assets" FontSize="14" Width="26" Background="#FF2E3440" Foreground="#FF14A95B" ToolTip="Изменить название"/>
 
     </Grid>
 </Window>

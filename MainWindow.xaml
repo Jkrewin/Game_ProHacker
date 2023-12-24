@@ -26,7 +26,7 @@
             <Canvas.Background>
                 <ImageBrush ImageSource="\Content\Desktop\Wallpapers.png"/>
             </Canvas.Background>
-            <TextBlock x:Name="DeskCmd" TextWrapping="WrapWithOverflow" Text="DeskCmd" Canvas.Left="648" Canvas.Top="10" Foreground="#FF42B715" Width="1171" Height="545" FontSize="20" FontFamily="Consolas" TextAlignment="Left">
+            <TextBlock x:Name="DeskCmd" TextWrapping="WrapWithOverflow" Text="DeskCmd" Canvas.Left="648" Canvas.Top="10" Foreground="#FFBBFDBC" Width="1171" Height="545" FontSize="18" FontFamily="Consolas" TextAlignment="Left">
                 <TextBlock.Effect>
                     <DropShadowEffect      ShadowDepth="4"      Direction="330"      Color="Yellow"      Opacity="0.5"     BlurRadius="4"/>
                 </TextBlock.Effect>
@@ -92,7 +92,7 @@
                 <Image x:Name="NewsIndicator" Margin="6,0,250,19" Cursor="Hand" Source="/Content/Desktop/bPanel/news.png" PreviewMouseDown="ОткрытьНовостиПанель"/>
                 <Image x:Name="MailIndicator" Cursor="Hand" Margin="65,-7,186,14" Source="/Content/Desktop/bPanel/mail.png" MouseDown="КликПоПочте"/>
                 <Image x:Name="StatusSpeedImg" Cursor="Hand" Source="/Content/Desktop/bPanel/SpeedPause.png" Margin="142,-10,98,2" MouseDown="КликПоSpeedPanel"/>
-                <Label x:Name="DateGameIndicator" Content="00.00.0000" Width="108" FontSize="18" FontWeight="Bold" ScrollViewer.VerticalScrollBarVisibility="Disabled" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" Foreground="#FF323438" Margin="207,0,0,0"/>
+                <Label x:Name="DateGameIndicator" Content="01.01.2001" Width="108" FontSize="18" FontWeight="Bold" ScrollViewer.VerticalScrollBarVisibility="Disabled" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" Foreground="#FF323438" Margin="207,0,0,0"/>
 
             </Grid>
             <Button  Width="80" BorderBrush="#FF3F3F3F" BorderThickness="0" Click="Открыть_консоль" Height="79" Background="{x:Null}"  >
@@ -125,7 +125,12 @@
 
         <Button x:Name="ButtonOption" Content="" BorderThickness="4" HorizontalAlignment="Right" Height="72" Margin="1850,0,0,0" Grid.Row="1" VerticalAlignment="Stretch" Width="70" Background="#FF4B566A" BorderBrush="#FF3F3F3F" FontFamily="Wingdings 2" FontSize="36" Foreground="#FF2C2D2F" FontWeight="Bold" Click="MenuOpen" HorizontalContentAlignment="Center"/>
         <Grid Background="#FF4B566A" Height="45" VerticalAlignment="Top" HorizontalAlignment="Right" Width="374">
-            <TextBox x:Name="T_Search" HorizontalAlignment="Left" Margin="19,0,0,0" TextWrapping="Wrap" VerticalAlignment="Center" Width="296" FontSize="16" Height="27" Background="#FF4B566A" Foreground="#FFCDC8C8" TextChanged="ПоисковаяСтрока" KeyDown="ПоискЭлементаНачало"/>
+            <TextBox x:Name="T_Search" HorizontalAlignment="Left" Margin="19,0,0,0" TextWrapping="Wrap" VerticalAlignment="Center" Width="296" FontSize="16" Height="27" Background="#FF4B566A" Foreground="#FFCDC8C8" TextChanged="ПоисковаяСтрока" KeyDown="ПоискЭлементаНачало">
+                <TextBox.ContextMenu>
+                    <ContextMenu Visibility="Collapsed">
+                    </ContextMenu>
+                </TextBox.ContextMenu>
+            </TextBox>
             <Button Content="&#xE11A;" HorizontalAlignment="Left" Height="25" Margin="320,0,0,0" VerticalAlignment="Center" Width="31" Background="#FF4B566A" BorderBrush="#FFABADB3" FontFamily="Segoe MDL2 Assets" FontSize="18" Foreground="#FFBFB6B6" Click="НачатьПоискСервера"/>
         </Grid>
         <Grid x:Name="G_BackPanel" Background="#FF4B566A" Height="433" VerticalAlignment="Top" HorizontalAlignment="Right" Width="374" Margin="0,45,0,0">
@@ -140,7 +145,8 @@
             <Button x:Name="ShutdownServer" Content="Перезапуск сервера" HorizontalAlignment="Center" Height="31" Margin="0,248,0,0" VerticalAlignment="Top" Width="342" Click="Перезапустить_сервер" Background="#FF3F4B62" RenderTransformOrigin="0.5,0.5" Foreground="#FFCDC8C8" BorderBrush="#FF2B2929"/>
             <Button x:Name="AdminPanel" Content="Панель Администратора" HorizontalAlignment="Center" Height="31" Margin="0,284,0,0" VerticalAlignment="Top" Width="342" Click="ОткрАдминПанел" Background="#FF623C38" RenderTransformOrigin="0.5,0.5" Foreground="White" BorderBrush="#FF0E1E34" FontSize="14"/>
             <!-- Сюда ниже не лезь тут список поверх кнопок-->
-                <ListBox Visibility="Hidden"  x:Name="LB_FindEl" Background="#FF4B566A" FontSize="14" Foreground="#FF599F84" SelectionChanged="ВыделенниеЭлементаПоиска"/>
+            <ListBox Visibility="Hidden"  x:Name="LB_FindEl" Background="#FF4B566A" FontSize="14" Foreground="#FF599F84" SelectionChanged="ВыделенниеЭлементаПоиска"/>
+            <Button x:Name="AddRouteButton" Content="Создать маршрут" HorizontalAlignment="Center" Height="31" Margin="0,320,0,0" VerticalAlignment="Top" Width="342" Click="СоздатьМаршрут" Background="#FF294376" RenderTransformOrigin="0.5,0.5" Foreground="#FFCDC8C8" BorderBrush="#FF2B2929"/>
 
         </Grid>
 

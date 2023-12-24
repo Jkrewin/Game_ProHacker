@@ -11,11 +11,13 @@ namespace PH4_WPF.Engine
     /// Отображает линии маршрута
     /// </summary>
     [Serializable]
-    public class RouterClass
+    public sealed class RouterClass
     {
+        private bool _MyRoute =false;
         private int top;
         private int left;
         [NonSerialized] private Line line;
+
 
         /// <summary>
         /// Сервер начальный
@@ -24,30 +26,7 @@ namespace PH4_WPF.Engine
         /// <summary>
         /// Сервер конец
         /// </summary>
-        public Server EndServer;
-        /// <summary>
-        /// Сама линиии маршрута которая рис
-        /// </summary>
-        public Line Line
-        {
-            get
-            {
-                if (line == null)
-                {
-                    Line lineNew = new Line
-                    {
-                        StrokeThickness = LineArgument.StrokeThickness,
-                        Stroke = LineArgument.Stroke,
-                        Y1 = LineArgument.Y1,
-                        X1 = LineArgument.X1,
-                        Y2 = LineArgument.Y2,
-                        X2 = LineArgument.X2
-                    };
-                    line = lineNew;
-                }
-                return line;
-            }
-        }
+        public Server EndServer;               
         /// <summary>
         /// Параметры линии для рисовки
         /// </summary>
@@ -74,6 +53,38 @@ namespace PH4_WPF.Engine
                 top = value;
             }
         }
+        /// <summary>
+        /// Созданный маршрут вам или нет <b>true- это ваш маршрут</b>
+        /// </summary>
+        public bool MyRoute
+        {
+            get => _MyRoute;
+            set
+            {
+                _MyRoute = value;
+                Line.Stroke = _MyRoute ? Brushes.OrangeRed : Brushes.GreenYellow;
+            }
+        }
+        /// <summary>
+        /// Сама линиии маршрута которая рисуется
+        /// </summary>
+        public Line Line
+        {
+            get
+            {
+                line ??= new Line
+                {
+                    StrokeThickness = LineArgument. StrokeThickness,
+                    Stroke = _MyRoute ? Brushes.OrangeRed : Brushes.GreenYellow,
+                    Y1 = LineArgument. Y1,
+                    X1 = LineArgument. X1,
+                    Y2 = LineArgument. Y2,
+                    X2 = LineArgument.X2
+                };
+                return line;
+            }
+        }
+
 
         /// <summary>
         /// Необходим для создание линии в качестве свойств
@@ -81,12 +92,21 @@ namespace PH4_WPF.Engine
         [Serializable]
         public struct LineArgumentStruct
         {
-            public double StrokeThickness;
-            public Brush Stroke { get => Brushes.GreenYellow; }
+            public double StrokeThickness;            
             public double Y1;
             public double Y2;
             public double X1;
             public double X2;
+
+            public LineArgumentStruct(double strokeThickness, double y1, double y2, double x1, double x2)
+            {
+                StrokeThickness = strokeThickness;
+                Y1 = y1;
+                Y2 = y2;
+                X1 = x1;
+                X2 = x2;                    
+            }           
+           
         }
     }
 }

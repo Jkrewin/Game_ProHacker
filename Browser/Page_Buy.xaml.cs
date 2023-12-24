@@ -18,7 +18,7 @@ namespace PH4_WPF.Browser
     public partial class Page_Buy : Page
     {
         readonly DownloadText DT;
-        Page PageOld; 
+        readonly Page PageOld; 
         public Page_Buy(DownloadText downloadText , Page oldPage )
         {
             InitializeComponent();
@@ -32,10 +32,10 @@ namespace PH4_WPF.Browser
         public  struct DownloadText
         {
             public string NameBug;
-            public FileServerClass.ParameterClass.TypeParam  TypeProg;
+            public Enums.TypeParam  TypeProg;
             public string ID;
             public string Price;
-           
+            public string ValueString;
         }
 
         private void Отмена(object sender, RoutedEventArgs e)
@@ -48,15 +48,16 @@ namespace PH4_WPF.Browser
             L_ErrorText.Visibility = Visibility.Hidden;
             var rand = new Random();
             // Если нужно купить программу 
-            string dt = DT.ID=="" ? "0" : DT.ID;
-            if (DT.Price != "0" | DT.Price != "")
+            string dt = DT.ID == "" ? "0" : DT.ID;
+            if (L_Price.Content.ToString () !="0$")
             {
+                // Это платный софт нужно купить 
                 if (App.GameGlobal.Bank.DefaultBankAccount == null)
                 {
                     ErrorText("У вас нет аккаунта, вы должны создать и установить по умолчанию");
                     return;
                 }
-                if (App.GameGlobal.Bank.DefaultBankAccount.TypeMoney != Engine.BankClass.BankAccount.TypeMoneyEnum.Dollar)
+                if (App.GameGlobal.Bank.DefaultBankAccount.TypeMoney != Enums.TypeMoneyEnum.Dollar)
                 {
                     ErrorText("Счет должен быть в $$$");
                     return;
@@ -73,12 +74,13 @@ namespace PH4_WPF.Browser
                 }
                 // Тут покупка
                 App.GameGlobal.Bank.DefaultBankAccount.Money = App.GameGlobal.Bank.DefaultBankAccount.Money - int.Parse(DT.Price);
-                App.GameGlobal.LogAdd("Вы купили программу", Game.LogTypeEnum.Money);
+                App.GameGlobal.LogAdd("Вы купили программу", Enums.LogTypeEnum.Money);
                 ((FrmBrowser)App.GameGlobal.ActiveApp["PH4_WPF.Browser.FrmBrowser"]).StartDownload(DT.NameBug,
                     new FileServerClass.ParameterClass()
                     {
                         TypeInformation = DT.TypeProg,
-                        IntParam = int.Parse(dt)
+                        IntParam = int.Parse(dt),
+                        TextCommand = DT.ValueString
                     }, rand.Next(150, 800), "pl");
                 App.GameGlobal.SoundSignal("buy");
                 Отмена(null, null);
@@ -93,7 +95,7 @@ namespace PH4_WPF.Browser
                 {
                     // тут бесплатная скачка
                     ((FrmBrowser)App.GameGlobal.ActiveApp["PH4_WPF.Browser.FrmBrowser"]).StartDownload(DT.NameBug,
-                        new FileServerClass.ParameterClass() { TypeInformation = DT.TypeProg, IntParam = int.Parse(dt) },
+                        new FileServerClass.ParameterClass() { TypeInformation = DT.TypeProg, IntParam = int.Parse(dt), TextCommand = DT.ValueString  },
                         rand.Next(150, 800), "pl");  
                     Отмена(null, null);
                 }

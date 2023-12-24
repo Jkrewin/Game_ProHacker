@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using System.Linq;
 
 namespace PH4_WPF.Engine
 {
@@ -8,15 +9,21 @@ namespace PH4_WPF.Engine
     /// Сервер
     /// </summary>
     [Serializable]
-    public class Server
+    public sealed class Server
     {
         [NonSerialized] public DrawingHubClass DrawingHub;
+        public delegate void UpdateFileSystem (string patch);
+        /// <summary>
+        /// событие сообщает что были изменения в файловой системе этого сервера
+        /// </summary>
+        [field: NonSerialized] public event UpdateFileSystem ChangeFileSys;
 
         private TypeOSEnum PrvOS = TypeOSEnum.Unknown;
         private const int MAXPORTS = 10;                                               //масксимально число портов на сервере 
         private System.Drawing.Point _LocateTextura = new System.Drawing.Point(0, 0);  // сохраняет положение на карте 
-        private List<Port> Allports;                                                    // тут все порты
+        private List<Port> Allports;                                                   // тут все порты
         private bool PrvActSrv = true;
+        private PremissionServerEnum PrvPremision= PremissionServerEnum.none;
 
         /// <summary>
         /// Необходим для сохранение положение координат серверов
@@ -116,7 +123,8 @@ namespace PH4_WPF.Engine
         /// </summary>
         public TypeOSEnum OS
         {
-            get => PrvOS; set
+            get => PrvOS; 
+            set
             {
                 PrvOS = value;
                 var rand = new Random();
@@ -127,10 +135,12 @@ namespace PH4_WPF.Engine
                 if (PrvOS == TypeOSEnum.WinSrv)
                 {
                     key = "WIN system ";
-                    string[] txt2 = App.GameGlobal.MainWindow.Firewall_TXT;                    
-                    FireWall = txt2[rand.Next(0, txt2.Length)].Split (',')[1];
+                    string[] txt2 = App.GameGlobal.MainWindow.Firewall_TXT;
+                    FireWall = txt2[rand.Next(0, txt2.Length)].Split(',')[1];
                 }
+                else if (PrvOS == TypeOSEnum.Logerhead) goto w10;
                 else if (PrvOS == TypeOSEnum.Linux) key = "BSD system ";
+                
                 if (PopularSRV >= 40) v = "High";
 
                 foreach (var item in txt)
@@ -144,6 +154,7 @@ namespace PH4_WPF.Engine
                     }
                 }
                 OSName = "Unknown";
+                PrvOS = TypeOSEnum.Unknown;
             w10:;
             }
         }
@@ -158,7 +169,10 @@ namespace PH4_WPF.Engine
         /// <summary>
         /// текущий уровень допуска
         /// </summary>
-        public PremissionServerEnum Premision { get; set; } = PremissionServerEnum.none;
+        public PremissionServerEnum Premision { get=> PrvPremision; set {
+                PrvPremision = value;
+                App.GameGlobal.EventIntroduce(Enums.ConditionEnum.ИзменениеПравДоступа,  NameSrv, PrvPremision.ToString());
+            } }
         /// <summary>
         /// Максимальная вычислительная можность сервера 
         /// </summary>
@@ -211,7 +225,7 @@ namespace PH4_WPF.Engine
         public FileServerClass FileSys { get; set; } = new FileServerClass()
         {
             Dir = new List<FileServerClass>(),
-            FileСontents = new FileServerClass.ParameterClass() { TypeInformation = FileServerClass.ParameterClass.TypeParam.dir },
+            FileСontents = new FileServerClass.ParameterClass() { TypeInformation = Enums.TypeParam.dir },
             FileName = "root",
             Size = 1,
             Rights = FileServerClass.PremisionEnum.none,
@@ -226,9 +240,10 @@ namespace PH4_WPF.Engine
         /// </summary>
         public string LoginAndPass = "";
         /// <summary>
-        /// Указывает что вы засветились в логах этого сервера
+        /// Указывает что вы засветились в логах этого сервера 
+        ///  <b>0 - значение указывает что логи очистили или вы не были на сервере</b>
         /// </summary>
-        public int LogSaver = 0;
+        public int LogSaver = 0;        
         /// <summary>
         /// Виртуальные сервера
         /// </summary>
@@ -281,7 +296,7 @@ namespace PH4_WPF.Engine
         /// <param name="perfix"></param>
         /// <param name="systemFile"></param>
         /// <param name="createDirAuto"></param>
-        public void CreateFiles(string patch, string nameFile, FileServerClass.ParameterClass comment, int size, Engine.FileServerClass.PremisionEnum rights, string perfix, bool systemFile = false, bool createDirAuto = true)
+        public void CreateFiles(string patch, string nameFile, FileServerClass.ParameterClass comment, int size, FileServerClass.PremisionEnum rights, string perfix, bool systemFile = false, bool createDirAuto = true)
         {
             string[] p = patch.Split('/');
             FileServerClass dir = FileSys;
@@ -294,9 +309,9 @@ namespace PH4_WPF.Engine
                 if (dir == null) if (createDirAuto)
                     {
                         // создает каталог если его при createDirAuto = true
-                        oldDir.Dir.Add(new Engine.FileServerClass()
+                        oldDir.Dir.Add(new FileServerClass()
                         {
-                            FileСontents = new FileServerClass.ParameterClass() { TypeInformation = FileServerClass.ParameterClass.TypeParam.dir },
+                            FileСontents = new FileServerClass.ParameterClass() { TypeInformation = Enums.TypeParam.dir },
                             SystemFile = systemFile,
                             FileName = p[i],
                             Size = 1,
@@ -314,7 +329,8 @@ namespace PH4_WPF.Engine
             }
 
             if (perfix == "" & nameFile.IndexOf('.') != -1) perfix = nameFile.Split('.')[^1];           
-            if (nameFile != "") dir.Dir.Add(new Engine.FileServerClass() { FileСontents = comment, FileName = nameFile, Size = size, Rights = rights, Perfix = perfix, SystemFile = systemFile });
+            if (nameFile != "") dir.Dir.Add(new FileServerClass() { FileСontents = comment, FileName = nameFile, Size = size, Rights = rights, Perfix = perfix, SystemFile = systemFile });
+            ChangeFileSys?.Invoke(patch);
         }
         /// <summary>
         /// Создакт файл из готового экземпляра
@@ -337,7 +353,7 @@ namespace PH4_WPF.Engine
         /// <param name="rights"></param>
         /// <param name="systemFile"></param>
         /// <param name="createDirAuto"></param>
-        public void CreateFiles(string patch, string nameFile, FileServerClass.ParameterClass comment, int size, Engine.FileServerClass.PremisionEnum rights, bool systemFile = false, bool createDirAuto = true)
+        public void CreateFiles(string patch, string nameFile, FileServerClass.ParameterClass comment, int size, FileServerClass.PremisionEnum rights, bool systemFile = false, bool createDirAuto = true)
         {
             string perfix;
             string s;
@@ -362,7 +378,7 @@ namespace PH4_WPF.Engine
         {
             CreateFiles(patch, nameFile, new FileServerClass.ParameterClass()
             {
-                TypeInformation = FileServerClass.ParameterClass.TypeParam.file,
+                TypeInformation = Enums.TypeParam.file,
                 TextCommand = comment
             }, size, rights, systemFile, createDirAuto);
         }
@@ -383,9 +399,9 @@ namespace PH4_WPF.Engine
                 dir = dir.Dir.Find(x => x.FileName == p[i]);
                 if (dir == null) { throw new Exception("Не найден игровой каталог " + patch); }
             }
-            dir.Dir.Add(new Engine.FileServerClass()
+            dir.Dir.Add(new FileServerClass()
             {
-                FileСontents = new FileServerClass.ParameterClass() { TypeInformation = FileServerClass.ParameterClass.TypeParam.dir },
+                FileСontents = new FileServerClass.ParameterClass() { TypeInformation = Enums.TypeParam.dir },
                 SystemFile = systemFile,
                 FileName = dirName,
                 Size = 1,
@@ -393,6 +409,7 @@ namespace PH4_WPF.Engine
                 Perfix = "",
                 Dir = new List<FileServerClass>()
             });
+            ChangeFileSys?.Invoke(patch);           
         }
         /// <summary>
         /// Генерирует случайные файлы для сервера
@@ -551,6 +568,70 @@ namespace PH4_WPF.Engine
             if (LogSaver != 0) {
                 App.GameGlobal.Msg("","в логах", FrmSoft.FrmError.InformEnum.Критическая_ошибка );
             }
+        }
+        /// <summary>
+        /// Создает виртуальный сервер автаматически 
+        /// </summary>
+        public void CreateVirtualAuto()
+        {
+            VirtualizationServer = new Virtualization { MaxPower = PopularSRV * 45 };
+            // автоматическое создание инстансев          
+            var rnd = new Random();
+            int need_power = (int)(VirtualizationServer.MaxPower * 0.9);
+            var items = new[] {
+                            new { typ=Enums.InstaceTypeEnum.BookingApi, b = rnd.Next (0,2)==0  },
+                            new { typ=Enums.InstaceTypeEnum.MailApi, b = rnd.Next (0,1)==0 },
+                            new { typ=Enums.InstaceTypeEnum.SerWebApi, b = rnd.Next (0,3)==0 },
+                            new { typ=Enums.InstaceTypeEnum.StreamVideoApi, b = rnd.Next (0,3)==0 },
+                            new { typ=Enums.InstaceTypeEnum.WebChatApi, b = rnd.Next (0,3)==0 },
+                            new { typ=Enums.InstaceTypeEnum.WebForumApi, b = rnd.Next (0,1)==0 },
+                            new { typ=Enums.InstaceTypeEnum.ShopApi, b = rnd.Next (0,3)==0 },
+                      };
+
+            var first = VirtualizationServer.Role_Templates(Enums.InstaceTypeEnum.TranceSrv);
+            VirtualizationServer.Instance.Add(first);
+
+            long ra = items.Where(x => x.b).LongCount();
+            int pwr = (int)(need_power / ra);
+
+            foreach (var item in items)
+            {
+                if (item.b == true)
+                {
+                    Virtualization.InstaceClass instaceClass = VirtualizationServer.Role_Templates(item.typ);
+                    instaceClass.VerA = (byte)rnd.Next(1, 5);
+                    instaceClass.VerB = (byte)rnd.Next(1, 25);
+                    instaceClass.KVT_Ver = pwr / instaceClass.VerA;
+                    instaceClass.Popular_Ver = pwr / instaceClass.VerB;
+                    instaceClass.StatusInstance = Enums.StatusInstanceEnum.Working;
+
+                    VirtualizationServer.Instance.Add(instaceClass);
+                }
+            }
+
+            first.KVT_Ver = Math.Min(0, need_power - VirtualizationServer.SummarPower);
+            first.StatusInstance = Enums.StatusInstanceEnum.Working;
+
+            VirtualizationServer.Hardware = new Virtualization.HardwareClass(VirtualizationServer);
+        }
+        /// <summary>
+        /// Создает виртуальный сервер для квестов 
+        /// </summary>
+        public void CreateVirtualManual()
+        {
+            VirtualizationServer = new Virtualization { MaxPower = PopularSRV * 45 };
+            // создаем истансы не активные           
+            Enums.InstaceTypeEnum[] defaultTypes = new Enums.InstaceTypeEnum[] {      
+                    Enums.InstaceTypeEnum.FTP ,
+                    Enums.InstaceTypeEnum.MySql ,
+                    Enums.InstaceTypeEnum.WebForum ,
+                    Enums.InstaceTypeEnum.BanerAD ,
+                    Enums.InstaceTypeEnum.Mail
+            };
+                       
+            foreach (var item in defaultTypes) VirtualizationServer.Instance.Add(VirtualizationServer.Role_Templates(item));
+            
+            VirtualizationServer.Hardware = new Virtualization.HardwareClass(VirtualizationServer);
         }
 
         #region "Структуры и перечисления"

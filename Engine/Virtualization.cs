@@ -11,7 +11,7 @@ namespace PH4_WPF.Engine
     /// Необходимо для работы админ панели 
     /// </summary>
     [Serializable]
-    public class Virtualization
+    public sealed class Virtualization
     {
         private UpgradeStruct ProccesNowUpgadePrv;
 
@@ -31,6 +31,10 @@ namespace PH4_WPF.Engine
         /// Посещаемость в день
         /// </summary>
         public int PeerDay { get; set; }
+        /// <summary>
+        /// Железо на сервере
+        /// </summary>
+        public HardwareClass Hardware;
         /// <summary>
         /// Сумарная мощь всех инстансов
         /// </summary>
@@ -52,7 +56,7 @@ namespace PH4_WPF.Engine
         /// <summary>
         /// Если в настоящий момент что то улучшаеться то <b> true </b>
         /// </summary>
-        public bool CheckUpgradeNow { get => Instance.Find(x => x.UpdateSoft == true) == null ? false : true; }
+        public bool CheckUpgradeNow { get => Instance.Find(x => x.UpdateSoft == true) != null; }
 
         /// <summary>
         /// Запуск обновление софта
@@ -84,12 +88,12 @@ namespace PH4_WPF.Engine
             ImageSource img = App.UriResImage("/Content/AdminPanel/rackserver.png");
             switch (instance.StatusInstance)
             {
-                case StatusInstanceEnum.Stopping:
+                case Enums.StatusInstanceEnum.Stopping:
                     sts = "ПАУЗА";
                     img = App.UriResImage("/Content/AdminPanel/pause.png");
                     col = (System.Windows.Media.Brush)bc.ConvertFrom("#FFF2C94D");
                     break;
-                case StatusInstanceEnum.ErrorCritical:
+                case Enums.StatusInstanceEnum.ErrorCritical:
                     sts = "ОШИБКА";
                     img = App.UriResImage("/Content/AdminPanel/rackservererror.png");
                     col = (System.Windows.Media.Brush)bc.ConvertFrom("#FFA93A2D");
@@ -131,8 +135,8 @@ namespace PH4_WPF.Engine
             for (;;){
                 foreach (var item in Instance)
                 {
-                    if (CheckDependencies(item) == false & item.StatusInstance == StatusInstanceEnum.Working ) {
-                        item.StatusInstance = StatusInstanceEnum.ErrorCritical;
+                    if (CheckDependencies(item) == false & item.StatusInstance == Enums.StatusInstanceEnum.Working ) {
+                        item.StatusInstance = Enums.StatusInstanceEnum.ErrorCritical;
                         b = false;
                     }
                 }
@@ -157,7 +161,7 @@ namespace PH4_WPF.Engine
                     }
                     else if (item.InstaceType == str)
                     {
-                        if (item.StatusInstance == StatusInstanceEnum.Working)
+                        if (item.StatusInstance == Enums.StatusInstanceEnum.Working)
                         {
                             goto good;
                         }
@@ -180,96 +184,113 @@ namespace PH4_WPF.Engine
         /// </summary>
         /// <param name="TypeName"></param>
         /// <returns></returns>
-        public InstaceClass Role_Templates(InstaceTypeEnum TypeName) => TypeName switch
+        public InstaceClass Role_Templates(Enums.InstaceTypeEnum TypeName) => TypeName switch
         {
-            InstaceTypeEnum.FTP =>
-               new InstaceClass()
-               {
-                   InstaceType = TypeName,
-                   VerA = 1,
-                   VerB = 0,
-                    KVT_Ver =10,
-                     Popular_Ver =60,
-                   Dependencies = new InstaceTypeEnum[] {  }
-               },
-            InstaceTypeEnum.MySql =>
-                new InstaceClass()
-                {
-                    InstaceType = TypeName,
-                    VerA = 1,
-                    VerB = 0,
-                    KVT_Ver = 10,
-                    Popular_Ver = 80,
-                    Dependencies = new InstaceTypeEnum[] { }
-                },
-            InstaceTypeEnum.WebForum =>
-                new InstaceClass()
-                {
-                    InstaceType = TypeName,
-                    VerA = 1,
-                    VerB = 0,
-                    KVT_Ver = 10,
-                    Popular_Ver = 200,
-                    Dependencies = new InstaceTypeEnum[] { InstaceTypeEnum.MySql, InstaceTypeEnum.BanerAD, InstaceTypeEnum.Mail }
-                },
-            InstaceTypeEnum.BanerAD =>
-                new InstaceClass()
-                {
-                    InstaceType = TypeName,
-                    VerA = 1,
-                    VerB = 0,
-                    KVT_Ver = 10,
-                    Popular_Ver = 50,
-                    Dependencies = new InstaceTypeEnum[] { InstaceTypeEnum.Mail }
-                },
-            InstaceTypeEnum.Mail =>
-                new InstaceClass()
-                {
-                    InstaceType = TypeName,
-                    VerA = 1,
-                    VerB = 0,
-                    KVT_Ver = 10,
-                    Popular_Ver = 200,
-                    Dependencies = new InstaceTypeEnum[] { InstaceTypeEnum.FTP }
-                },
-            InstaceTypeEnum.Coordinator =>
-                new InstaceClass()
-                {
-                    InstaceType = TypeName,
-                    VerA = 1,
-                    VerB = 0,
-                    KVT_Ver = 10,
-                    Popular_Ver = 0,
-                    Dependencies = new InstaceTypeEnum[] { }
-                },
-            _ =>
-                  null
+            Enums.InstaceTypeEnum.FTP =>        new InstaceClass(TypeName, 10, 60, new Enums.InstaceTypeEnum[] { }),
+            Enums.InstaceTypeEnum.MySql =>      new InstaceClass(TypeName, 10, 80, new Enums.InstaceTypeEnum[] { }),
+            Enums.InstaceTypeEnum.WebForum =>   new InstaceClass(TypeName, 10, 200, new Enums.InstaceTypeEnum[] {
+                Enums.InstaceTypeEnum.MySql,
+                Enums.InstaceTypeEnum.BanerAD,
+                Enums.InstaceTypeEnum.Mail }),
+            Enums.InstaceTypeEnum.BanerAD =>     new InstaceClass(TypeName, 10, 50, new Enums.InstaceTypeEnum[] { Enums.InstaceTypeEnum.Mail }),
+            Enums.InstaceTypeEnum.Mail =>        new InstaceClass(TypeName, 10, 200, new Enums.InstaceTypeEnum[] { Enums.InstaceTypeEnum.FTP }),
+            Enums.InstaceTypeEnum.Coordinator => new InstaceClass(TypeName, 10, 0, new Enums.InstaceTypeEnum[] { }),
+            Enums.InstaceTypeEnum.Shop => new InstaceClass(TypeName, 25, 320, new Enums.InstaceTypeEnum[] { 
+                Enums.InstaceTypeEnum.Mail,
+                Enums.InstaceTypeEnum.MySql,
+                Enums.InstaceTypeEnum.BanerAD }),
+            Enums.InstaceTypeEnum.StreamVideo =>    new InstaceClass(TypeName, 100, 450, new Enums.InstaceTypeEnum[] { 
+                Enums.InstaceTypeEnum.Mail,
+                Enums.InstaceTypeEnum.BanerAD,
+                Enums.InstaceTypeEnum.Coordinator }),
+            Enums.InstaceTypeEnum.WebChat =>        new InstaceClass(TypeName, 25, 280, new Enums.InstaceTypeEnum[] { 
+                Enums.InstaceTypeEnum.Mail,
+                 Enums.InstaceTypeEnum.MySql,
+                 Enums.InstaceTypeEnum.BanerAD }),
+            Enums.InstaceTypeEnum.TranceSrv =>       new InstaceClass(TypeName, 0, 0, new Enums.InstaceTypeEnum[] { }, true),
+            Enums.InstaceTypeEnum.ShopApi =>         new InstaceClass(TypeName, 0, 0, new Enums.InstaceTypeEnum[] { Enums.InstaceTypeEnum.TranceSrv }, true),
+            Enums.InstaceTypeEnum.SerWebApi =>       new InstaceClass(TypeName, 0, 0, new Enums.InstaceTypeEnum[] { Enums.InstaceTypeEnum.TranceSrv }, true),
+            Enums.InstaceTypeEnum.StreamVideoApi =>  new InstaceClass(TypeName, 0, 0, new Enums.InstaceTypeEnum[] { Enums.InstaceTypeEnum.TranceSrv }, true),
+            Enums.InstaceTypeEnum.WebChatApi =>      new InstaceClass(TypeName, 0, 0, new Enums.InstaceTypeEnum[] { Enums.InstaceTypeEnum.TranceSrv }, true),
+            Enums.InstaceTypeEnum.WebForumApi =>     new InstaceClass(TypeName, 0, 0, new Enums.InstaceTypeEnum[] { Enums.InstaceTypeEnum.TranceSrv }, true),
+            Enums.InstaceTypeEnum.MailApi =>         new InstaceClass(TypeName, 0, 0, new Enums.InstaceTypeEnum[] { Enums.InstaceTypeEnum.TranceSrv }, true),
+            Enums.InstaceTypeEnum.BookingApi =>      new InstaceClass(TypeName, 0, 0, new Enums.InstaceTypeEnum[] { Enums.InstaceTypeEnum.TranceSrv }, true),
+            _ =>  null
         };
-        public string GetTextName(InstaceTypeEnum TypeName) =>
+        public string GetTextName(Enums.InstaceTypeEnum TypeName) =>
             TypeName switch
             {
-                InstaceTypeEnum.FTP => "Файловый Сервер FTP",
-                InstaceTypeEnum.BanerAD => "Управление, реклама, баннеры",
-                InstaceTypeEnum.Mail => "Почтовый сервер",
-                InstaceTypeEnum.MySql => "MySql Сервер",
-                InstaceTypeEnum.WebForum => "Веб-сайт скрипт: Форум PHP",
-                InstaceTypeEnum.Coordinator => "Создает точку управление сервисами",
+                Enums.InstaceTypeEnum.FTP => "Файловый Сервер FTP",
+                Enums.InstaceTypeEnum.BanerAD => "Управление, реклама, баннеры",
+                Enums.InstaceTypeEnum.Mail => "Почтовый сервер",
+                Enums.InstaceTypeEnum.MySql => "MySql Сервер",
+                Enums.InstaceTypeEnum.WebForum => "Веб-сайт скрипт: Форум PHP",
+                Enums.InstaceTypeEnum.Coordinator => "Создает точку управление сервисами",
+                Enums.InstaceTypeEnum.WebChat => "Чат",
+                Enums.InstaceTypeEnum.Shop => "Магазин товаров",
+                Enums.InstaceTypeEnum.StreamVideo  => "Каталог видео",
+                Enums.InstaceTypeEnum.TranceSrv  => "Сервер нагрузки других сервисов",
+                Enums.InstaceTypeEnum.Booking  => "Покупка билетов и аренда номеров",
+                Enums.InstaceTypeEnum.WebChatApi => "Чат Уникальный",
+                Enums.InstaceTypeEnum.ShopApi  => "Магазин товаров Уникальный",
+                Enums.InstaceTypeEnum.StreamVideoApi => "Каталог видео Уникальный",
+                Enums.InstaceTypeEnum.SerWebApi => "Веб сервис для пользователей",
+                Enums.InstaceTypeEnum.BookingApi => "Покупка билетов и аренда Уникальный",
+                Enums.InstaceTypeEnum.WebForumApi => "Веб-сайт Уникальный",
+                Enums.InstaceTypeEnum.MailApi => "Почта Уникальный",
                 _ => "<Роль не определена>",
             };
+
+        /// <summary>
+        /// Железо на сервере
+        /// </summary>
+        [Serializable]
+        public class HardwareClass {
+            /// <summary>
+            /// Всего процессоров
+            /// </summary>
+            public int TotalProcessor;
+            /// <summary>
+            /// Всего ОЗУ
+            /// </summary>
+            public int TotalRAM;
+            /// <summary>
+            /// Всего жестких дисков
+            /// </summary>
+            public int TotalHDD;
+
+            /// <summary>
+            /// Общая мощность 
+            /// </summary>
+            public int PowerKVT { get => TotalProcessor * TotalRAM; }
+
+            public HardwareClass() { }
+            public HardwareClass(Virtualization vr ) {               
+                TotalProcessor = (int)(vr.MaxPower * 0.4);
+                TotalRAM = (int)(vr.MaxPower * 0.6);
+                TotalHDD = vr.SummarPopular * 3;
+            }
         
+        }
 
         /// <summary>
         /// Нужен для объекта роли сервера
         /// </summary>
-        public class InstaceClass {           
-           private StatusInstanceEnum StatusInstancePrv = StatusInstanceEnum.Stopping;
+        [Serializable]
+        public class InstaceClass
+        {
+            private Enums.StatusInstanceEnum StatusInstancePrv = Enums.StatusInstanceEnum.Stopping;           
 
-            public InstaceTypeEnum InstaceType { get; set; }
+            public Enums.InstaceTypeEnum InstaceType { get; set; }
             public byte VerA = 1;
             public byte VerB = 0;
-            public string Version { get  => VerA + "." + VerB;}
-            public StatusInstanceEnum StatusInstance { get => StatusInstancePrv; set => StatusInstancePrv = value; } 
-            public InstaceTypeEnum[] Dependencies = new InstaceTypeEnum[] { InstaceTypeEnum.MySql };
+            public string Version { get => VerA + "." + VerB; }
+            public Enums.StatusInstanceEnum StatusInstance { get => StatusInstancePrv; set => StatusInstancePrv = value; }
+            public readonly Enums.InstaceTypeEnum[] Dependencies = new Enums.InstaceTypeEnum[] { Enums.InstaceTypeEnum.MySql };
+            /// <summary>
+            /// Эта роль уникальна так он авто генерирован
+            /// </summary>
+            public readonly bool API;
 
             /// <summary>
             /// Количество потребления за каждую версию A
@@ -280,21 +301,33 @@ namespace PH4_WPF.Engine
             /// </summary>
             public int Popular_Ver = 10;
             /// <summary>
-            /// В процесае улучшения
+            /// В процесае улучшения <b>true - в процессе</b>
             /// </summary>
-            public bool UpdateSoft;
+            public bool UpdateSoft =false;
 
             /// <summary>
             /// Потребление энергии
             /// </summary>
-            public int KVT { get => StatusInstance == StatusInstanceEnum.Working ? KVT_Ver * VerA : 0; }
+            public int KVT { get => StatusInstance == Enums.StatusInstanceEnum.Working ? KVT_Ver * VerA : 0; }
             /// <summary>
             /// Посещение сайта в день
             /// </summary>
-            public int Popular { get => StatusInstance == StatusInstanceEnum.Working ? Popular_Ver * VerB : 0; }
+            public int Popular { get => StatusInstance == Enums.StatusInstanceEnum.Working ? Popular_Ver * VerB : 0; }
+           
 
+            public InstaceClass(Enums.InstaceTypeEnum instaceType, int KVT, int popular_Ver, Enums.InstaceTypeEnum[] dependencies, bool api = false)
+            {
+                InstaceType = instaceType;
+                VerA = 1;
+                VerB = 0;
+                KVT_Ver = KVT;
+                Popular_Ver = popular_Ver;
+                Dependencies = dependencies;
+                API = api;
+            }
         }
 
+        [Serializable]
         public struct UpgradeStruct
         {
             public DateTime DataStart;
@@ -302,27 +335,6 @@ namespace PH4_WPF.Engine
             public GameEvenStruct EvenLink;
         }
 
-        /// <summary>
-        /// Доступные инстансы
-        /// </summary>
-        public enum InstaceTypeEnum { 
-            FTP,
-            MySql,
-            WebForum,
-            BanerAD,
-            Mail,
-            Coordinator
-        
-        }
-
-        /// <summary>
-        /// Статус работы инстанса
-        /// </summary>
-        public enum StatusInstanceEnum
-        {
-            Working,
-            Stopping,
-            ErrorCritical
-        }
+       
     }
 }

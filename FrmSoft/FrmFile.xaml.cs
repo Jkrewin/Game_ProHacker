@@ -2,24 +2,19 @@
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.Text;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Media;
-using System.Linq;
-using System.Windows.Shapes;
 
 namespace PH4_WPF.FrmSoft
 {
     
     public partial class FrmFile : Window
     {
-      
 
 
+        private FileServerClass RenameFile;
         private readonly ObservableCollection<ListViewItemsData> ListViewItemsCollections = new ObservableCollection<ListViewItemsData>();
         private string MyPath="/";
        
@@ -48,9 +43,13 @@ namespace PH4_WPF.FrmSoft
             InitializeComponent();
             LsFile.ItemsSource = ListViewItemsCollections;
             RefFiles();
+            App.GameGlobal.MyServer.ChangeFileSys += ChageFileSys;
         }
 
-        
+        private void ChageFileSys(string patch) {
+            if (PatchDisplay.ToLower () == patch.ToLower ())   RefFiles();                  
+        }
+
         private void RefFiles() {
             var ls = FileServerClass.GetInfoFiles(MyPath, App.GameGlobal.MyServer);
             ListViewItemsCollections.Clear();
@@ -115,7 +114,7 @@ namespace PH4_WPF.FrmSoft
                 var f = Engine.FileServerClass.GetFile(MyPath + l.File.FileName, App.GameGlobal.MyServer);
 
                                // Переместить сполйт
-                 if (f.FileСontents.TypeInformation == FileServerClass.ParameterClass.TypeParam.exploit & MyPath == "/user/Hpro4/Download/")
+                 if (f.FileСontents.TypeInformation == Enums.TypeParam.exploit & MyPath == "/user/Hpro4/Download/")
                 {
                     var h = Engine.FileServerClass.GetFile("/user/Hpro4/Exploit/", App.GameGlobal.MyServer);
                     if (h.Dir.Find(x => x.FileName == f.FileName) == null)
@@ -315,9 +314,9 @@ namespace PH4_WPF.FrmSoft
             if (l.File.Dir == null)
             {
                 //это файл
-                var f = Engine.FileServerClass.GetFile(MyPath + l.File.FileName, App.GameGlobal.MyServer);
+                var f = FileServerClass.GetFile(MyPath + l.File.FileName, App.GameGlobal.MyServer);
                
-                if (f.FileСontents.TypeInformation == FileServerClass.ParameterClass.TypeParam.exe)
+                if (f.FileСontents.TypeInformation == Enums.TypeParam.exe)
                 {
                     // Установка программы в App
                     if (FileServerClass.Exist("/apps/", f.FileСontents.TextCommand, App.GameGlobal.MyServer))
@@ -331,19 +330,66 @@ namespace PH4_WPF.FrmSoft
                         App.GameGlobal.Msg("Установка", "Установка программы " + f.FileName + " завершенно ", FrmError.InformEnum.УстановкаПрограммы);
                     }
                 }
-                else if (f.FileСontents.TypeInformation == FileServerClass.ParameterClass.TypeParam.exploit)
+                else if (f.FileСontents.TypeInformation == Enums.TypeParam.exploit)
                 {
                     App.GameGlobal.Msg("Файл", "Это файл эксплойта. Запустите его в консоли чтобы взломать сервер", FrmError.InformEnum.Информация);
                 }
-                else if (f.FileСontents.TypeInformation == FileServerClass.ParameterClass.TypeParam.backdoor)
+                else if (f.FileСontents.TypeInformation == Enums.TypeParam.backdoor)
                 {
                     App.GameGlobal.Msg("Файл", "Backdoor файл загрузите его на другой сервер, затем запустите консольную комманду Make чтобы повысит права доступа ", FrmError.InformEnum.Информация);
                 }
-                else if (f.FileСontents.TypeInformation == FileServerClass.ParameterClass.TypeParam.shell)
+                else if (f.FileСontents.TypeInformation == Enums.TypeParam.shell)
                 {
                     App.GameGlobal.Msg("Файл", "Это файл Shell необходим для подключении к серверу через комманду connect ", FrmError.InformEnum.Информация);
                 }
             }
+        }
+
+        private void СоздаемПапку(object sender, RoutedEventArgs e)
+        {
+            var f = FileServerClass.GetFile(PatchDisplay, App.GameGlobal.MyServer);
+            int i = 0;
+            string s;
+            for (; ; )
+            {
+                s = "Папка №" + i;
+                if (f.Dir.Find(x => x.FileName == s) == null) break;
+                i++;
+            }
+            f.Dir.Add(new FileServerClass()
+            {
+                FileName = s,
+                Perfix = f.Perfix,
+                Rights =  FileServerClass.PremisionEnum.AdminUserGuest,
+                FileСontents = f.FileСontents,
+                SystemFile = false,
+                Size = 10,
+                Dir = new List<FileServerClass>()
+            });
+            RefFiles();
+        }
+
+        private void ПереименоватьФайл(object sender, RoutedEventArgs e)
+        {
+            ListViewItemsData f = (ListViewItemsData)LsFile.SelectedItem;
+            if (f == null) return;
+            RenamePanel.Visibility = Visibility.Visible;
+            RenameFile = f.File;
+            RenameTexBox.Text = RenameFile.FileName;
+        }
+
+        private void ОК_ПереименоватьФайл(object sender, RoutedEventArgs e) => RenamePanel.Visibility = Visibility.Hidden;
+
+        private void ИзменитьНазваниеФайла(object sender, RoutedEventArgs e)
+        {
+            if (RenameTexBox.Text == "") {
+                RenameTexBox.Background = Brushes.Red;
+                return;
+            }
+            RenameTexBox.Text.Replace("/", "");
+            RenameTexBox.Text.Replace(@"\", "");
+            RenameFile.FileName = RenameTexBox.Text;
+            ОК_ПереименоватьФайл(null, null);
         }
     }
 }

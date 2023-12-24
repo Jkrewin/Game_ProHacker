@@ -129,6 +129,27 @@
     <None Remove="Content\Desktop\Srv\StandSvr_4.png" />    
     <None Remove="Content\Desktop\Srv\StandSvr_5.png" />    
     <None Remove="Content\Desktop\Wallpapers.png" />    
+    <None Remove="Content\face\007.gif" />    
+    <None Remove="Content\face\106-skull.gif" />    
+    <None Remove="Content\face\10814.gif" />    
+    <None Remove="Content\face\1123084.gif" />    
+    <None Remove="Content\face\1268763.gif" />    
+    <None Remove="Content\face\1284801.gif" />    
+    <None Remove="Content\face\1329108.gif" />    
+    <None Remove="Content\face\3535.gif" />    
+    <None Remove="Content\face\5265.gif" />    
+    <None Remove="Content\face\5266.gif" />    
+    <None Remove="Content\face\5393.gif" />    
+    <None Remove="Content\face\9842.gif" />    
+    <None Remove="Content\face\MДеадмент.gif" />    
+    <None Remove="Content\face\MИз темноты.gif" />    
+    <None Remove="Content\face\MКак гари потер.gif" />    
+    <None Remove="Content\face\MПсих.gif" />    
+    <None Remove="Content\face\SЭто товой предок.gif" />    
+    <None Remove="Content\face\WАзиатка.gif" />    
+    <None Remove="Content\face\WДевушка.gif" />    
+    <None Remove="Content\face\WОбычная девушка.gif" />    
+    <None Remove="Content\face\WСтарое фото.gif" />    
     <None Remove="Content\Firewall.txt" />    
     <None Remove="Content\msg\download.png" />    
     <None Remove="Content\msg\error.png" />    
@@ -448,6 +469,69 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="Content\Desktop\Srv\StandSvr_5.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Content\face\007.gif">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Content\face\106-skull.gif">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Content\face\10814.gif">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Content\face\1123084.gif">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Content\face\1268763.gif">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Content\face\1284801.gif">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Content\face\1329108.gif">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Content\face\3535.gif">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Content\face\5265.gif">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Content\face\5266.gif">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Content\face\5393.gif">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Content\face\9842.gif">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Content\face\MДеадмент.gif">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Content\face\MИз темноты.gif">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Content\face\MКак гари потер.gif">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Content\face\MПсих.gif">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Content\face\SЭто товой предок.gif">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Content\face\WАзиатка.gif">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Content\face\WДевушка.gif">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Content\face\WОбычная девушка.gif">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Content\face\WСтарое фото.gif">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="Content\Firewall.txt">

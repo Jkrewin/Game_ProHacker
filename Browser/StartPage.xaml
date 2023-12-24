@@ -7,23 +7,30 @@
       mc:Ignorable="d" d:DesignWidth="800"
       Title="StartPage" Height="600">
     <ScrollViewer>
-        <Grid Margin="0,0,0,0" Height="1151">
+        <Grid Margin="0,0,0,0" Height="1800">
             <Grid Background="White" Margin="0,0,0,0">
                 <Rectangle HorizontalAlignment="Center" Height="108" VerticalAlignment="Top" Width="800">
                     <Rectangle.Fill>
                         <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
-                            <GradientStop Color="#FF23257B" Offset="0.633"/>
                             <GradientStop Color="White" Offset="1"/>
+                            <GradientStop Color="#FF0198CB" Offset="0.885"/>
                         </LinearGradientBrush>
                     </Rectangle.Fill>
                 </Rectangle>
-                <Rectangle HorizontalAlignment="Center" Height="22" Margin="0,113,0,0" VerticalAlignment="Top" Width="800" Stroke="Black" StrokeThickness="2" Fill="#FFF9E2B7"/>
-                <Rectangle HorizontalAlignment="Center" Height="217" Margin="0,134,0,0" Stroke="Black" VerticalAlignment="Top" Width="800" StrokeThickness="2"/>
+                <Rectangle HorizontalAlignment="Center" Height="22" Margin="0,113,0,0" VerticalAlignment="Top" Width="800" StrokeThickness="2" Fill="#FFF7BC4E"/>
+                <Rectangle HorizontalAlignment="Center" Height="217" Margin="0,134,0,0" VerticalAlignment="Top" Width="800" StrokeThickness="2">
+                    <Rectangle.Fill>
+                        <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
+                            <GradientStop Color="White" Offset="0.367"/>
+                            <GradientStop Color="#FF92DDE8" Offset="0"/>
+                        </LinearGradientBrush>
+                    </Rectangle.Fill>
+                </Rectangle>
                 <Label Content="Стартовая Страница" HorizontalAlignment="Left" Margin="95,10,0,0" VerticalAlignment="Top" Foreground="White" FontFamily="Comic Sans MS" FontSize="36" FontStyle="Italic"/>
                 <Label Cursor="Hand"  HorizontalAlignment="Right" Margin="0,140,439,0" VerticalAlignment="Top" Width="334" Foreground="#FF2F10FF" PreviewMouseDown="ГайдШеллы">
                     <TextBlock TextDecorations="Underline" FontSize="16" Width="319"><Run Text="Шелл-shell как этим пользоваться"/></TextBlock>
                 </Label>
-                <Label Content="Гайды" Margin="365,108,364,0" VerticalAlignment="Top" Foreground="#FF080707" FontFamily="Comic Sans MS" FontStyle="Italic" FontSize="14"/>
+                <Label Content="Гайды" Margin="365,108,364,0" VerticalAlignment="Top" Foreground="#FF881B1B" FontFamily="Comic Sans MS" FontStyle="Italic" FontSize="14"/>
                 <Label Cursor="Hand"  HorizontalAlignment="Right" Margin="0,171,439,0" VerticalAlignment="Top" Width="334" Foreground="#FF2F10FF" PreviewMouseDown="Эксплойты">
                     <TextBlock TextDecorations="Underline" FontSize="16" Width="319"><Run Text="Типы Exploit что они дают вам"/></TextBlock>
                 </Label>
@@ -31,7 +38,7 @@
                     <TextBlock TextDecorations="Underline" FontSize="16" Width="319"><Run Text="Консоль для новичка. Подробный гайд"/></TextBlock>
                 </Label>
             </Grid>
-            <RichTextBox x:Name="Rtf" IsReadOnly="True " Background="White" Margin="10,357,10,-244" BorderBrush="Black">
+            <RichTextBox x:Name="Rtf" IsReadOnly="True " Background="White" Margin="0,291,-17,-491" BorderBrush="Black" Width="800" Height="2000">
                 <FlowDocument>
                     <Paragraph>
                         <Run Text=""/>

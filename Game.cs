@@ -2,11 +2,6 @@
 using System;
 using System.Collections.Generic;
 using System.Windows;
-using System.Drawing;
-using System.Windows.Shapes;
-using System.Windows.Controls;
-using System.Runtime.Serialization.Formatters.Binary;
-using System.Linq;
 
 namespace PH4_WPF
 {
@@ -24,6 +19,8 @@ namespace PH4_WPF
         /// Основная форма
         /// </summary>
         [NonSerialized] public MainWindow MainWindow;
+        // Загруженна игра или еще обрабатывает параметры 
+        public bool GameLoaded = false;
         /// <summary>
         /// Сервер игрока
         /// </summary>
@@ -190,7 +187,7 @@ namespace PH4_WPF
         {
             foreach (var item in Servers)
             {
-                if (item == MyServer) continue;
+                //if (item == MyServer) continue;
                 if (name_or_ip.Trim() == item.IP) return item;
                 if (item.NameSrv.ToLower() == name_or_ip.ToLower().Trim()) return item;
             }
@@ -200,29 +197,16 @@ namespace PH4_WPF
         /// Добавляет в лог информацию
         /// </summary>
         /// <param name="text">Текст инф. в начале разделитель пример : <i>*тут лог</i></param>
-        public void LogAdd(string text, LogTypeEnum logType) {
-            string str;
-            switch (logType)
+        public void LogAdd(string text,Enums.LogTypeEnum logType) {
+            string str = logType switch
             {
-                case LogTypeEnum.Money:
-                    str = "";
-                    break;
-                case LogTypeEnum.Error:
-                    str = "";
-                    break;
-                case LogTypeEnum.Server:
-                    str = "";
-                    break;
-                case LogTypeEnum.Problem:
-                    str = "";
-                    break;
-                case LogTypeEnum.Exp:
-                    str = "";
-                    break;
-                default:
-                    str = "";
-                    break;
-            }
+                Enums.LogTypeEnum.Money => "",
+                Enums.LogTypeEnum.Error => "",
+                Enums.LogTypeEnum.Server => "",
+                Enums.LogTypeEnum.Problem => "",
+                Enums.LogTypeEnum.Exp => "",
+                _ => "",
+            };
             News.Logs.Add(new NewsClass.LogStruct() { Text = str + text, Date = DataGM.ToString("dd/mm/yy") }); 
         }
         /// <summary>
@@ -235,7 +219,7 @@ namespace PH4_WPF
             //gameover - игра закончена
             //buy - Покупка
             //button-sound-14 - письмо откыто аттачь 
-            if (MainWindow.SoundDisable == false)
+            if (App.SoundDisable == false)
             {
                 System.Windows.Media.MediaPlayer media = new System.Windows.Media.MediaPlayer();
                 media.Open(new Uri(App.PatchAB + @"sound\" + str + ".mp3", UriKind.Relative));
@@ -247,22 +231,18 @@ namespace PH4_WPF
         /// </summary>
         /// <param name="srvA">От сервера</param>
         /// <param name="srvB">До сервера</param>
-        private void AddRouter(Server srvA, Server srvB)
+        public void AddRouter(Server srvA, Server srvB)
         {
             if (srvA.NameSrv != srvB.NameSrv)
             {
-               
-                RouterClass.LineArgumentStruct lineArgument = new RouterClass.LineArgumentStruct()
-                {
-                    StrokeThickness = 2,
-                    Y1 = srvA.DrawingHub.GetLocateRec.Y + (App.H_GRIND / 2),
-                    X1 = srvA.DrawingHub.GetLocateRec.X + (App.W_GRIND / 2),
-                    Y2 = srvB.DrawingHub.GetLocateRec.Y + (App.H_GRIND / 2),
-                    X2 = srvB.DrawingHub.GetLocateRec.X + (App.W_GRIND / 2)
-                };
+
+                RouterClass.LineArgumentStruct lineArgument = new RouterClass.LineArgumentStruct(2,
+                    srvA.DrawingHub.GetLocateRec.Y + (App.H_GRIND / 2),
+                                                        srvB.DrawingHub.GetLocateRec.Y + (App.H_GRIND / 2),
+                                                        srvA.DrawingHub.GetLocateRec.X + (App.W_GRIND / 2),
+                                                        srvB.DrawingHub.GetLocateRec.X + (App.W_GRIND / 2));
                 Routers.Add(new RouterClass() { FirstServer = srvA, EndServer = srvB, LineArgument = lineArgument });
-                MainWindow.MyCanvas.Children.Add(Routers[^1].Line);
-                Canvas.SetZIndex(Routers[^1].Line, 0);
+                MainWindow.AddLineRoute(Routers[^1]);
             }
         }
         /// <summary>
@@ -282,7 +262,11 @@ namespace PH4_WPF
         /// </summary>
         /// <param name="condition"></param>
         /// <param name="StringElemen"></param>
-        public void EventIntroduce(GameScen.ScenStruct.ConditionStruct.ConditionEnum condition, string[] StringElemen ) => this.GameScen.ActiveScen.EventIntroduce(condition, StringElemen);
+        public void EventIntroduce(Enums.ConditionEnum condition, string target, string parametor="") {
+            if (GameLoaded==false) return;
+            string[] StringElemen = new string[] { target, parametor };
+            GameScen.ActiveScen.EventIntroduce(condition, StringElemen);
+        }
 
 
         /// <summary>
@@ -326,7 +310,7 @@ namespace PH4_WPF
             {
                 foreach (var tv in item.Ports) {
                     if (tv.NameTitle == "Unknown") continue;
-                    if (tv.Rationo < GamerInfo.HiTecLevel) //Тех уровень игрока высокий он обнаружит уязвимость 
+                    if (tv.Rationo <= GamerInfo.HiTecLevel) //Тех уровень игрока высокий он обнаружит уязвимость 
                     {
                         if (VulnerabilitiesList.Find(x => x.NameBug == tv.NameTitle & x.VerB == tv.Rationo) == null)
                         {
@@ -392,14 +376,6 @@ namespace PH4_WPF
             Speed2X,
             Speed4X
         }
-
-        public enum LogTypeEnum
-        {
-            Money,
-            Error,
-            Server,
-            Problem,
-            Exp
-        }
+        
     }
 }

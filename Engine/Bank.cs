@@ -8,7 +8,7 @@ namespace PH4_WPF.Engine
     /// Банковская система
     /// </summary>
     [Serializable]
-    public class BankClass
+    public sealed class BankClass
     {
         /// <summary>
         /// Счета банков
@@ -31,42 +31,34 @@ namespace PH4_WPF.Engine
         /// <param name="sum">Суииа этих денег</param>
         /// <param name="toMoney">В эту валюту конвертируем</param>
         /// <returns>Сумма в валюте <i>toMoney</i></returns>
-        public int ConvertMoney(BankAccount.TypeMoneyEnum inMoney, int sum, BankAccount.TypeMoneyEnum toMoney) {
+        public int ConvertMoney(Enums.TypeMoneyEnum inMoney, int sum, Enums.TypeMoneyEnum toMoney) {
             switch (inMoney)
             {
-                case BankAccount.TypeMoneyEnum.Karbovantsy:
+                case Enums.TypeMoneyEnum.Karbovantsy:
                     sum =(int)( Convert.ToDouble ( sum) * Karbovantsy);
                     break;
-                case BankAccount.TypeMoneyEnum.Ether:
+                case Enums.TypeMoneyEnum.Ether:
                     sum = (int)(Convert.ToDouble(sum) * Ether);
                     break;
-                case BankAccount.TypeMoneyEnum.BitCoin:
+                case Enums.TypeMoneyEnum.BitCoin:
                     sum = (int)(Convert.ToDouble(sum) * BitCoin);
                     break;
-                case BankAccount.TypeMoneyEnum.Dollar:
+                case Enums.TypeMoneyEnum.Dollar:
                 default:                   
                     break;
             }
 
-            double f;
-            switch (toMoney)
+            var f = toMoney switch
             {
-                case BankAccount.TypeMoneyEnum.Karbovantsy:
-                    f = Karbovantsy;
-                    break;
-                case BankAccount.TypeMoneyEnum.Ether:
-                    f = Ether;
-                    break;
-                case BankAccount.TypeMoneyEnum.BitCoin:
-                    f = BitCoin;
-                    break;
-                case BankAccount.TypeMoneyEnum.Dollar:
-                default:
-                    f = 1;
-                    break;
-            }           
+                Enums.TypeMoneyEnum.Karbovantsy => Karbovantsy,
+                Enums.TypeMoneyEnum.Ether => Ether,
+                Enums.TypeMoneyEnum.BitCoin => BitCoin,
+                _ => 1,
+            };
             return (int)(sum / f);
         }
+
+        public BankAccount this[int index] { get => Accounts[index]; }
 
         /// <summary>
         /// Банковский счет
@@ -77,20 +69,14 @@ namespace PH4_WPF.Engine
             public string Rs;
             public string Login;
             public string Pass;
-            public TypeMoneyEnum TypeMoney;
+            public Enums.TypeMoneyEnum TypeMoney;
             public int Money;
             /// <summary>
             /// Счет игрока вход без логина и пароля
             /// </summary>
             public bool MyCash = false;
 
-            public enum TypeMoneyEnum
-            {
-                Dollar = 2,
-                Karbovantsy = 1,
-                Ether = 4,
-                BitCoin = 3
-            }
+           
         }
 
     }

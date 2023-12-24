@@ -6,7 +6,7 @@ namespace PH4_WPF.Engine
     /// Уязвимость для серверов
     /// </summary>
     [Serializable]
-    public class Vulnerabilities
+    public sealed class Vulnerabilities
     {
         private readonly int id;
         /// <summary>

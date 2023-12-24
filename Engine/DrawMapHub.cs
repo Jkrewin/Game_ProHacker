@@ -12,7 +12,7 @@ namespace PH4_WPF.Engine
     /// <summary>
     /// Необходим для отображения серверов на экране <b>Без Сериализации</b>
     /// </summary>
-    public class DrawingHubClass
+    public sealed class DrawingHubClass
     {
         private int top;
         private int left;
@@ -109,7 +109,7 @@ namespace PH4_WPF.Engine
                 Margin = new Thickness(-2, 0, 0, 0)
             };
 
-             if (App.GameGlobal.MainWindow.DebugMode) {
+             if (App.DebugMode) {
 
                 LabelName = new Label()
                 {

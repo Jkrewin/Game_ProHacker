@@ -21,7 +21,7 @@ namespace PH4_WPF.FrmSoft
     public partial class Mail : Window
     {
         private readonly string PatchAB = App.PatchAB + @"\soft\mail\";
-
+        private MailInBox AttachMail;
         private ObservableCollection<ListViewItemsData> ListViewItemsCollections = new ObservableCollection<ListViewItemsData>();
      
 
@@ -41,7 +41,7 @@ namespace PH4_WPF.FrmSoft
 
         public void Refreh_Mail() {
             ListViewItemsCollections.Clear();
-            
+           
             foreach (MailInBox item in App.GameGlobal.Servers[0].Mails)
             {
                 string mail = item.ReadMail == false ? "mailnew.png" : "Mail.png";
@@ -94,14 +94,10 @@ namespace PH4_WPF.FrmSoft
                 AttachMail = w.Mail;
             }
 
-            // Индикатор показывает что все прочитанно
-            var result = from TV in ListViewItemsCollections where TV.Mail.ReadMail == false select TV;
-            if (result.Count() == 0) App.GameGlobal.MainWindow.MailIndicator.Source =
-            new BitmapImage(new Uri(App.PatchAB + @"\Desktop\bPanel\Mail.png"));
+            // Индикатор показывает что все прочитанно или нет
+            MailInBox.MailNotification();
 
         }
-
-
 
 
         private void Перетаскивание(object sender, MouseButtonEventArgs e)
@@ -123,7 +119,6 @@ namespace PH4_WPF.FrmSoft
         {
             this.Close();
         }
-
         private void УдалениеКнопка(object sender, RoutedEventArgs e)
         {
             if (LsMail.SelectedItem == null) return;
@@ -131,9 +126,7 @@ namespace PH4_WPF.FrmSoft
             App.GameGlobal.Servers[0].Mails.Remove(w.Mail);
             ListViewItemsCollections.Remove(w);
             MailText.Text = "";
-        }
-
-        MailInBox  AttachMail;
+        }       
         private void ОткрытьПрикрКомманду(object sender, RoutedEventArgs e)
         {
             if (AttachMail.CommandList  is Engine.GameEvenStruct.GetMoney t)
@@ -151,5 +144,6 @@ namespace PH4_WPF.FrmSoft
                 }
             }
         }
+
     }
 }

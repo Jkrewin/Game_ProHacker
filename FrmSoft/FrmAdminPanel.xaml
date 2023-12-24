@@ -9,7 +9,7 @@
         ResizeMode="NoResize"       
 AllowsTransparency="True"
 Background="Transparent"
-        Title="FrmAdminPanel" Height="450" Width="800" Closed="ФормаЗакрыта" WindowStartupLocation="CenterScreen">
+        Title="FrmAdminPanel" Height="450" Width="800" Closed="ФормаЗакрыта" WindowStartupLocation="CenterScreen" Loaded="ЗагруженнаФорма">
 
     <Window.Effect>
         <DropShadowEffect Color="#FF0BE7BB" Direction="320" ShadowDepth="8" Opacity="0.5" RenderingBias="Performance"/>
@@ -75,11 +75,34 @@ Background="Transparent"
             <Label x:Name="L_AllProcessor" Content="0000" HorizontalAlignment="Left" Margin="274,128,0,0" VerticalAlignment="Top" Width="90" FontFamily="Book Antiqua" FontSize="14" FontWeight="Normal"/>
             <Label x:Name="L_OZY" Content="0000" HorizontalAlignment="Left" Margin="274,153,0,0" VerticalAlignment="Top" Width="90" FontFamily="Book Antiqua" FontSize="14" FontWeight="Normal"/>
             <Label x:Name="L_HDD" Content="0000" HorizontalAlignment="Left" Margin="273,179,0,0" VerticalAlignment="Top" Width="91" FontFamily="Book Antiqua" FontSize="14" FontWeight="Normal"/>
-            <ProgressBar x:Name="PB_Hardware" HorizontalAlignment="Left" Height="14" Margin="295,325,0,0" VerticalAlignment="Top" Width="410" BorderBrush="#FFC5C5C5" Background="#FFF4ECEC" Foreground="#FF7482ED" Value="55"/>
-            <Label Content="Процесс улучшения серверов" HorizontalAlignment="Left" Margin="43,319,0,0" VerticalAlignment="Top" Width="218" FontFamily="Arial" FontSize="14" RenderTransformOrigin="0.5,0.5">
+            <Label Content="Заказать улучшение сервера " HorizontalAlignment="Left" Margin="431,124,0,0" VerticalAlignment="Top" Width="218" FontFamily="Arial" FontSize="14" RenderTransformOrigin="0.5,0.5">
 
             </Label>
-            <Label x:Name="L_ОбщееKVT" Content="200 KVT" HorizontalAlignment="Left" Margin="364,139,0,0" VerticalAlignment="Top" Width="326" FontFamily="Arial" FontSize="48" Height="60" Background="{x:Null}" Foreground="#FFED5959"/>
+            <Label Content="---------------------------------------" HorizontalAlignment="Left" Margin="489,199,0,0" VerticalAlignment="Top" Width="202"/>
+            <Label x:Name="L_ОбщееKVT" Content="200 KVT" HorizontalAlignment="Left" Margin="27,211,0,0" VerticalAlignment="Top" Width="326" FontFamily="Arial" FontSize="48" Height="60" Background="{x:Null}" Foreground="#FFED5959" HorizontalContentAlignment="Center"/>
+            <Label Content="Процессоры + RAM" HorizontalAlignment="Left" Margin="437,151,0,0" VerticalAlignment="Top" Width="132"/>
+            <TextBox x:Name="NumericProcessRam" HorizontalAlignment="Left" Margin="594,153,0,0" Text="0" TextWrapping="Wrap" VerticalAlignment="Top" Width="55" FontWeight="Normal" FontFamily="Adobe Gothic Std B" Height="22" Padding="0,-1,0,0" MouseMove="МышкаНадВерхнемNumeric" TextChanged="ПроверкаNumericОснова" MaxLines="3">
+                <TextBox.ContextMenu>
+                    <ContextMenu Visibility="Collapsed">
+                    </ContextMenu>
+                </TextBox.ContextMenu>
+            </TextBox>
+            <Label Content="Жесткие диски" HorizontalAlignment="Left" Margin="437,180,0,0" VerticalAlignment="Top" Width="132"/>
+            <TextBox x:Name="NumericHDD" HorizontalAlignment="Left" Margin="594,182,0,0" Text="0" TextWrapping="Wrap" VerticalAlignment="Top" Width="55" FontWeight="Normal" FontFamily="Adobe Gothic Std B" Height="22" Padding="0,-1,0,0" MouseMove="МышкаНадНижнемNumeric" TextChanged="ПроверкаNumericОснова" MaxLines="3">
+                <TextBox.ContextMenu>
+                    <ContextMenu Visibility="Collapsed">
+                    </ContextMenu>
+                </TextBox.ContextMenu>
+            </TextBox>
+            <Button x:Name="ButtonUp" Content="▲" HorizontalAlignment="Left" Margin="654,149,0,0" VerticalAlignment="Top" Width="16" Height="14" Background="{x:Null}" FontSize="9" Click="ButtonUpКлик"/>
+            <Button x:Name="ButtonDown" Content="▼" HorizontalAlignment="Left" Margin="654,165,0,0" VerticalAlignment="Top" Width="16" Height="14" Background="{x:Null}" FontSize="9" Click="ButtonDownклик"/>
+            <Label x:Name="SumNumeric" Content="" HorizontalAlignment="Left" Margin="446,215,0,0" VerticalAlignment="Top" Width="245"/>
+            <Label Content="Заказать" HorizontalAlignment="Left" Margin="594,250,0,0" VerticalAlignment="Top" Foreground="Black" FontFamily="Arial" FontSize="14" Width="88" Height="21" VerticalContentAlignment="Center" Padding="7,0,5,0" Background="#FFAAE0D0" MouseDown="ЗаказатьЖелезо" MouseMove="КнопкаЗапускНад" MouseLeave="КнопкаПотеряФокус" FontWeight="Normal" HorizontalContentAlignment="Center">
+                <Label.Clip>
+                    <RectangleGeometry Rect="0,0,88,21" RadiusX="6" RadiusY="6"/>
+                </Label.Clip>
+            </Label>
+            <Rectangle x:Name="Curtain" Visibility="Visible" HorizontalAlignment="Left" Height="253" Margin="383,98,0,0" Stroke="White" VerticalAlignment="Top" Width="334" Fill="White"/>
 
 
         </Grid>
@@ -186,7 +209,7 @@ Background="Transparent"
                 </ListBoxItem>
             </ListBox>
             <Label Content="Управляет службами сервера, также &#10;помогает включать нужные компоненты" HorizontalAlignment="Left" Margin="27,42,0,0" VerticalAlignment="Top" Background="#FFF2C94D" FontFamily="Arial" FontSize="14" Width="295" FontWeight="Normal" Height="46"/>
-            <Label x:Name="StartStop" Content="&#xF5B0;" HorizontalAlignment="Left" Margin="352,15,0,0" VerticalAlignment="Top" Foreground="Black" FontFamily="Segoe MDL2 Assets" FontSize="24" Width="40" Height="40" VerticalContentAlignment="Center" Padding="7,0,5,0" Background="#FFD4D8F1" MouseDown="ЗапускСервиса" MouseMove="КнопкаЗапускНад" MouseLeave="КнопкаПотеряФокус">
+            <Label x:Name="StartStop" Visibility="Hidden" Content="&#xF5B0;" HorizontalAlignment="Left" Margin="352,15,0,0" VerticalAlignment="Top" Foreground="Black" FontFamily="Segoe MDL2 Assets" FontSize="24" Width="40" Height="40" VerticalContentAlignment="Center" Padding="7,0,5,0" Background="#FFD4D8F1" MouseDown="ЗапускСервиса" MouseMove="КнопкаЗапускНад" MouseLeave="КнопкаПотеряФокус">
                 <Label.Clip>
                     <RectangleGeometry Rect="0,0,40,40" RadiusX="6" RadiusY="6"/>
                 </Label.Clip>

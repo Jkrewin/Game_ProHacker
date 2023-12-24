@@ -35,6 +35,8 @@
 			<string>ls;ls - список сообщений</string>
 			<string>list;list - список сообщений</string>
 			<string>read;read [id] - прочитать сообщение требуеться указать id письма</string>
+			<string>act;act [id] - выполнить почтовое задание</string>
+			<string>action;action [id] - выполнить почтовое задание</string>
 		</Comment>
 		<Info>Прочитать почту через консоль</Info>
 		<Menu>3</Menu>
@@ -60,7 +62,8 @@
 	</XmlInfoCommand>
 	<XmlInfoCommand NameCommand="wget">
 		<Comment>
-			<string>-u;-u[Укажите адрес доступного ресурса чтобы скачать файл в текущую папку]</string>			
+			<string>-u;-u[Укажите адрес доступного ресурса чтобы скачать файл в текущую папку]</string>
+			<string>-d;-d[Скачать файл в папку download]</string>
 		</Comment>
 		<Info>Скачивает файлы из сети в текущую папку. Для Unix систем. &#10; Доступные ресурсы вашого сервера можно проверить командой openurl</Info>
 		<Menu>1</Menu>
@@ -68,6 +71,7 @@
 	<XmlInfoCommand NameCommand="download">
 		<Comment>
 			<string>;[Укажите адрес доступного ресурса чтобы скачать файл в текущую папку]</string>
+			<string>/d;/d[Скачать файл в папку download]</string>
 		</Comment>
 		<Info>Скачивает файлы из сети в текущую папку. Для Win систем. &#10; Доступные ресурсы вашого сервера можно проверить командой openurl</Info>
 		<Menu>1</Menu>
@@ -105,7 +109,7 @@
 		</Comment>
 		<Info>Определяет версию OS для Win систем</Info>
 		<Menu>2</Menu>
-	</XmlInfoCommand>
+	</XmlInfoCommand>	
 	<XmlInfoCommand NameCommand="id">
 		<Comment>
 			<string>-uname;[-uname]Подробная информация</string>
@@ -120,6 +124,19 @@
 		<Info>Проверяет файл на существование</Info>
 		<Menu>2</Menu>
 	</XmlInfoCommand>
-	
-	
+	<XmlInfoCommand NameCommand="logclear">
+		<Comment>
+			<string>-w;-w для запуска в середе win</string>
+			<string>-l;-l для запуска в середе unix</string>
+		</Comment>
+		<Info>Закрывает соеденение и чистит логи на сервере</Info>
+		<Menu>3</Menu>
+	</XmlInfoCommand>
+	<XmlInfoCommand NameCommand="route">
+		<Comment>
+			<string>;СерверА(управляемый) СерверБ</string>
+		</Comment>
+		<Info>Создает маршрут от вашего сервера до соседнего</Info>
+		<Menu>1</Menu>
+	</XmlInfoCommand>
 </ArrayOfXmlInfoCommand>

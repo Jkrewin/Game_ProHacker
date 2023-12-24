@@ -16,57 +16,17 @@ namespace PH4_WPF
 {    
     public partial class MainWindow : Window
     {
-        #region "Для файла config"
-        private bool PrvCheatCode =false ;
-        private bool PrvDebugMode = false;
-        private bool PrvSoundDisable = false;
+       
 
-        /// <summary>
-        /// Использовать режим отладки
-        /// </summary>
-        public bool DebugMode
-        {
-            get => PrvDebugMode;
-            set
-            {
-                PrvCheatCode = value;
-                SaveConfig("DebugMode", PrvDebugMode);
-            }
-        }
-        /// <summary>
-        /// Использовать чит коды
-        /// </summary>
-        public bool CheatCode
-        {
-            get => PrvCheatCode; 
-            set
-            {
-                PrvCheatCode = value;
-                SaveConfig("CheatCode", PrvCheatCode);
-            }
-        }
-        /// <summary>
-        /// Отключить звук
-        /// </summary>
-        public bool SoundDisable
-        {
-            get => PrvSoundDisable;
-            set
-            {
-                PrvCheatCode = value;
-                SaveConfig("SoundDisable", PrvSoundDisable);
-            }
-        }
-
-        #endregion
-
-        private readonly string FileConfig = System.AppDomain.CurrentDomain.BaseDirectory + @"Save\config.cnf";
+        private readonly LinkedList<Server> RouteList = new LinkedList<Server>();        
         private readonly BitmapImage[,] ImageArr = new BitmapImage[8, 6];
         private readonly System.Windows.Threading.DispatcherTimer GameTimer =new System.Windows.Threading.DispatcherTimer();
         private readonly System.Windows.Threading.DispatcherTimer AnimationTimer = new System.Windows.Threading.DispatcherTimer();
         private readonly System.Windows.Threading.DispatcherTimer AnimationText = new System.Windows.Threading.DispatcherTimer();
         private sbyte AnmIndex = 0;
         private float speedCanvas = 1;
+        private int _possTextAnm = 0;
+        private Server _selectedServer;
 
         private readonly List<string> LogGame = new List<string>();
         private readonly List<string> TextAnimation = new List<string> ();
@@ -96,7 +56,6 @@ namespace PH4_WPF
             }
         }
 
-
         public MainWindow()
         {
             InitializeComponent();
@@ -105,11 +64,7 @@ namespace PH4_WPF
             LentaNews.Visibility = Visibility.Hidden;
             Grid_Menu.Visibility = Visibility.Hidden;
             DeskCmd.Visibility = Visibility.Hidden;
-
         }
-
-
-      
 
         private void LoadValue() {
             try            {           
@@ -181,48 +136,18 @@ namespace PH4_WPF
             if (AnmIndex == 6) AnmIndex = 0;
             foreach (var item in App.GameGlobal.Servers)
             {
-                 item.DrawingHub .TexturaSrv .Source = ImageArr[((int)item.TypesSrv), AnmIndex];
+                 item.DrawingHub .TexturaSrv .Source = ImageArr[(int)item.TypesSrv, AnmIndex];
             }          
 
             AnmIndex++;        
         }
 
-        private void LoadConfig()
-        {
-            if (System.IO.File.Exists(FileConfig) == false) return;
-            string[] txt = System.IO.File.ReadAllLines(FileConfig, System.Text.Encoding.Default);
-
-            foreach (var item in txt)
-            {
-                switch (item.Split('=')[0])
-                {
-                    case "CheatCode":
-                        PrvCheatCode = Boolean.Parse(item.Split('=')[1]);
-                        break;
-                    case "DebugMode":
-                        PrvDebugMode = Boolean.Parse(item.Split('=')[1]);
-                        break;
-                    case "SoundDisable":
-                        PrvSoundDisable = Boolean.Parse(item.Split('=')[1]);
-                        break;
-                    default:
-                        break;
-                }
-            }
-
-        }
-
+       
 
         private void Загруженно(object sender, RoutedEventArgs e)
-        {
-            App.GameGlobal.MainWindow = this;
-            LoadValue();                        // Загрузка картинок из файлов
-
-
-           LoadGame(null, null);
-
-           
-
+        {            
+            LoadValue();                        // Загрузка картинок из файлов         
+         
             //Настройка таймера анимации
             AnimationTimer.Tick += new EventHandler(AnimationTick);
             AnimationTimer.Interval = TimeSpan.FromMilliseconds(500);
@@ -240,16 +165,18 @@ namespace PH4_WPF
 
             //Маштабирование UI
             ButtonOption.Margin = new Thickness(DownPanel.Margin.Left + ButtonOption.Height, 0, 0, 0);
-
-            App.GameGlobal.MainWindow.NewDayEvent += GameEventCheck; // проверка событий в игре 
+            // проверка событий в игре 
+            App.GameGlobal.MainWindow.NewDayEvent += GameEventCheck; 
+            
+                        
         }
 
-        int possTextAnm = 0;
+        
         private void АнимацияТекста(object sender, EventArgs e)
         {
-            if (possTextAnm == TextAnimation.Count)
+            if (_possTextAnm == TextAnimation.Count)
             {
-                possTextAnm = 0;
+                _possTextAnm = 0;
                 TextAnimation.Clear();
                 DeskCmd.Text = "";
                 DeskCmd.Visibility = Visibility.Hidden;
@@ -258,9 +185,9 @@ namespace PH4_WPF
             }
             else
             {
-                DeskCmd.Text += TextAnimation[possTextAnm] + "\n";
-                possTextAnm++;
-                if (possTextAnm == TextAnimation.Count) AnimationText.Interval = TimeSpan.FromMilliseconds(5000); // задержка чтобы текст сразу не пропал
+                DeskCmd.Text += TextAnimation[_possTextAnm] + "\n";
+                _possTextAnm++;
+                if (_possTextAnm == TextAnimation.Count) AnimationText.Interval = TimeSpan.FromMilliseconds(5000); // задержка чтобы текст сразу не пропал
             }
         }
 
@@ -284,8 +211,7 @@ namespace PH4_WPF
                 default:
                     break;
             }           
-        }
-       
+        }      
 
         private void GameEventCheck() {
             DateGameIndicator.Content = App.GameGlobal.DataGM.ToString("dd.MM.yyyy");
@@ -301,64 +227,14 @@ namespace PH4_WPF
                     App.GameGlobal.AllEventGame.Remove(item);
                     continue;
                 }               
-                LogGame.Add("Случилось игровое событие: " + item.DataStart.ToString() + " - " + item.GameEvent.GetType().Name);
+               // LogGame.Add("Случилось игровое событие: " + item.DataStart.ToString() + " - " + item.GameEvent.GetType().Name);
+              
                 item.GameEvent.Run();               
-                Event_Completed(item.GameEvent);
+                Event_Completed?.Invoke(item.GameEvent);
                 App.GameGlobal.AllEventGame.Remove(item);
             }
         }
-        private void NewGame(object sender, RoutedEventArgs e)
-        {
-            LoadConfig();
-            App.GameGlobal.CreativeMap();                               // Создает карту
-            App.GameGlobal.Servers.ForEach(x => x.FileGenerator());    // Создаем файлы
-            App.GameGlobal.News.News.Add(new NewsClass.NewsСlass( 
-            NewsClass.NewsСlass.TopicEnum.НовостиКасательноИгрока , "Это лента новостей, тут вы можете читать актуальные новости. Нажмите на новость чтобы пометить как прочитанная новость\n\n (Вы можете удалить новости двойным нажатием мышки.)","Подсказка") );
-            App.GameGlobal.GameScen.ActiveScen = App.GameGlobal.GameScen.Scen_start();
-            // Примерные счета
-            App.GameGlobal.Bank.Accounts.Add(new BankAccount() { Login = "Mr.Bin", Money = 100, Pass = "lox", Rs = "003", TypeMoney = BankAccount.TypeMoneyEnum.Dollar });
-            App.GameGlobal.Bank.Accounts.Add(new BankAccount() { Login = "Present", Money = 100, Pass = "Sd0w551ds", Rs = "0022", TypeMoney = BankAccount.TypeMoneyEnum.Dollar });
-            App.GameGlobal.Bank.Accounts.Add(new BankAccount() { Login = "XZibit", Money = 100, Pass = "Ged74sd44zx", Rs = "0033", TypeMoney = BankAccount.TypeMoneyEnum.Karbovantsy });
-            App.GameGlobal.Instructions_V(); //создадим уязвимости в начале
-            // Настроки для тествого сервера
-            Server srv = App.GameGlobal.FindServer("www.test.ru");
-            srv.OS = Server.TypeOSEnum.WinSrv;
-            srv.OSName = "win 95";
-            // Создает доступный узел для скачки шела бесплатно 
-            App.GameGlobal.OpenUrl.Add(@"localhost.cloud/win95_shell", new FileServerClass()
-            {
-                FileName = "Win_95",
-                Perfix = ".shell",
-                Rights = FileServerClass.PremisionEnum.AdminUserGuest,
-                Size = 5000,
-                FileСontents = new FileServerClass.ParameterClass() { TypeInformation = FileServerClass.ParameterClass.TypeParam.shell }
-            });
-
-        }
-
-        /// <summary>
-        /// Сохраняет настройки конфигурации в игре
-        /// </summary>
-        /// <param name="key">Ключ</param>
-        /// <param name="value">Значение для сохранения</param>
-        public void SaveConfig(string key, object value)
-        {
-            if (System.IO.Directory.Exists(System.AppDomain.CurrentDomain.BaseDirectory + "Save") == false) return;
-            string[] txt = System.IO.File.ReadAllLines(FileConfig, System.Text.Encoding.Default);
-
-            for (int i = 0; i < txt.Length; i++)
-            {
-                if (key == txt[i].Split('=')[0])
-                {
-                    txt[i] = key + "" + value.ToString();
-                    goto end;
-                }
-            }
-            Array.Resize(ref txt, txt.Length + 1);
-            txt[^1] = key + "" + value.ToString();
-        end:;
-            System.IO.File.WriteAllLines(FileConfig, txt);
-        }
+               
 
         /// <summary>
         /// обновляет список программ ниже
@@ -390,27 +266,27 @@ namespace PH4_WPF
             AnimationText.Start();        
         }
 
-        Server SelectedServer;
+       
         public void OpenBackPanel(object sender, System.Windows.Input.MouseButtonEventArgs e)
         {
-            if (SelectedServer != null) {
-                SelectedServer.DrawingHub.Ellipse.Fill = Brushes.GreenYellow; 
-                SelectedServer.DrawingHub.Ellipse.Stroke = Brushes.GreenYellow;
+            if (_selectedServer != null) {
+                _selectedServer.DrawingHub.Ellipse.Fill = Brushes.GreenYellow; 
+                _selectedServer.DrawingHub.Ellipse.Stroke = Brushes.GreenYellow;
             }
             G_BackPanel.Visibility = Visibility.Visible;
             L_SrvName.Content = sender;
-            SelectedServer = App.GameGlobal.Servers.Find(x => x.NameSrv == L_SrvName.Content.ToString ());
-            SelectedServer.DrawingHub.Ellipse.Fill = Brushes.DodgerBlue ; //GreenYellow
-            SelectedServer.DrawingHub.Ellipse.Stroke  = Brushes.Blue ;
+            _selectedServer = App.GameGlobal.Servers.Find(x => x.NameSrv == L_SrvName.Content.ToString ());
+            _selectedServer.DrawingHub.Ellipse.Fill = Brushes.DodgerBlue ; //GreenYellow
+            _selectedServer.DrawingHub.Ellipse.Stroke  = Brushes.Blue ;
             LB_FindEl.Visibility = Visibility.Hidden;
-            L_Status.Background = SelectedServer.ActSrv ? Brushes.LawnGreen : Brushes.OrangeRed;
-            if (SelectedServer.ActSrv) {
+            L_Status.Background = _selectedServer.ActSrv ? Brushes.LawnGreen : Brushes.OrangeRed;
+            if (_selectedServer.ActSrv) {
                 L_Status.Content = "Активный";
-            } else if(SelectedServer.ActSrv==false ) {
+            } else if(_selectedServer.ActSrv==false ) {
                 L_Status.Content = "Не работает";
             }// сюда добавить еще основания не работы сервера
             var bc = new BrushConverter();
-            switch (SelectedServer.Premision)
+            switch (_selectedServer.Premision)
             {
                 case Server.PremissionServerEnum.none:
                     L_StatusLine.Text = "У вас нет доступа к этому серверу, сервер не был взломан.";
@@ -435,47 +311,34 @@ namespace PH4_WPF
                 default:
                     break;
             }
-            PopularBar.Value = SelectedServer.PopularSRV;           
+            PopularBar.Value = _selectedServer.PopularSRV;           
             ShutdownServer.Visibility = Visibility.Hidden;
             AdminPanel.Visibility = Visibility.Hidden;
 
-            if (SelectedServer.Premision == Server.PremissionServerEnum.FullControl) AdminPanel.Visibility = Visibility.Visible;
+            //тут проверка маршрута
+            if (RouteList.Find(_selectedServer) != null)
+                AddRouteButton.Content = "Сбросить ВСЕ Маршруты";
+            else
+                AddRouteButton.Content = "Создать маршрут";
+
+            if (_selectedServer.Premision == Server.PremissionServerEnum.FullControl) AdminPanel.Visibility = Visibility.Visible;
             if (App.GameGlobal.GamerInfo.DefecerLvl > 0) ShutdownServer.Visibility = Visibility.Visible ;
         }
-
-        public void SaveGame(object sender, RoutedEventArgs e)
-        {
-
-            LoadConfig();
-            string sFile = AppDomain.CurrentDomain.BaseDirectory + @"Save\1.sav";
-            BinaryFormatter formatter = new BinaryFormatter();
-            using FileStream fs = new FileStream(sFile, FileMode.OpenOrCreate);
-            formatter.Serialize(fs, App.GameGlobal);
-
-
-        }
-
-        public void LoadGame(object sender, RoutedEventArgs e)
-        {
-            LoadConfig();
-            string sFile = System.AppDomain.CurrentDomain.BaseDirectory + @"Save\1.sav";
-            if (System.IO.File.Exists(sFile))
+        public void LoadGame(string sFile) {           
+           
+            if (File.Exists(sFile))
             {
                 BinaryFormatter formatter = new BinaryFormatter();
 
-                using (FileStream fs = new FileStream(sFile, FileMode.OpenOrCreate)) 
+                using (FileStream fs = new FileStream(sFile, FileMode.Open))
                     App.GameGlobal = formatter.Deserialize(fs) as Game;
 
                 // Основная форма
                 App.GameGlobal.MainWindow = this;
                 // Обновляем Графические хабы
-                App.GameGlobal. Servers.ForEach(x => x.DrawingHub = new DrawingHubClass(x, x.LocateTextura.X, x.LocateTextura.Y));               
+                App.GameGlobal.Servers.ForEach(x => x.DrawingHub = new DrawingHubClass(x, x.LocateTextura.X, x.LocateTextura.Y));
                 // Тепрь рисуем маршруты
-                foreach (var item in App.GameGlobal.Routers)
-                {
-                    MyCanvas.Children.Add(item.Line);
-                    Canvas.SetZIndex(item.Line, 0);
-                }
+                foreach (var item in App.GameGlobal.Routers) AddLineRoute(item);
                 // проверка чата
                 if (App.GameGlobal.GameChat != null) App.GameGlobal.GameChat.InLoadChat();
                 // список программ новый
@@ -485,11 +348,49 @@ namespace PH4_WPF
                 // прочитаны все новости или нет 
                 CheckReadAllNews();
                 // Нотификация для почты
-                MailInBox.RfMail();
-
+                MailInBox.MailNotification();
+                // Первый маршрут всегда ваш сервер
+                RouteList.AddFirst(App.GameGlobal.MyServer);   
 
             }
-           
+
+            // В последнию очередь
+            App.GameGlobal.GameLoaded = true;
+
+        }
+        public void SaveGame(string sFile) { 
+            BinaryFormatter formatter = new BinaryFormatter();
+            using FileStream fs = new FileStream(sFile, FileMode.OpenOrCreate);
+            formatter.Serialize(fs, App.GameGlobal);        
+        }
+        public void NewGame() {             
+            App.GameGlobal.CreativeMap();                               // Создает карту
+            App.GameGlobal.Servers.ForEach(x => x.FileGenerator());    // Создаем файлы
+            App.GameGlobal.News.News.Add(new NewsClass.NewsСlass(
+            Enums.TopicEnum.НовостиКасательноИгрока , "Это лента новостей, тут вы можете читать актуальные новости. Нажмите на новость чтобы пометить как прочитанная новость\n\n (Вы можете удалить новости двойным нажатием мышки.)","Подсказка") );
+            App.GameGlobal.GameScen.ActiveScen = App.GameGlobal.GameScen.Scen_start();
+            // Примерные счета
+            App.GameGlobal.Bank.Accounts.Add(new BankAccount() { Login = "Mr.Bin", Money = 100, Pass = "lox", Rs = "003", TypeMoney = Enums.TypeMoneyEnum.Dollar });
+            App.GameGlobal.Bank.Accounts.Add(new BankAccount() { Login = "Present", Money = 100, Pass = "Sd0w551ds", Rs = "0022", TypeMoney = Enums.TypeMoneyEnum.Dollar });
+            App.GameGlobal.Bank.Accounts.Add(new BankAccount() { Login = "XZibit", Money = 100, Pass = "Ged74sd44zx", Rs = "0033", TypeMoney = Enums.TypeMoneyEnum.Karbovantsy });
+            App.GameGlobal.Instructions_V(); //создадим уязвимости в начале
+            RouteList.AddFirst(App.GameGlobal.MyServer);    // Первый маршрут всегда ваш сервер
+
+
+            App.GameGlobal.GameLoaded = true;        
+        }
+
+
+      
+        /// <summary>
+        /// Добавляет линнию на карту
+        /// </summary>
+        /// <param name="router"></param>
+        public void AddLineRoute(RouterClass router)
+        {
+            // добавляет  линию на карту 
+            MyCanvas.Children.Add(router.Line);
+            Canvas.SetZIndex(router.Line, 0);
         }
 
         private void OpenNews()
@@ -549,13 +450,13 @@ namespace PH4_WPF
 
                 brush = App.GameGlobal.News.News[i].Topic switch
                 {
-                    NewsClass.NewsСlass.TopicEnum.Общие_Новости => Brushes.BlueViolet,
-                    NewsClass.NewsСlass.TopicEnum.НовостиКасательноИгрока => Brushes.YellowGreen,
-                    NewsClass.NewsСlass.TopicEnum.Найдены_Баги => Brushes.IndianRed,
-                    NewsClass.NewsСlass.TopicEnum.Важное => Brushes.Red,
-                    NewsClass.NewsСlass.TopicEnum.Новости_Шлак => Brushes.Blue,
-                    NewsClass.NewsСlass.TopicEnum.Разное => Brushes.Firebrick,
-                    _ => (System.Windows.Media.Brush)bc.ConvertFrom("#FF373131"),
+                    Enums.TopicEnum.Общие_Новости => Brushes.BlueViolet,
+                    Enums.TopicEnum.НовостиКасательноИгрока => Brushes.YellowGreen,
+                    Enums.TopicEnum.Найдены_Баги => Brushes.IndianRed,
+                    Enums.TopicEnum.Важное => Brushes.Red,
+                    Enums.TopicEnum.Новости_Шлак => Brushes.Blue,
+                    Enums.TopicEnum.Разное => Brushes.Firebrick,
+                    _ => (Brush)bc.ConvertFrom("#FF373131"),
                 };
                 Border border = new Border()
                 {
@@ -655,6 +556,8 @@ namespace PH4_WPF
             }
         }
 
+        
+
         #region "Панель скорости управление"
 
         private void Курсорнад4х(object sender, MouseEventArgs e)=> Img4x.Source = App.UriResImage("Content/Desktop/bPanel/spPanel4X.png");
@@ -698,6 +601,21 @@ namespace PH4_WPF
 
 
         #endregion
+
+        private void SaveGame(object sender, RoutedEventArgs e)
+        {
+            SaveGame( AppDomain.CurrentDomain.BaseDirectory + @"Save\1.sav");      
+        }
+
+        private void LoadGame(object sender, RoutedEventArgs e)
+        {
+            LoadGame(AppDomain.CurrentDomain.BaseDirectory + @"Save\1.sav");
+        }
+
+        private void NewGame(object sender, RoutedEventArgs e)
+        {
+            NewGame();
+        }
 
         private void КлавишиУправление(object sender, KeyEventArgs e)
         {
@@ -841,9 +759,9 @@ namespace PH4_WPF
         private void ЗакрытьПанель(object sender, RoutedEventArgs e)
         {
             G_BackPanel.Visibility = Visibility.Hidden;
-            SelectedServer.DrawingHub.Ellipse.Fill = System.Windows.Media.Brushes.GreenYellow;
-            SelectedServer.DrawingHub.Ellipse.Stroke = System.Windows.Media.Brushes.GreenYellow;
-            SelectedServer = null;
+            _selectedServer.DrawingHub.Ellipse.Fill = System.Windows.Media.Brushes.GreenYellow;
+            _selectedServer.DrawingHub.Ellipse.Stroke = System.Windows.Media.Brushes.GreenYellow;
+            _selectedServer = null;
         }
 
         private void ПоискЭлементаНачало(object sender, KeyEventArgs e)
@@ -877,9 +795,13 @@ namespace PH4_WPF
         }
 
         private void MenuOpen(object sender, RoutedEventArgs e)=> Grid_Menu.Visibility = Visibility.Visible;
-        private void ЗакрытьМенюИгры(object sender, RoutedEventArgs e) { Grid_Menu.Visibility = Visibility.Hidden;
+        private void ЗакрытьМенюИгры(object sender, RoutedEventArgs e)
+        { 
+            Grid_Menu.Visibility = Visibility.Hidden;
+            var frm = new FrmApp();
+            frm.ShowForm();
 
-           
+
         }
 
         private void ОткрытьИД(object sender, RoutedEventArgs e)
@@ -918,10 +840,9 @@ namespace PH4_WPF
 
         private void Перезапустить_сервер(object sender, RoutedEventArgs e)
         {
-            FrmSoft.FrmError msg = new FrmError("Действия", "Вы хотите перезапустить сервер? Это привлечёт внимание, уязвимости будут обновлены, вы получите опыт.  ", delegate
+            FrmError msg = new FrmError("Действия", "Вы хотите перезапустить сервер? Это привлечёт внимание, уязвимости будут обновлены, вы получите опыт.  ", delegate
             {
-                App.GameGlobal.EventIntroduce(GameScen.ScenStruct.ConditionStruct.ConditionEnum.СерверОтключен,
-                                 new string[] { L_SrvName.Content.ToString() });
+                App.GameGlobal.EventIntroduce(Enums.ConditionEnum.СерверОтключен, L_SrvName.Content.ToString());
                 App.GameGlobal.FindServer(L_SrvName.Content.ToString()).ActSrv = false;
                 DateTime date = App.GameGlobal.DataGM;
                 date.AddMonths(1);
@@ -935,20 +856,21 @@ namespace PH4_WPF
 
         private void ВыходИзПроекта(object sender, RoutedEventArgs e) => System.Windows.Application.Current.Shutdown();
 
-        private void ОткрАдминПанел(object sender, RoutedEventArgs e)
+        public void ОткрАдминПанел(object sender, RoutedEventArgs e)
         {
             Server srv = App.GameGlobal.FindServer(L_SrvName.Content.ToString());
 
             if (srv == null) return;
 
-            if (srv.ActSrv == false) {
+            if (srv.ActSrv == false)
+            {
                 App.GameGlobal.Msg("ошибка", "Сервер не работает", FrmError.InformEnum.Информация);
                 return;
             }
-                      
-                FrmAdminPanel frm = new FrmAdminPanel(srv);
-                frm.ShowForm();
-            
+
+            FrmAdminPanel frm = new FrmAdminPanel(srv);
+            frm.ShowForm();
+            App.GameGlobal.EventIntroduce(Enums.ConditionEnum.АдминПанельДоступ, L_SrvName.Content.ToString());
         }
 
         private void ВсеПрочитанно(object sender, RoutedEventArgs e)
@@ -956,6 +878,54 @@ namespace PH4_WPF
             App.GameGlobal.News.News.ForEach(x => x.ReadNews = true);
             CheckReadAllNews();
             ЗакрытьЛенту(null, null);
+        }
+
+        private void СоздатьМаршрут(object sender, RoutedEventArgs e)
+        {
+            if (AddRouteButton.Content.ToString() == "Создать маршрут")
+            {
+                // выбока всех маршрутов с этим сервером
+                var result = (from Tv in App.GameGlobal.Routers
+                              where Tv.EndServer.NameSrv == _selectedServer.NameSrv ^ Tv.FirstServer.NameSrv == _selectedServer.NameSrv
+                              select Tv).ToArray();
+
+                if (result.Length == 0)
+                {
+                    L_StatusLine.Text = "Нет маршрутов соединенных с вашим сервером !";
+                    StartConsoleText(new List<string>() { "> Нет маршрутов соединенных с вашим сервером !", "> ОШИБКА" });
+                    return;
+                }
+
+                // проверка верности маршрута
+                bool ok = false;
+                foreach (var item in result)
+                {
+                    if (RouteList.Find(item.FirstServer) != null ^ RouteList.Find(item.EndServer) != null)
+                    {
+                        item.MyRoute = true;
+                        RouteList.AddLast(_selectedServer);
+                        ok = true;
+                    }
+                }
+                if (ok)
+                {
+                    StartConsoleText(new List<string>() {
+                    "> Маршрут создат ","> УСПЕШНО" });
+                    AddRouteButton.Content = "Сбросить ВСЕ Маршруты";
+                }
+                else
+                {
+                    StartConsoleText(new List<string>() { "> Нет рядом ваших серверов которые можно подключить ", "   Либо сервера не работают", "   Либо создайте новый маршрут коммандой route", "> ОШИБКА" });
+                }
+            }
+            else
+            {
+                foreach (var item in App.GameGlobal.Routers) item.MyRoute = false;
+                RouteList.Clear();
+                RouteList.AddFirst(App.GameGlobal.MyServer);
+                AddRouteButton.Content = "Создать маршрут";
+                StartConsoleText(new List<string>() { "> Удаляем Все маршруты", "> Все маршруты нужно создавать снова", "> OK" });
+            }
         }
     }
 
