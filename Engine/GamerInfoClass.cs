@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Text;
 
 namespace PH4_WPF.Engine
 {
@@ -13,6 +12,7 @@ namespace PH4_WPF.Engine
         private int exp;
         private int expNext = 100;
         private ushort level = 1;
+        private readonly HashSet<string> _BonusExtraPoint = new HashSet<string>();
 
         /// <summary>
         /// Имя игрока
@@ -21,15 +21,15 @@ namespace PH4_WPF.Engine
         /// <summary>
         /// Возраст
         /// </summary>
-        public short Age = 12;
+        public short Age { get; set; } = 12;
         /// <summary>
         /// Пол
         /// </summary>
-        public short Gender = 0;
+        public short Gender { get; set; } = 0;
         /// <summary>
         /// Аватарка
         /// </summary>
-        public string Ava;
+        public string Ava { get; set; }
         /// <summary>
         /// Опыт сейчас
         /// </summary>
@@ -49,7 +49,12 @@ namespace PH4_WPF.Engine
         /// <summary>
         /// Влияет на цены чем выше тем товар дороже
         /// </summary>
-        public double MultiplierPrices { get; set; } = 1.2;
+        public double MultiplierPrices { get; set; } = 1.2;       
+        /// <summary>
+        /// Какие бонусы были активированны в игре при чтение файлов или событий
+        /// </summary>
+        public HashSet<string> BonusExtraPoint { get => _BonusExtraPoint; }
+        
 
         /// <summary>
         /// Очки навыка
@@ -73,11 +78,59 @@ namespace PH4_WPF.Engine
         public byte CrackLvl = 0;
 
         /// <summary>
-        /// Есть ли доступ к крипте у игрока
+        /// Способности дефейсера
         /// </summary>
-        public bool Cripta { get; set; } = false;
-               
-
+        /// <param name="skill"></param>
+        /// <returns></returns>
+        public bool Defecer(Enums.SkillDefecer skill)
+        {
+            return DefecerLvl >= ((int)skill);
+        }
+        /// <summary>
+        /// Способности кракера
+        /// </summary>
+        /// <param name="skill"></param>
+        /// <returns></returns>
+        public bool Cracker(Enums.SkillCrack skill)
+        {
+            return CrackLvl >= ((int)skill);
+        }
+        /// <summary>
+        /// Способности вирьмекера
+        /// </summary>
+        /// <param name="skill"></param>
+        /// <returns></returns>
+        public bool Vir(Enums.SkillVir skill)
+        {
+            return VirLvl >= ((int)skill);
+        }
+        /// <summary>
+        /// Способности кодера
+        /// </summary>
+        /// <param name="skill"></param>
+        /// <returns></returns>
+        public bool Coder(Enums.SkillCoder skill)
+        {
+            return CoderLvl >= ((int)skill);
+        }
+        /// <summary>
+        /// Внутри игровой рейтинг игрока
+        /// </summary>
+        /// <returns></returns>
+        public int RatingUser()
+        {
+            int t = 0;
+            foreach (var item in App.GameGlobal.Servers)
+            {
+                t = t + item.RatingSrv();
+            }
+            return t * 6;
+        }
+        /// <summary>
+        /// Добавить экста поинт для навыков
+        /// </summary>
+        /// <param name="prof"></param>
+        public void Add_Bonus(PH4_WPF.Engine.GameEvenStruct.GetProf.ProfEnum prof ) => _BonusExtraPoint.Add(prof.ToString ());
         /// <summary>
         /// Добавить опыт к игроку
         /// </summary>
@@ -99,6 +152,7 @@ namespace PH4_WPF.Engine
                 frm.UpdateLev();
             }
         }
+
 
     }
 }

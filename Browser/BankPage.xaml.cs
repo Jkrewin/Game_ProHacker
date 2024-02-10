@@ -39,8 +39,8 @@ namespace PH4_WPF.Browser
             CBTypeMoney.Items.Add("1. Карбованци - открыть счет в валюте");
             CBTypeMoney.Items.Add("2. Счет Доллар - Основная валюта $$$");
 
-            if(App.GameGlobal.GamerInfo.Cripta ) CBTypeMoney.Items.Add("3. BitCoin Крипто кошелек");
-
+            if(App.GameGlobal.GamerInfo.Cracker (Enums.SkillCrack.ДоступКрипте)) CBTypeMoney.Items.Add("3. BitCoin Крипто кошелек");
+            
             if (App.GameGlobal.GamerInfo.Gender == 0) { Gender.Text = "Female"; }
             else if (App.GameGlobal.GamerInfo.Gender == 1) { Gender.Text = "Male"; }
             else { Gender.Text = "---"; }

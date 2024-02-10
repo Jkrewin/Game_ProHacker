@@ -6,10 +6,79 @@
     public class Enums
     {
         /// <summary>
+        /// Способности класса дефейсера
+        /// </summary>
+        public enum SkillDefecer : byte
+        {
+            ПерезапускСервера = 1,
+            СообщитьДефейсе = 2,
+            ПовышеннаяСкрытность = 4,
+            СоздаватьМаршруты = 3,
+            ЧисткаЛогов = 5,
+            AA = 6,
+            AAA = 7,
+            AAAA = 8,
+            ДоступКоВсемУязвимостям = 9,
+            МаксимальноеДостижение = 10
+        }
+
+        /// <summary>
+        /// Способности кракера
+        /// </summary>
+        public enum SkillCrack : byte
+        {
+            СобиратьХешиПаролей = 1,
+            СкидкаНаСофт20 = 2,
+            ТорговатьХешами = 3,
+            ИИИ = 4,
+            ДоступКрипте = 5,
+            AA = 6,
+            AAA = 7,
+            AAAA = 8,
+            AAAAA = 9,
+            МаксимальноеДостижение = 10
+        }
+
+        /// <summary>
+        /// Способности вирусмейкера
+        /// </summary>
+        public enum SkillVir : byte
+        {
+            ВирусыWin = 1,
+            ЗомбиВирусWin = 2,
+            ЧервьWin = 3,
+            ВирусыNix = 4,
+            ВирусВымогательWin = 5,
+            AA = 6,
+            AAA = 7,
+            AAAA = 8,
+            AAAAA = 9,
+            МаксимальноеДостижение = 10
+        }
+
+        /// <summary>
+        /// Способности кодера
+        /// </summary>
+        public enum SkillCoder : byte
+        {
+            ПисатьКод = 1,
+            ПоискБанковскойИнформации = 2,
+            мм = 3,
+            ИИИ = 4,
+            ммм = 5,
+            AA = 6,
+            AAA = 7,
+            AAAA = 8,
+            AAAAA = 9,
+            МаксимальноеДостижение = 10
+        }
+
+        /// <summary>
         /// Типы валют
         /// </summary>
-        public enum TypeMoneyEnum
+        public enum TypeMoneyEnum : int
         {
+            none = 0,
             Dollar = 2,
             Karbovantsy = 1,
             Ether = 4,
@@ -28,7 +97,9 @@
             ИзменениеПравДоступа,
             ПосещениеСервера,
             ПроизошлоСобытие,
-            МощностьСервера
+            МощностьСервераУвеличина,
+            СофтОбновлен,
+            ПодборПароляЗавершен
         }
         /// <summary>
         /// Доступные инстансы
@@ -46,6 +117,7 @@
             Booking,
             StreamVideo,
             TranceSrv,
+            RigFrame,
             // для уникальных серверов с авто сервисов
             WebForumApi,
             MailApi,
@@ -69,6 +141,7 @@
         /// </summary>
         public enum TypeParam
         {
+            text,
             exploit,
             shell,
             backdoor,
@@ -76,7 +149,9 @@
             goal_file,
             exe,
             dir,
-            instructions
+            instructions,
+            script_deface,
+            sbank
         }
         /// <summary>
         /// Типы логов для обозначения типа 

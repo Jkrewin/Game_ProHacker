@@ -164,6 +164,7 @@
     <None Remove="Content\rtf\shell.rtf" />    
     <None Remove="Content\site\milw0rm.jpg" />    
     <None Remove="Content\soft\browser\browIcon.png" />    
+    <None Remove="Content\soft\Brute.png" />    
     <None Remove="Content\soft\FileManager\conf.png" />    
     <None Remove="Content\soft\FileManager\cpp.png" />    
     <None Remove="Content\soft\FileManager\dll.png" />    
@@ -674,6 +675,7 @@
     <Resource Include="Content\soft\browser\browIcon.png" />
     <Resource Include="Content\soft\FileManager\filesystems.png" />
     <Resource Include="Content\soft\FileManager\uprow.png" />
+    <Resource Include="Content\soft\Brute.png" />
     <Resource Include="Content\soft\IQ.png" />
     <Resource Include="Content\soft\IQNewMess.png" />
     <Resource Include="Content\soft\mail\back.png" />

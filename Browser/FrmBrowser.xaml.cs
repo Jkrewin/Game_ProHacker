@@ -136,5 +136,10 @@ namespace PH4_WPF.Browser
         {
             FrameBrouser.Navigate(new StartPage());
         }
+
+        private void Переход_Stockcom(object sender, MouseButtonEventArgs e)
+        {
+            FrameBrouser.Navigate(new Page_Stock());
+        }
     }
 }

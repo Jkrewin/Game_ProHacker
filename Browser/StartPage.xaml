@@ -5,7 +5,7 @@
       xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
       xmlns:local="clr-namespace:PH4_WPF.Browser"
       mc:Ignorable="d" d:DesignWidth="800"
-      Title="StartPage" Height="600">
+      Title="StartPage" Height="600" Loaded="Загруженна">
     <ScrollViewer>
         <Grid Margin="0,0,0,0" Height="1800">
             <Grid Background="White" Margin="0,0,0,0">
@@ -37,8 +37,27 @@
                 <Label Cursor="Hand"  HorizontalAlignment="Right" Margin="0,207,439,0" VerticalAlignment="Top" Width="334" Foreground="#FF2F10FF" PreviewMouseDown="ГайдНовичкаПоКонсоли">
                     <TextBlock TextDecorations="Underline" FontSize="16" Width="319"><Run Text="Консоль для новичка. Подробный гайд"/></TextBlock>
                 </Label>
+                <Label Cursor="Hand"  HorizontalAlignment="Right" Margin="0,257,10,0" VerticalAlignment="Top" Width="166" Foreground="#FF2F10FF" PreviewMouseDown="ОткрытьМоиСкрипты">
+                    <TextBlock x:Name="LinkMyScr" TextDecorations="Underline" FontSize="16" Width="167"><Run Text="Мои Файлы Скрипты"/></TextBlock>
+                </Label>
+                <StackPanel Background="White" Margin="27,314,69,1201" ScrollViewer.HorizontalScrollBarVisibility="Disabled" CanVerticallyScroll="True" ScrollViewer.CanContentScroll="True">                    
+                    <Button x:Name="ScriptOneBank"  Height="74"  Background="#FFFAFAFA" Click="СкачатьСкрипт" Tag="sbank">
+                        <Grid  Width="672" Height="76" >
+                            <Label Content="Скрипт поиска Банковских данных" HorizontalAlignment="Left" VerticalAlignment="Top" FontSize="14" FontWeight="Bold"/>
+                            <TextBlock Text ="Анализирует данные на сервере и может найти данные карт и банковских счетов. Нажмите сюда &#x0a;чтобы скачать скрипт. Запускается через консоль команду make" HorizontalAlignment="Center" VerticalAlignment="Top" FontSize="14" FontWeight="Normal" Width="652" Height="56" Margin="0,25,0,0"/>
+                        </Grid>
+                    </Button>
+                    <Button x:Name="ScriptOneDeface"  Height="74"  Background="#FFFAFAFA" Click="СкачатьСкрипт" Tag="script_deface">
+                        <Grid  Width="672" Height="76" >
+                            <Label Content="Скрипт Deface" HorizontalAlignment="Left" VerticalAlignment="Top" FontSize="14" FontWeight="Bold"/>
+                            <TextBlock Text ="Позволяет на стартовой странице сервера заявить о себе разместить вашу тему и текст &#xA;Консольная команда make для запуска. Привлекает внимание на безопасность сервера админа." HorizontalAlignment="Center" VerticalAlignment="Top" FontSize="14" FontWeight="Normal" Width="652" Height="56" Margin="0,25,0,0"/>
+                        </Grid>
+                    </Button>
+
+
+                </StackPanel>
             </Grid>
-            <RichTextBox x:Name="Rtf" IsReadOnly="True " Background="White" Margin="0,291,-17,-491" BorderBrush="Black" Width="800" Height="2000">
+            <RichTextBox Visibility="Hidden"  x:Name="Rtf" IsReadOnly="True " Background="White" Margin="0,291,-17,-491" BorderBrush="Black" Width="800" Height="2000">
                 <FlowDocument>
                     <Paragraph>
                         <Run Text=""/>

@@ -18,7 +18,6 @@ namespace PH4_WPF.Engine
         private int left;
         [NonSerialized] private Line line;
 
-
         /// <summary>
         /// Сервер начальный
         /// </summary>
@@ -36,7 +35,8 @@ namespace PH4_WPF.Engine
         /// </summary>
         public int Left
         {
-            get => left; set
+            get => left; 
+            set
             {
                 Canvas.SetLeft(Line, value);
                 left = value;
@@ -47,7 +47,8 @@ namespace PH4_WPF.Engine
         /// </summary>
         public int Top
         {
-            get => top; set
+            get => top; 
+            set
             {
                 Canvas.SetTop(Line, value);
                 top = value;
@@ -74,17 +75,22 @@ namespace PH4_WPF.Engine
             {
                 line ??= new Line
                 {
-                    StrokeThickness = LineArgument. StrokeThickness,
+                    StrokeThickness = LineArgument.StrokeThickness,
                     Stroke = _MyRoute ? Brushes.OrangeRed : Brushes.GreenYellow,
-                    Y1 = LineArgument. Y1,
-                    X1 = LineArgument. X1,
-                    Y2 = LineArgument. Y2,
+                    Y1 = LineArgument.Y1,
+                    X1 = LineArgument.X1,
+                    Y2 = LineArgument.Y2,
                     X2 = LineArgument.X2
                 };
                 return line;
             }
         }
 
+
+        public override string ToString()
+        {
+            return $" L:{Left} top:{Top} [{LineArgument}] `{FirstServer.NameSrv}`>`{EndServer.NameSrv}`" + (_MyRoute ? "*" : "" );
+        }
 
         /// <summary>
         /// Необходим для создание линии в качестве свойств
@@ -105,8 +111,12 @@ namespace PH4_WPF.Engine
                 Y2 = y2;
                 X1 = x1;
                 X2 = x2;                    
-            }           
-           
+            }
+
+            public override string ToString()
+            {
+                return $"({X1},{Y1})-({X2},{Y2}),{StrokeThickness}";
+            }
         }
     }
 }

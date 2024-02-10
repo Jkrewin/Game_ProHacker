@@ -1,0 +1,57 @@
+﻿<Page x:Class="PH4_WPF.Browser.Page_Stock"
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+      xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+      xmlns:local="clr-namespace:PH4_WPF.Browser"
+      mc:Ignorable="d" 
+      d:DesignHeight="450" d:DesignWidth="800"
+      Title="Page_Stock" Loaded="Загруженно">
+    <Grid Background="#FF1C2129">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="71*"/>
+            <RowDefinition Height="28*"/>
+            <RowDefinition Height="351*"/>
+        </Grid.RowDefinitions>
+        <ListBox x:Name="ListBoxStock" Grid.Row="2" Background="#FF1C2129">
+            <Grid Height="23" Width="784" Background="Black">
+                <Label Content="USDF" HorizontalAlignment="Left" VerticalAlignment="Center" Background="{x:Null}" Foreground="#FFDADFE3" FontFamily="Calibri" Width="35"/>
+                <Label Content="/frsd" HorizontalAlignment="Left" VerticalAlignment="Center" Background="{x:Null}" Foreground="#FF6E727B" FontFamily="Calibri" Width="35" Margin="28,0,0,0" FontSize="11" Height="23" Padding="5,3,5,5"/>
+                <Label Content="54.254" HorizontalAlignment="Left" VerticalAlignment="Center" Background="{x:Null}" Foreground="#FF3A9A7E" FontFamily="Calibri" Width="78" Margin="110,0,0,0" FontWeight="Bold" HorizontalContentAlignment="Right"/>
+                <Label Content="54.2" HorizontalAlignment="Left" VerticalAlignment="Center" Background="{x:Null}" Foreground="#FF6E727B" FontFamily="Calibri" Width="48" Margin="176,0,0,0" FontSize="11" Height="23" Padding="5,3,5,5"/>
+                <Label Content="-54.25%" HorizontalAlignment="Left" VerticalAlignment="Center" Background="#FFCA1111" Foreground="#FFDBEAE6" FontFamily="Calibri" Width="51" Margin="244,0,0,0" FontWeight="Bold" HorizontalContentAlignment="Center" Padding="5,2,5,5" Height="18" FontSize="11">
+                    <Label.Clip>
+                        <RectangleGeometry Rect="0,0,51,18" RadiusX="2" RadiusY="2"/>
+                    </Label.Clip>
+                </Label>
+            </Grid>
+        </ListBox>
+        <Label x:Name="CB_USD" Content="USD" HorizontalAlignment="Left" VerticalAlignment="Center" Background="#FF242932" Foreground="#FFCEC217" FontFamily="Calibri" Width="47" Margin="26,0,0,0" FontWeight="Bold" Grid.Row="1" Height="18" HorizontalContentAlignment="Center" Padding="5,2,5,5" FontSize="11" Tag="2" MouseDown="ВыборЭлементаВалюты">
+            <Label.Clip>
+                <RectangleGeometry Rect="0,0,59,23" RadiusX="2" RadiusY="2"/>
+            </Label.Clip>
+        </Label>
+        <Label x:Name="CB_KR" Content="KR" HorizontalAlignment="Left" VerticalAlignment="Center" Background="#FF242932" Foreground="#FF61636D" FontFamily="Calibri" Width="47" Margin="86,0,0,0" FontWeight="Bold" Grid.Row="1" Height="18" HorizontalContentAlignment="Center" Padding="5,2,5,5" FontSize="11" Tag="1" MouseDown="ВыборЭлементаВалюты">
+            <Label.Clip>
+                <RectangleGeometry Rect="0,0,59,23" RadiusX="2" RadiusY="2"/>
+            </Label.Clip>
+        </Label>
+        <Label x:Name="CB_BTC" Content="BTC" HorizontalAlignment="Left" VerticalAlignment="Center" Background="#FF242932" Foreground="#FF61636D" FontFamily="Calibri" Width="47" Margin="145,0,0,0" FontWeight="Bold" Grid.Row="1" Height="18" HorizontalContentAlignment="Center" Padding="5,2,5,5" FontSize="11" Tag="3" MouseDown="ВыборЭлементаВалюты" Visibility="Hidden">
+            <Label.Clip>
+                <RectangleGeometry Rect="0,0,59,23" RadiusX="2" RadiusY="2"/>
+            </Label.Clip>
+        </Label>
+        <Label x:Name="CB_ETH" Content="ETH" HorizontalAlignment="Left" VerticalAlignment="Center" Background="#FF242932" Foreground="#FF61636D" FontFamily="Calibri" Width="47" Margin="206,0,0,0" FontWeight="Bold" Grid.Row="1" Height="18" HorizontalContentAlignment="Center" Padding="5,2,5,5" FontSize="11" Tag="4" MouseDown="ВыборЭлементаВалюты" Visibility="Hidden">
+            <Label.Clip>
+                <RectangleGeometry Rect="0,0,59,23" RadiusX="2" RadiusY="2"/>
+            </Label.Clip>
+        </Label>
+        <Label x:Name="CB_Convert" Content="Конвертация валют" HorizontalAlignment="Left" VerticalAlignment="Top" Background="#FF2E3E5D" Foreground="#FFE5E5E5" FontFamily="Calibri" Width="150" Margin="10,10,0,0" FontWeight="Normal" Height="26" HorizontalContentAlignment="Center" Padding="5,4,5,5" FontSize="14" Tag="2" MouseDown="ВыборКонвертацииВалют">
+            <Label.Clip>
+                <RectangleGeometry Rect="0,0,150,26" RadiusX="2" RadiusY="2"/>
+            </Label.Clip>
+        </Label>
+    </Grid>
+
+
+</Page>

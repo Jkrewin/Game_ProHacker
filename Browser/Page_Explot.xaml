@@ -35,6 +35,9 @@
                 <Label Cursor="Hand"  HorizontalAlignment="Left" Margin="-194,46,0,0" VerticalAlignment="Top" Width="189" Foreground="#FF2F10FF" PreviewMouseDown="СкачатьПрограммуF">
                     <TextBlock TextDecorations="Underline" FontSize="14" Width="182"><Run Text="Сканер портов PScanе v1.0"/></TextBlock>
                 </Label>
+                <Label Cursor="Hand"  HorizontalAlignment="Left" Margin="-195,80,0,0" VerticalAlignment="Top" Width="189" Foreground="#FF2F10FF" PreviewMouseDown="СкачатьПрограммуB">
+                    <TextBlock TextDecorations="Underline" FontSize="14" Width="182"><Run Text="Переборщик паролей v3.2"/></TextBlock>
+                </Label>
                 <ScrollViewer x:Name="myScrollViewer" HorizontalScrollBarVisibility ="Auto" >
                     <StackPanel x:Name="SP_ListNews" Margin="0,25,0,0" CanHorizontallyScroll="True" Background="#FFF0EDED" Orientation="Vertical" VerticalAlignment="Stretch">
                         <Grid Height="100">

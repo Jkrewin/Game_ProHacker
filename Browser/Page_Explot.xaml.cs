@@ -137,5 +137,12 @@ namespace PH4_WPF.Browser
             }
             Refreh_News(vulnerabilities);
         }
+
+        private void СкачатьПрограммуB(object sender, MouseButtonEventArgs e)
+        {
+            ((FrmBrowser)App.GameGlobal.ActiveApp["PH4_WPF.Browser.FrmBrowser"]).StartDownload("bruteforce",
+              new FileServerClass.ParameterClass() { TypeInformation = Enums.TypeParam.exe, TextCommand = "bruteforce" },
+              800, "exe");
+        }
     }
 }

@@ -35,6 +35,61 @@ namespace PH4_WPF.Engine
             public void Run();
         }
 
+
+        /// <summary>
+        /// Получить способность
+        /// </summary>
+        [Serializable]
+        public readonly struct GetProf : IEventGame
+        {
+            readonly ProfEnum Prof;
+            /// <summary>
+            /// Если была ранее способность то очки будут возвращены
+            /// </summary>
+            public GetProf(ProfEnum prof ) {
+                Prof = prof;            
+            }
+
+            public void Run()
+            {
+                if (App.GameGlobal.GamerInfo.BonusExtraPoint.Contains(Prof.ToString()) == false)
+                {
+                    switch (Prof)
+                    {
+                        case ProfEnum.GetCoder:
+                            if (App.GameGlobal.GamerInfo.CoderLvl >= 1)
+                                App.GameGlobal.GamerInfo.ExtraPoint++;
+                            else
+                                App.GameGlobal.GamerInfo.CoderLvl = 1;
+                            break;
+                        case ProfEnum.GetClearLog:
+                            if (App.GameGlobal.GamerInfo.DefecerLvl >= 1)
+                                App.GameGlobal.GamerInfo.ExtraPoint++;
+                            else
+                                App.GameGlobal.GamerInfo.DefecerLvl = 1;
+                            break;
+                        default:
+                            break;
+                    }
+                    App.GameGlobal.GamerInfo.Add_Bonus(Prof);
+                }
+            }
+
+            /// <summary>
+            /// Какие способности экстра получить 
+            /// </summary>
+            public enum ProfEnum
+            {
+                /// <summary>
+                /// Получить первую способоность кодера писать и улучшать код
+                /// </summary>
+                GetCoder,
+                /// <summary>
+                /// Солучить способность чистить логи
+                /// </summary>
+                GetClearLog
+            }
+        }
         /// <summary>
         /// Улучшает софт
         /// </summary>
@@ -69,8 +124,8 @@ namespace PH4_WPF.Engine
         [Serializable]
         public struct RequestHardwareUp : IEventGame
         {
-            int MoneyOut;            
-            HardwareUpStart UpStart;
+            readonly int MoneyOut;
+            readonly HardwareUpStart UpStart;
             bool AllReady;
 
             public RequestHardwareUp(int moneyOut, HardwareUpStart upStart)
@@ -110,11 +165,11 @@ namespace PH4_WPF.Engine
         /// Запрос на улучшение сервера
         /// </summary>
         [Serializable]
-        public struct HardwareUpStart : IEventGame
+        public readonly struct HardwareUpStart : IEventGame
         {
-            Server SrvUp;
-            int Proc;
-            int HDD;
+            readonly Server SrvUp;
+            readonly int Proc;
+            readonly int HDD;
 
             public HardwareUpStart(Server srvUp, int proc, int hdd)
             {
@@ -128,22 +183,27 @@ namespace PH4_WPF.Engine
                 SrvUp.VirtualizationServer.Hardware.TotalRAM += Proc;
                 SrvUp.VirtualizationServer.Hardware.TotalHDD += HDD;
                 App.GameGlobal.LogAdd("Сервер обновил железо :: " + SrvUp.NameSrv, Enums.LogTypeEnum.Server );
+                App.GameGlobal.EventIntroduce(Enums.ConditionEnum.МощностьСервераУвеличина, SrvUp.NameSrv);
             }
         }
         /// <summary>
         /// Отправка почты
         /// </summary>
         [Serializable]
-        public struct SendMail : IEventGame
-        {            
-            public MailInBox Mail;
+        public readonly struct SendMail : IEventGame
+        {
+            readonly MailInBox Mail;
+
+            public SendMail(MailInBox mail) {
+                Mail = mail;
+            }
 
             public void Run() => MailInBox.NewMail(Mail);
-        }
-        /// <summary>
-        /// Добавить свою уязвимость
-        /// </summary>
-        [Serializable]
+        }  
+            /// <summary>
+            /// Добавить свою уязвимость
+            /// </summary>
+            [Serializable]
         public struct VulnerabilitiesAdd : IEventGame
         {           
             public string CName;           
@@ -177,16 +237,39 @@ namespace PH4_WPF.Engine
         /// Событие на включение сервера, после сбоя
         /// </summary>
         [Serializable]
-        public struct EventShutdown : IEventGame
-        {           
+        public readonly struct EventShutdown : IEventGame
+        {
             /// <summary>
             /// На этом сервере происходит перезагрузка
             /// </summary>
-            public string UrlServer;           
-               
+            readonly string UrlServer;
+            /// <summary>
+            /// Событие на включение сервера, после сбоя
+            /// </summary>
+            /// <param name="urlServer">На этом сервере происходит перезагрузка</param>
+            public EventShutdown(string urlServer) {
+                UrlServer = urlServer;
+            }
+
+            public void Run()=> App.GameGlobal.FindServer(UrlServer).Shutdown();
+        }
+        /// <summary>
+        /// Воcстановить сервер от событий как Deface 
+        /// </summary>
+        [Serializable]
+        public readonly struct RestatService : IEventGame
+        {
+            readonly Server server;
+            /// <summary>
+            /// Воcстановить сервер от событий как Deface 
+            /// </summary>
+            /// <param name="srv">Сервер где нужно сделать рестат</param>
+            public RestatService(Server srv) {
+                server = srv;
+            }
             public void Run()
             {
-                App.GameGlobal.FindServer(UrlServer).Shutdown();
+                server.VirtualizationServer.DefeceString = "";
             }
         }
         /// <summary>
@@ -216,28 +299,43 @@ namespace PH4_WPF.Engine
         /// Показать сообщение на экран
         /// </summary>
         [Serializable]
-        public struct MessageWin : IEventGame
+        public readonly struct MessageWin : IEventGame
         {
-           
-            public string Title;
-            public string Text;
-            public FrmSoft.FrmError.InformEnum Inform;
-
-            public void Run()
-            {
-                App.GameGlobal.Msg(Title, Text, Inform);
+            readonly string Title;
+            readonly string Text;
+            readonly FrmSoft.FrmError.InformEnum Inform;
+            /// <summary>
+            /// Показать сообщение на экран
+            /// </summary>
+            /// <param name="title">Тема</param>
+            /// <param name="text">Текст</param>
+            /// <param name="inform">Тип сообщения</param>
+            public MessageWin(string title, string text, FrmSoft.FrmError.InformEnum inform) {
+                Title = title;
+                Text = text;
+                Inform = inform;
             }
+
+            public void Run() => App.GameGlobal.Msg(Title, Text, Inform);
         }
         /// <summary>
         /// Запуск нового игрового сценария
         /// </summary>
         [Serializable]
-        public struct NextScen : IEventGame
-        {           
+        public readonly struct NextScen : IEventGame
+        {
             /// <summary>
-            /// Название колекции скриптов  из ActiveScenario
+            /// Название сценария в составе метода
             /// </summary>
-            public string ScenName;
+            public readonly string ScenName;
+            /// <summary>
+            /// Запуск нового игрового сценария
+            /// </summary>
+            /// <param name="scenName">Название сценария в составе метода</param>
+            public NextScen(string scenName)
+            {
+                ScenName = scenName;
+            }
             public void Run()
             {
                 var r = App.GameGlobal.GameScen.GetType().GetMethod(ScenName);
@@ -255,12 +353,21 @@ namespace PH4_WPF.Engine
         /// Запуск скриптов  из ActiveScenario
         /// </summary>
         [Serializable]
-        public struct RunScript : IEventGame
+        public readonly struct RunScript : IEventGame
         {            
             /// <summary>
             /// Название колекции скриптов  из ActiveScenario
             /// </summary>
-            public string NameScript;
+            readonly string NameScript;
+
+            /// <summary>
+            /// Запуск скриптов из ActiveScenario
+            /// </summary>
+            /// <param name="nameScript">Название колекции скриптов  из ActiveScenario</param>
+            public RunScript(string nameScript) {
+                NameScript = nameScript;
+            }
+
             public void Run()
             {
                 List<GameEvenStruct.IEventGame> script = App.GameGlobal.GameScen.ActiveScen.Script[NameScript];
@@ -271,12 +378,20 @@ namespace PH4_WPF.Engine
         /// Запускает чат
         /// </summary>
         [Serializable]
-        public struct StartChat : IEventGame
+        public readonly struct StartChat : IEventGame
         {           
             /// <summary>
             /// Название чата из ActiveScenario
             /// </summary>
-            public string NameChat;
+            readonly string NameChat;
+            /// <summary>
+            /// Запускает чат
+            /// </summary>
+            /// <param name="nameChat">Название чата из ActiveScenario</param>
+            public StartChat(string nameChat) {
+                NameChat = nameChat;
+            }
+
             public void Run()
             {
                 App.GameGlobal.GameChat = new GameChatClass(App.GameGlobal.GameScen.ActiveScen.Chat[NameChat]);
@@ -304,7 +419,7 @@ namespace PH4_WPF.Engine
         /// Повышает хайтек игрока, увеличивает количество найденных дыр 
         /// </summary>
         [Serializable]
-        public struct UppHiTec : IEventGame
+        public readonly struct UppHiTec : IEventGame
         {          
             public void Run()
             {
@@ -333,14 +448,33 @@ namespace PH4_WPF.Engine
         /// Получить новую новость
         /// </summary>
         [Serializable]
-        public struct GetNews : IEventGame
+        public readonly struct GetNews : IEventGame
         {
-            public string Text;
-            public Enums.TopicEnum Topic;
+            readonly string Text;
+            readonly Enums.TopicEnum Topic;
             /// <summary>
             /// Получает новости стандартные из файла = true
             /// </summary>
-            public bool FromFile;
+            readonly bool FromFile;
+
+            /// <summary>
+            /// Получить новую новость. Получает новости стандартные из файла [FromFile = true]
+            /// </summary>
+            public GetNews(bool fromFile) {
+                FromFile = fromFile;
+                Text = "";
+                Topic = Enums.TopicEnum.Разное;
+            }
+
+            /// <summary>
+            /// Получить новую новость. Получает новости стандартные из файла [FromFile]
+            /// </summary>
+            public GetNews(string text, Enums.TopicEnum topic)
+            {
+                FromFile = false;
+                Text = text;
+                Topic = topic;
+            }
 
             public void Run()
             {
@@ -360,9 +494,16 @@ namespace PH4_WPF.Engine
         /// Получен опыт
         /// </summary>
         [Serializable]
-        public struct GetExp : IEventGame
+        public readonly struct GetExp : IEventGame
         {
-            public int Exp;
+            readonly int Exp;
+            /// <summary>
+            /// Получен опыт
+            /// </summary>
+            /// <param name="exp">Кол-во опыта</param>
+            public GetExp(int exp) {
+                Exp = exp;
+            }
 
             public void Run()
             {
@@ -374,10 +515,10 @@ namespace PH4_WPF.Engine
         /// Получение денег
         /// </summary>
         [Serializable]
-        public struct GetMoney : IEventGame
+        public readonly struct GetMoney : IEventGame
         {
-            public int Money;
-            public Enums.TypeMoneyEnum TypeMoney;
+            readonly int Money;
+            readonly Enums.TypeMoneyEnum TypeMoney;
 
             /// <summary>
             /// Проверяет возможна предача денг или есть ошибки 
@@ -404,6 +545,15 @@ namespace PH4_WPF.Engine
                     }
                 }
             }
+            /// <summary>
+            /// Получение денег
+            /// </summary>
+            /// <param name="money">Сумма денег</param>
+            /// <param name="typeMoney">Валюта</param>
+            public GetMoney(int money, Enums.TypeMoneyEnum typeMoney) {
+                Money = money;
+                TypeMoney = typeMoney;
+            }
 
             public void Run()
             {
@@ -412,6 +562,7 @@ namespace PH4_WPF.Engine
                 {
                     App.GameGlobal.Bank.DefaultBankAccount.Money += Money;
                     App.GameGlobal.LogAdd("Вы получили деньги +" + Money + " на счет " + App.GameGlobal.Bank.DefaultBankAccount.Rs, Enums.LogTypeEnum.Money );
+                    App.GameGlobal.SoundSignal("button-sound-14");
                 }
             }
         }
@@ -438,7 +589,16 @@ namespace PH4_WPF.Engine
         {
             public IEventGame GameEvent;
             public DateTime DataStart;
-            
+            /// <summary>
+            /// Создает это событие во времени игры
+            /// </summary>
+            /// <param name="dataStar"><i>К примеру по мес  App.GameGlobal.DataGM.AddMonths(1)</i></param>
+            /// <param name="gameEvent"></param>
+            public CreateGameEven(DateTime dataStar, IEventGame gameEvent) {
+                DataStart = dataStar;
+                GameEvent = gameEvent;
+            }
+
             public void Run() => App.GameGlobal.AllEventGame.Add(new GameEvenStruct() { DataStart = DataStart, GameEvent = GameEvent });
         }
 

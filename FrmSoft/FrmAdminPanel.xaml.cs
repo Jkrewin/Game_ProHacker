@@ -50,6 +50,7 @@ namespace PH4_WPF.FrmSoft
             Refreh_ListVM();
             App.GameGlobal.MainWindow.NewDayEvent += UpdateDayUpgrade; //каждое обновление дня обновляет инфу о сервере
             App.GameGlobal.MainWindow.Event_Completed += EventComplited; //если произошло событие в которм зарешился апгрейд этого сервера
+            КликПоРоли(null, null); // Выбираем первую страницу
         }
 
         private void HideAllPage() {
@@ -78,7 +79,7 @@ namespace PH4_WPF.FrmSoft
                 else
                 {
 
-                    bool b = MainServer.VirtualizationServer.CheckDependencies(TagInstace);
+                    bool b = MainServer.VirtualizationServer.CheckDependencies(TagInstace, out string msg_error);
                     if (b)
                     {
                         TagInstace.StatusInstance = Enums.StatusInstanceEnum.Working;
@@ -88,7 +89,7 @@ namespace PH4_WPF.FrmSoft
                     }
                     else
                     {
-                        App.GameGlobal.Msg("", MainServer.VirtualizationServer.MSG_error, FrmError.InformEnum.Информация);
+                        App.GameGlobal.Msg("", msg_error, FrmError.InformEnum.Информация);
                     }
                 }
             }
@@ -134,7 +135,7 @@ namespace PH4_WPF.FrmSoft
 
             L_DayPop.Content = "посещаемость в день: " + PB_popular.Value;
             App.GameGlobal.EventIntroduce(Enums.ConditionEnum.ПосещениеСервера, MainServer.NameSrv, PB_popular.Value.ToString());
-            App.GameGlobal.EventIntroduce(Enums.ConditionEnum.МощностьСервера, MainServer.NameSrv, PowerServer.Maximum.ToString());
+            
         }
 
         private void UpdateDayUpgrade() {
@@ -279,6 +280,12 @@ namespace PH4_WPF.FrmSoft
         private void UgProg(object sender, MouseButtonEventArgs e)
         {
             if (MainServer.VirtualizationServer.ProccesNowUpgade == null) return;
+
+            if (App.GameGlobal.GamerInfo.Coder(Enums.SkillCoder.ПисатьКод) == false)
+            {
+                App.GameGlobal.Msg("", "К сожаленью у вас нет навыков программирования чтобы начать работать", FrmError.InformEnum.Информация);
+                return;
+            }
 
             SelectedInstance.UpdateSoft = true;
             DateTime date_end = App.GameGlobal.DataGM;

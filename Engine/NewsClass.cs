@@ -72,8 +72,11 @@ namespace PH4_WPF.Engine
             public string Date;
         }
 
+        /// <summary>
+        /// Игровая новость
+        /// </summary>
         [Serializable]
-        public class NewsСlass
+        public sealed class NewsСlass
         {
             public string TextNews;           
             public Enums.TopicEnum Topic;

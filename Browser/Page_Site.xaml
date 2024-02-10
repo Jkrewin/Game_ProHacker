@@ -1,0 +1,44 @@
+﻿<Page x:Class="PH4_WPF.Browser.Page_Site"
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+      xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+      xmlns:local="clr-namespace:PH4_WPF.Browser"
+      mc:Ignorable="d" 
+      d:DesignHeight="450" d:DesignWidth="800"
+      Title="Page_Site" Loaded="ЗагрузитьСайт">
+
+    <Grid>
+        <Grid Background="WhiteSmoke" Grid.RowSpan="2">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="44*"/>
+                <RowDefinition Height="181*"/>
+            </Grid.RowDefinitions>
+            <StackPanel x:Name="StackP_Main" Grid.Row="1" Margin="170,0,185,0" Background="WhiteSmoke">
+                <Grid Height="65" Background="#FFD9E992">
+                    <Rectangle HorizontalAlignment="Left" Height="64" VerticalAlignment="Center" Width="18" Fill="#FFFF0101"/>
+                    <Label Content="Label" HorizontalAlignment="Left" Margin="68,10,0,0" VerticalAlignment="Top" Width="154" FontWeight="Normal" FontFamily="Arial"/>
+                    <Label Content="85%" HorizontalAlignment="Left" Margin="68,32,0,0" VerticalAlignment="Top" Width="106" FontWeight="Bold" FontSize="14" HorizontalContentAlignment="Center"/>
+                    <Label Content="v 1.1" HorizontalAlignment="Left" Margin="380,0,0,0" VerticalAlignment="Top" Width="55" FontWeight="Normal" FontFamily="Candara" FontSize="14"/>
+                </Grid>
+            </StackPanel>
+            <Label x:Name="LabelUrl" Content="v 1.1fsdf sdfsdfsd" HorizontalAlignment="Left" Margin="150,2,0,0" VerticalAlignment="Top" Width="647" FontWeight="Normal" FontFamily="Global Sans Serif" FontSize="16" Height="29" Foreground="#FFEDE3E3" Background="#FF3871F9">
+                <Label.Clip>
+                    <RectangleGeometry Rect="0,0,647,29" RadiusX="2" RadiusY="2"/>
+                </Label.Clip>
+            </Label>
+            <Label x:Name="LabelUrl_Copy" Content="" HorizontalAlignment="Left" Margin="115,2,0,0" VerticalAlignment="Top" Width="30" FontWeight="Normal" FontFamily="Segoe MDL2 Assets" FontSize="16" Height="29" Foreground="#FFEDE3E3" Background="#FF3871F9" HorizontalContentAlignment="Center" VerticalContentAlignment="Center">
+                <Label.Clip>
+                    <RectangleGeometry Rect="0,0,30,29" RadiusX="2" RadiusY="2"/>
+                </Label.Clip>
+            </Label>
+            <Label x:Name="LabelUrl_Copy1" Content="Адрес строка:" HorizontalAlignment="Left" Margin="0,3,0,0" VerticalAlignment="Top" Width="115" FontWeight="Normal" FontFamily="Global Sans Serif" FontSize="16" Height="29" Foreground="Black" Background="{x:Null}">
+
+            </Label>
+            <Label x:Name="LabelMsgHack" Content="Label" HorizontalAlignment="Center" Grid.Row="1" VerticalAlignment="Center" Width="780" FontFamily="Consolas" FontSize="24" HorizontalContentAlignment="Center" Foreground="#FF159320"/>
+
+
+        </Grid>
+
+    </Grid>
+</Page>

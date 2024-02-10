@@ -9,32 +9,62 @@
         WindowStartupLocation="CenterScreen"
         AllowsTransparency="True"
         Background="Transparent"
-        Title="FrmApp" Height="450" Width="800" Loaded="Загруженно">
+        Title="FrmApp" Height="450" Width="800" Loaded="Загруженно" Closed="ФормаЗакрыта">
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="4*"/>
             <RowDefinition Height="71*"/>
         </Grid.RowDefinitions>
-        <Border BorderThickness="1" BorderBrush="Black" Background="#FF57397F"/>
+        <Border BorderThickness="1" BorderBrush="Black" Background="#FF323438" MouseDown="Перетаскивание">
+            <Rectangle x:Name="ExitButton" HorizontalAlignment="Left" Height="16" Stroke="#FF5C0F0F" VerticalAlignment="Top" Width="52" Fill="DarkRed" MouseEnter="Выделяет_кнопку_выход" MouseLeave="ПрекращаетВыделение" MouseDown="УдалениеКнопка" Margin="737,-1,0,0"/>
+        </Border>
         <Border BorderThickness="1" BorderBrush="Black" Grid.Row="1" Background="Gainsboro">
-            <Grid x:Name="Переборщик" Background="#FFF6F6F6">
-                <Label x:Name="LabelResBrute" Content="----------------------------------" HorizontalAlignment="Left" Margin="350,74,0,0" VerticalAlignment="Top" FontFamily="Calibri" FontSize="18" Width="277"/>
-                <Rectangle HorizontalAlignment="Left" Height="751" Margin="372,-314,0,0" VerticalAlignment="Top" Width="9" RenderTransformOrigin="0.5,0.5">
-                    <Rectangle.RenderTransform>
-                        <TransformGroup>
-                            <ScaleTransform/>
-                            <SkewTransform/>
-                            <RotateTransform Angle="-89.953"/>
-                            <TranslateTransform/>
-                        </TransformGroup>
-                    </Rectangle.RenderTransform>
-                    <Rectangle.Fill>
-                        <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
-                            <GradientStop Color="#FF54FCFF"/>
-                            <GradientStop Color="#FFF6F6F6" Offset="1"/>
-                        </LinearGradientBrush>
-                    </Rectangle.Fill>
-                </Rectangle>
+            <Grid x:Name="Переборщик" Background="#FF161719">
+                <Label x:Name="LabelСluster" Content="56m/в день" HorizontalAlignment="Left" Margin="207,11,0,0" VerticalAlignment="Top" Foreground="#FFE4DFDF" FontFamily="Arial" FontSize="20" Width="225"/>
+                <Label Content="Скорость перебора " HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top" Foreground="#FFE4DFDF" FontFamily="Arial" FontSize="20"/>
+                <Button x:Name="ButtonA" HorizontalAlignment="Left" Margin="619,50,0,0" VerticalAlignment="Top" Height="88" Width="40" Background="#FF2F2E2E" Click="КнопкаТипаХешей" Tag="0">
+                    <Grid>
+                        <Label Width="30" Height="14" VerticalAlignment="Top" HorizontalAlignment="Center" Margin="0,-40,0,0" Content="окл" Background="{x:Null}" Foreground="White" Padding="5,-5,5,5" HorizontalContentAlignment="Center"></Label>
+                        <Label Width="30" Margin="0,-12,0,-12" FontFamily="Segoe MDL2 Assets" Content="&#xE156;" HorizontalContentAlignment="Center" Foreground="White" FontSize="20"></Label>
+                    </Grid>
+                    <Button.Clip>
+                        <RectangleGeometry Rect="0,0,40,88" RadiusX="2" RadiusY="2"/>
+                    </Button.Clip>
+                </Button>
+
+                <Button x:Name="ButtonB" HorizontalAlignment="Left" Margin="664,50,0,0" VerticalAlignment="Top" Height="88" Width="40" Background="#FF2F2E2E" Click="КнопкаТипаХешей" Tag="1">
+                    <Button.Clip>
+                        <RectangleGeometry Rect="0,0,40,88" RadiusX="2" RadiusY="2"/>
+                    </Button.Clip>
+                    <Grid>
+                        <Label Width="30" Height="14" VerticalAlignment="Top" HorizontalAlignment="Center" Margin="0,-40,0,0" Content="окл" Background="{x:Null}" Foreground="White" Padding="5,-5,5,5" HorizontalContentAlignment="Center"/>
+                        <Label Width="30" Margin="0,-12,0,-12" FontFamily="Agency FB" Content="BTC" HorizontalContentAlignment="Center" Foreground="White" FontSize="18"/>
+                    </Grid>
+                </Button>
+                <Button x:Name="ButtonC" HorizontalAlignment="Left" Margin="709,50,0,0" VerticalAlignment="Top" Height="88" Width="40" Background="#FF2F2E2E" Click="КнопкаТипаХешей" Tag="2">
+                    <Button.Clip>
+                        <RectangleGeometry Rect="0,0,40,88" RadiusX="2" RadiusY="2"/>
+                    </Button.Clip>
+                    <Grid>
+                        <Label Width="30" Height="14" VerticalAlignment="Top" HorizontalAlignment="Center" Margin="0,-40,0,0" Content="окл" Background="{x:Null}" Foreground="White" Padding="5,-5,5,5" HorizontalContentAlignment="Center"/>
+                        <Label Width="30" Margin="0,-12,0,-12" FontFamily="Agency FB" Content="ETH" HorizontalContentAlignment="Center" Foreground="White" FontSize="18"/>
+                    </Grid>
+                </Button>
+                <ListBox x:Name="ListBoxServer" Margin="24,91,0,212" HorizontalAlignment="Left" Width="282" Background="#FF323438" Foreground="#FFEDEDED"/>
+                <Label Content="Подключенные сервера" HorizontalAlignment="Left" Margin="25,62,0,0" VerticalAlignment="Top" Foreground="#FFDDDDDD" FontSize="14"/>
+                <Rectangle HorizontalAlignment="Center" Height="45" Margin="0,379,0,0" Stroke="Black" VerticalAlignment="Top" Width="798" Fill="#FF363B46"/>
+                <Label x:Name="LabelResBrute" Content="----------------------------------" HorizontalAlignment="Left" Margin="320,384,0,0" VerticalAlignment="Top" FontFamily="Calibri" FontSize="18" Width="478" Foreground="#FFF7EDED" HorizontalContentAlignment="Center"/>
+                <Button x:Name="ButtonStart" Content="Запуск" HorizontalAlignment="Left" Margin="10,386,0,0" VerticalAlignment="Top" Width="169" Height="32" Background="{x:Null}" Foreground="White" FontSize="18" MouseLeave="МышкаУшлаКнопки" Click="ЗапускПереборщика"/>
+                <Label Content="Задача, тип хеша:" HorizontalAlignment="Left" Margin="615,16,0,0" VerticalAlignment="Top" Foreground="#FFDDDDDD" FontSize="14"/>
+                <Button x:Name="ButtonFinder" Content="&#xE1A3;" HorizontalAlignment="Left" Margin="282,66,0,0" VerticalAlignment="Top" Width="24" Height="24" Background="#FF2F2E2E" Foreground="White" FontSize="16" FontFamily="Segoe MDL2 Assets" Click="ПоискСвоихРигов"/>
+                <Label Content="Целевой Сервер" HorizontalAlignment="Left" Margin="24,231,0,0" VerticalAlignment="Top" Foreground="#FFDDDDDD" FontSize="14"/>
+                <TextBox x:Name="T_Search" HorizontalAlignment="Left" Margin="146,233,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="305" FontSize="16" Height="27" Background="{x:Null}" Foreground="#FFCDC8C8" LostFocus="ФокусПотерян">
+                    <TextBox.ContextMenu>
+                        <ContextMenu Visibility="Collapsed"/>
+                    </TextBox.ContextMenu>
+                </TextBox>
+                <Label x:Name="LabelError" Visibility="Hidden" Content="Целевой Сервер" HorizontalAlignment="Center" Margin="0,352,0,0" VerticalAlignment="Top" Foreground="White" FontSize="18" Width="798" Background="#FFE02626" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" Padding="5,0,5,5"/>
+                <Label x:Name="InfoProcess" Content="" Margin="10,264,10,0" VerticalAlignment="Top" Foreground="#FFDDDDDD" FontSize="14" Height="59" FontStyle="Normal" ScrollViewer.VerticalScrollBarVisibility="Disabled" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" Background="{x:Null}"/>
             </Grid>
         </Border>
 

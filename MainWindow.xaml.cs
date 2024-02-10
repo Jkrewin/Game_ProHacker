@@ -17,7 +17,6 @@ namespace PH4_WPF
     public partial class MainWindow : Window
     {
        
-
         private readonly LinkedList<Server> RouteList = new LinkedList<Server>();        
         private readonly BitmapImage[,] ImageArr = new BitmapImage[8, 6];
         private readonly System.Windows.Threading.DispatcherTimer GameTimer =new System.Windows.Threading.DispatcherTimer();
@@ -32,7 +31,7 @@ namespace PH4_WPF
         private readonly List<string> TextAnimation = new List<string> ();
 
         public delegate void NewDay();
-        public  event NewDay NewDayEvent;
+        public event NewDay NewDayEvent;
         public delegate void GameEventFinish(GameEvenStruct.IEventGame eventGame);
         public event GameEventFinish Event_Completed;
 
@@ -140,9 +139,7 @@ namespace PH4_WPF
             }          
 
             AnmIndex++;        
-        }
-
-       
+        }             
 
         private void Загруженно(object sender, RoutedEventArgs e)
         {            
@@ -170,7 +167,6 @@ namespace PH4_WPF
             
                         
         }
-
         
         private void АнимацияТекста(object sender, EventArgs e)
         {
@@ -198,14 +194,17 @@ namespace PH4_WPF
                 case Game.GameSpeedEnum.Speed1X:
                     App.GameGlobal.DataGM = App.GameGlobal.DataGM.AddDays(1);
                     NewDayEvent();
+                    App.GameGlobal.Bank.Monetary();
                     break;
                 case Game.GameSpeedEnum.Speed2X:
                     App.GameGlobal.DataGM= App.GameGlobal.DataGM.AddDays(2);
                     NewDayEvent();
+                    App.GameGlobal.Bank.Monetary();
                     break;
                 case Game.GameSpeedEnum.Speed4X:
                     App.GameGlobal.DataGM = App.GameGlobal.DataGM.AddDays(4);
                     NewDayEvent();
+                    App.GameGlobal.Bank.Monetary();
                     break;
                 case Game.GameSpeedEnum.Pause:
                 default:
@@ -241,13 +240,17 @@ namespace PH4_WPF
         /// </summary>
         public void Refreh_AppDeck() {
             PortScanerIcon1.Visibility = Visibility.Hidden;
+            BrutoforceSoft.Visibility = Visibility.Hidden;
 
-            foreach (var item in Engine.FileServerClass.GetInfoFiles("/apps/", App.GameGlobal.MyServer))
+            foreach (var item in FileServerClass.GetInfoFiles("/apps/", App.GameGlobal.MyServer))
             {
-                switch (FileServerClass.PatchToFileName (item.FileName.ToLower ()) )
+                switch (FileServerClass.PatchToFileName (item.FileName.ToLower ()))
                 {
                     case "portscaner":
                         PortScanerIcon1.Visibility = Visibility.Visible;
+                        break;
+                    case "bruteforce":
+                        BrutoforceSoft.Visibility = Visibility.Visible;
                         break;
                     default:
                         break;
@@ -322,7 +325,7 @@ namespace PH4_WPF
                 AddRouteButton.Content = "Создать маршрут";
 
             if (_selectedServer.Premision == Server.PremissionServerEnum.FullControl) AdminPanel.Visibility = Visibility.Visible;
-            if (App.GameGlobal.GamerInfo.DefecerLvl > 0) ShutdownServer.Visibility = Visibility.Visible ;
+            if (App.GameGlobal.GamerInfo.Defecer (Enums.SkillDefecer.ПерезапускСервера )) ShutdownServer.Visibility = Visibility.Visible ;
         }
         public void LoadGame(string sFile) {           
            
@@ -375,7 +378,9 @@ namespace PH4_WPF
             App.GameGlobal.Bank.Accounts.Add(new BankAccount() { Login = "XZibit", Money = 100, Pass = "Ged74sd44zx", Rs = "0033", TypeMoney = Enums.TypeMoneyEnum.Karbovantsy });
             App.GameGlobal.Instructions_V(); //создадим уязвимости в начале
             RouteList.AddFirst(App.GameGlobal.MyServer);    // Первый маршрут всегда ваш сервер
-
+            //добавить маршрут если его нет для www.test.ru
+            var srv = App.GameGlobal.Routers.Find(x => x.FirstServer == App.GameGlobal.MyServer & x.EndServer == App.GameGlobal.FindServer("www.test.ru"));
+            if (srv == null) App.GameGlobal.AddRouter (App.GameGlobal.MyServer, App.GameGlobal.FindServer("www.test.ru"));
 
             App.GameGlobal.GameLoaded = true;        
         }
@@ -386,7 +391,7 @@ namespace PH4_WPF
         /// Добавляет линнию на карту
         /// </summary>
         /// <param name="router"></param>
-        public void AddLineRoute(RouterClass router)
+        public void AddLineRoute(in RouterClass router)
         {
             // добавляет  линию на карту 
             MyCanvas.Children.Add(router.Line);
@@ -708,7 +713,7 @@ namespace PH4_WPF
                 App.GameGlobal.News.News[i].ReadNews = true;
                 Grid grid = (Grid)ListNewsLog.Items[i];
                 var bc = new BrushConverter();
-                grid.Background = (System.Windows.Media.Brush)bc.ConvertFrom("#FF4B566A");
+                grid.Background = (Brush)bc.ConvertFrom("#FF4B566A");
 
                 //проверка все новости прочитанны
                 CheckReadAllNews();
@@ -833,7 +838,7 @@ namespace PH4_WPF
                 Point p = Mouse.GetPosition(this);
                 OldPossCursor = new Point(OldPossCursor.X - p.X, OldPossCursor.Y - p.Y);
                 App.GameGlobal.Servers.ForEach(x => { x.DrawingHub.Left -= (int)OldPossCursor.X; x.DrawingHub.Top -= (int)OldPossCursor.Y; });
-                App.GameGlobal.Routers.ForEach(x => { x.Left -= (int)OldPossCursor.X; x.Top -= (int)OldPossCursor.Y; });
+                App.GameGlobal.Routers.ForEach(x => { x.Left -= (int)OldPossCursor.X; x.Top -= (int)OldPossCursor.Y; });                
                 OldPossCursor = Mouse.GetPosition(this);
             }
         }
@@ -846,8 +851,8 @@ namespace PH4_WPF
                 App.GameGlobal.FindServer(L_SrvName.Content.ToString()).ActSrv = false;
                 DateTime date = App.GameGlobal.DataGM;
                 date.AddMonths(1);
-                App.GameGlobal.AllEventGame.Add(new GameEvenStruct(date, new GameEvenStruct.EventShutdown() { UrlServer = L_SrvName.Content.ToString() }));
-                App.GameGlobal.MainWindow.G_BackPanel.Visibility = Visibility.Hidden;
+                App.GameGlobal.AllEventGame.Add(new GameEvenStruct(date, new GameEvenStruct.EventShutdown(L_SrvName.Content.ToString() )));
+                App.GameGlobal.MainWindow.G_BackPanel.Visibility = Visibility.Hidden;               
             });
             msg.Show();
             msg.Activate();
@@ -926,6 +931,54 @@ namespace PH4_WPF
                 AddRouteButton.Content = "Создать маршрут";
                 StartConsoleText(new List<string>() { "> Удаляем Все маршруты", "> Все маршруты нужно создавать снова", "> OK" });
             }
+        }
+
+        private void ОткрытьПереборщик(object sender, RoutedEventArgs e)
+        {
+            var brute = new FrmApp();
+            brute.T_Search.Text = L_SrvName.Content.ToString();
+            brute.ФокусПотерян(null,null);
+            brute.ShowForm();
+        }
+
+        private void ПереходНаВебСервис(object sender, RoutedEventArgs e)
+        {    
+            var frm = new Browser.FrmBrowser();
+            frm.ShowForm();
+            frm.FrameBrouser.Navigate(new Browser.Page_Site (_selectedServer ));
+        }
+
+        private void ТествоеКольцо(object sender, MouseButtonEventArgs e)
+        {
+            System.Text.StringBuilder s  = new System.Text.StringBuilder();
+            foreach (var item in App.GameGlobal.Routers )
+            {
+                RingTest.Items.Add(item.ToString());
+                s.Append ("\r\n"+ item.ToString()) ;
+            }
+
+
+            Clipboard.SetText(s.ToString());
+        }
+
+        private void RingTest_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+
+        }
+
+        private void ТестоваяКнопка(object sender, RoutedEventArgs e)
+        {
+
+
+           
+
+
+        }
+
+        private void ОткрытьIDE(object sender, RoutedEventArgs e)
+        {
+            var frm = new FrmIDE();
+            frm.ShowForm();
         }
     }
 

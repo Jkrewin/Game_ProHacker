@@ -314,34 +314,7 @@ namespace PH4_WPF.FrmSoft
             if (l.File.Dir == null)
             {
                 //это файл
-                var f = FileServerClass.GetFile(MyPath + l.File.FileName, App.GameGlobal.MyServer);
-               
-                if (f.FileСontents.TypeInformation == Enums.TypeParam.exe)
-                {
-                    // Установка программы в App
-                    if (FileServerClass.Exist("/apps/", f.FileСontents.TextCommand, App.GameGlobal.MyServer))
-                    {
-                        App.GameGlobal.Msg("Программа", "Эта программа была ранее установлена", FrmError.InformEnum.СообщениеОтПрограмимы );
-                    }
-                    else
-                    {
-                        App.GameGlobal.MyServer.CreateFiles("/apps/", f.FileСontents.TextCommand, "Запускает программу", (int)(f.Size * 1.2), FileServerClass.PremisionEnum.AdminAndUser, false);
-                        App.GameGlobal.MainWindow.Refreh_AppDeck();
-                        App.GameGlobal.Msg("Установка", "Установка программы " + f.FileName + " завершенно ", FrmError.InformEnum.УстановкаПрограммы);
-                    }
-                }
-                else if (f.FileСontents.TypeInformation == Enums.TypeParam.exploit)
-                {
-                    App.GameGlobal.Msg("Файл", "Это файл эксплойта. Запустите его в консоли чтобы взломать сервер", FrmError.InformEnum.Информация);
-                }
-                else if (f.FileСontents.TypeInformation == Enums.TypeParam.backdoor)
-                {
-                    App.GameGlobal.Msg("Файл", "Backdoor файл загрузите его на другой сервер, затем запустите консольную комманду Make чтобы повысит права доступа ", FrmError.InformEnum.Информация);
-                }
-                else if (f.FileСontents.TypeInformation == Enums.TypeParam.shell)
-                {
-                    App.GameGlobal.Msg("Файл", "Это файл Shell необходим для подключении к серверу через комманду connect ", FrmError.InformEnum.Информация);
-                }
+               FileServerClass .ShellFile ( FileServerClass.GetFile(MyPath + l.File.FileName, App.GameGlobal.MyServer));     
             }
         }
 

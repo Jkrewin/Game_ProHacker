@@ -1,4 +1,5 @@
-﻿using System;
+﻿using PH4_WPF.FrmSoft;
+using System;
 using System.Collections.Generic;
 
 namespace PH4_WPF.Engine
@@ -25,7 +26,7 @@ namespace PH4_WPF.Engine
                     return fileName + "." + Perfix;
                 }
             }
-           // set => fileName = PatchToFileName(value); // убирает все после .
+            // set => fileName = PatchToFileName(value); // убирает все после .
             set => fileName = value;
         }
         /// <summary>
@@ -58,14 +59,14 @@ namespace PH4_WPF.Engine
         /// Содержимое файла
         /// </summary>
         [Serializable]
-        public class ParameterClass
+        public sealed class ParameterClass
         {
             public string TextCommand;
-            public Enums.TypeParam TypeInformation = Enums.TypeParam.file ;
+            public Enums.TypeParam TypeInformation = Enums.TypeParam.file;
             public int IntParam = 0;
             public byte ByteParam = 0;
+            public GameEvenStruct.IEventGame EventGame;
 
-           
         }
 
         /// <summary>
@@ -103,12 +104,16 @@ namespace PH4_WPF.Engine
 
         #region "Далее только статика"
         /// <summary>
+        /// мои документы на моем сервере
+        /// </summary>
+        public static List<FileServerClass> MyFiles { get => GetInfoFiles("/user/Hpro4/HDoc/", App.GameGlobal.MyServer); }
+        /// <summary>
         /// получить файл
         /// </summary>
         /// <param name="patch">Путь к файлу</param>
         /// <param name="srv">Сервер</param>
         /// <returns></returns>
-        public static FileServerClass GetFile(string patch, Server srv)=> EnFileSys(srv.FileSys, patch.Split('/'));
+        public static FileServerClass GetFile(string patch, Server srv) => EnFileSys(srv.FileSys, patch.Split('/'));
         /// <summary>
         /// Существует ли эта директория
         /// </summary>
@@ -262,6 +267,58 @@ namespace PH4_WPF.Engine
             }
             return newpatch;
         }
+        /// <summary>
+        /// Исполнительная среда файла при его запуске. Только для вашего сервера
+        /// </summary>
+        /// <param name="f"></param>
+        public static void ShellFile(FileServerClass f) {
+
+            switch (f.FileСontents.TypeInformation)
+            {
+                case Enums.TypeParam.exploit:
+                    App.GameGlobal.Msg("Файл", "Это файл эксплойта. Запустите его в консоли чтобы взломать сервер", FrmError.InformEnum.Информация);
+                    break;
+                case Enums.TypeParam.shell:
+                    App.GameGlobal.Msg("Файл", "Это файл Shell необходим для подключении к серверу через комманду connect ", FrmError.InformEnum.Информация);
+                    break;
+                case Enums.TypeParam.backdoor:
+                    App.GameGlobal.Msg("Файл", "Backdoor файл загрузите его на другой сервер, затем запустите консольную комманду Make чтобы повысит права доступа ", FrmError.InformEnum.Информация);
+                    break;
+                case Enums.TypeParam.file:
+                    break;
+                case Enums.TypeParam.goal_file:
+                    if (f.FileСontents.EventGame != null)
+                        f.FileСontents.EventGame.Run();                    
+                    break;
+                case Enums.TypeParam.exe:
+                    // Установка программы в App
+                    if (FileServerClass.Exist("/apps/", f.FileСontents.TextCommand, App.GameGlobal.MyServer))
+                    {
+                        App.GameGlobal.Msg("Программа", "Эта программа была ранее установлена", FrmError.InformEnum.СообщениеОтПрограмимы);
+                    }
+                    else
+                    {
+                        App.GameGlobal.MyServer.CreateFiles("/apps/", f.FileСontents.TextCommand, "Запускает программу", (int)(f.Size * 1.2), FileServerClass.PremisionEnum.AdminAndUser, false);
+                        App.GameGlobal.MainWindow.Refreh_AppDeck();
+                        App.GameGlobal.Msg("Установка", "Установка программы " + f.FileName + " завершенно ", FrmError.InformEnum.УстановкаПрограммы);
+                    }
+                    break;
+                case Enums.TypeParam.text:
+                    if (App.GameGlobal.MyServer.FileTextInfo.ContainsKey(f.FileName)) { 
+                    
+                    
+                    }
+                    break;
+                case Enums.TypeParam.dir:
+                    break;
+                case Enums.TypeParam.instructions:
+                    break;
+                default:
+                    break;
+            }
+        }
+
+
         #endregion  
 
     }

@@ -40,6 +40,9 @@
             <TextBlock TextDecorations="Underline" FontSize="16"><Run Text="www.milw0rm.com"/></TextBlock>
         </Label>
         <Label Cursor="Hand"  HorizontalAlignment="Left" Margin="10,0,0,0" Grid.Row="1" VerticalAlignment="Center" Width="32" Foreground="#FF2F10FF" PreviewMouseDown="Переход_Стартовая" FontFamily="Segoe MDL2 Assets" Content="&#xE10F;" FontSize="22" FontWeight="Bold"/>
+        <Label Cursor="Hand"  HorizontalAlignment="Left" Grid.Row="1" VerticalAlignment="Center" Width="147" Foreground="#FF2F10FF" PreviewMouseDown="Переход_Stockcom" Margin="438,0,0,0">
+            <TextBlock TextDecorations="Underline" FontSize="16"><Run Text="Stock.com"/></TextBlock>
+        </Label>
 
 
 

@@ -14,11 +14,15 @@ namespace PH4_WPF.Engine
     public sealed class Virtualization
     {
         private UpgradeStruct ProccesNowUpgadePrv;
+        private string _DefeceString;
 
         /// <summary>
-        /// Текст ошибки
+        /// Текст который появиться при дефейсе сайта <b>Если строка пуста означает что нет дефейса</b> <i>Максимум 50 символов</i> 
         /// </summary>
-        public string MSG_error { get; set; }
+        public string DefeceString { get => _DefeceString;
+            set {
+                _DefeceString = value.Substring(0, Math.Min(value.Length, 50));
+            } }       
         /// <summary>
         /// Список рабочих уровней 
         /// </summary>
@@ -26,11 +30,7 @@ namespace PH4_WPF.Engine
         /// <summary>
         /// Мощность сервера 
         /// </summary>
-        public int MaxPower { get; set; }
-        /// <summary>
-        /// Посещаемость в день
-        /// </summary>
-        public int PeerDay { get; set; }
+        public int MaxPower { get; set; }        
         /// <summary>
         /// Железо на сервере
         /// </summary>
@@ -56,7 +56,7 @@ namespace PH4_WPF.Engine
         /// <summary>
         /// Если в настоящий момент что то улучшаеться то <b> true </b>
         /// </summary>
-        public bool CheckUpgradeNow { get => Instance.Find(x => x.UpdateSoft == true) != null; }
+        public bool CheckUpgradeNow { get => Instance.Find(x => x.UpdateSoft == true) != null; }       
 
         /// <summary>
         /// Запуск обновление софта
@@ -135,7 +135,7 @@ namespace PH4_WPF.Engine
             for (;;){
                 foreach (var item in Instance)
                 {
-                    if (CheckDependencies(item) == false & item.StatusInstance == Enums.StatusInstanceEnum.Working ) {
+                    if (CheckDependencies(item,out string msg_error) == false & item.StatusInstance == Enums.StatusInstanceEnum.Working ) {
                         item.StatusInstance = Enums.StatusInstanceEnum.ErrorCritical;
                         b = false;
                     }
@@ -149,7 +149,7 @@ namespace PH4_WPF.Engine
         /// </summary>
         /// <param name="instance"></param>
         /// <returns>true - работает отлично </returns>
-        public bool CheckDependencies(InstaceClass instance)
+        public bool CheckDependencies(InstaceClass instance, out string msg_error)
         {
             foreach (var str in instance.Dependencies)
             {
@@ -167,16 +167,16 @@ namespace PH4_WPF.Engine
                         }
                         else
                         {
-                            MSG_error = "Зависимости ролей: Служба (" + GetTextName(item.InstaceType) + ") отключена или не работает";
+                            msg_error = "Зависимости ролей: Служба (" + GetTextName(item.InstaceType) + ") отключена или не работает";
                             return false;
                         }
                     }
                 }
-                MSG_error = "Зависимости ролей: Служба (" + GetTextName(str) + ") недоступна или не установлена";
+                msg_error = "Зависимости ролей: Служба (" + GetTextName(str) + ") недоступна или не установлена";
                 return false;
             good:;
             }
-            MSG_error = "";
+            msg_error = "";
             return true;
         }
         /// <summary>
@@ -188,6 +188,7 @@ namespace PH4_WPF.Engine
         {
             Enums.InstaceTypeEnum.FTP =>        new InstaceClass(TypeName, 10, 60, new Enums.InstaceTypeEnum[] { }),
             Enums.InstaceTypeEnum.MySql =>      new InstaceClass(TypeName, 10, 80, new Enums.InstaceTypeEnum[] { }),
+            Enums.InstaceTypeEnum.RigFrame => new InstaceClass(TypeName, 25, 0, new Enums.InstaceTypeEnum[] { }),
             Enums.InstaceTypeEnum.WebForum =>   new InstaceClass(TypeName, 10, 200, new Enums.InstaceTypeEnum[] {
                 Enums.InstaceTypeEnum.MySql,
                 Enums.InstaceTypeEnum.BanerAD,
@@ -217,10 +218,16 @@ namespace PH4_WPF.Engine
             Enums.InstaceTypeEnum.BookingApi =>      new InstaceClass(TypeName, 0, 0, new Enums.InstaceTypeEnum[] { Enums.InstaceTypeEnum.TranceSrv }, true),
             _ =>  null
         };
+        /// <summary>
+        /// Тип InstaceTypeEnum в название переводит
+        /// </summary>
+        /// <param name="TypeName"></param>
+        /// <returns></returns>
         public string GetTextName(Enums.InstaceTypeEnum TypeName) =>
             TypeName switch
             {
                 Enums.InstaceTypeEnum.FTP => "Файловый Сервер FTP",
+                Enums.InstaceTypeEnum.RigFrame => "Обеспечивает сервис по перебору хешей",
                 Enums.InstaceTypeEnum.BanerAD => "Управление, реклама, баннеры",
                 Enums.InstaceTypeEnum.Mail => "Почтовый сервер",
                 Enums.InstaceTypeEnum.MySql => "MySql Сервер",
@@ -245,7 +252,7 @@ namespace PH4_WPF.Engine
         /// Железо на сервере
         /// </summary>
         [Serializable]
-        public class HardwareClass {
+        public sealed class HardwareClass {
             /// <summary>
             /// Всего процессоров
             /// </summary>
@@ -277,7 +284,7 @@ namespace PH4_WPF.Engine
         /// Нужен для объекта роли сервера
         /// </summary>
         [Serializable]
-        public class InstaceClass
+        public sealed class InstaceClass
         {
             private Enums.StatusInstanceEnum StatusInstancePrv = Enums.StatusInstanceEnum.Stopping;           
 

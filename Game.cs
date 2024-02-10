@@ -2,11 +2,12 @@
 using System;
 using System.Collections.Generic;
 using System.Windows;
+using System.Linq;
 
 namespace PH4_WPF
 {
     [Serializable]
-    public class Game
+    public sealed class Game
     {
         private GameSpeedEnum gameSpeed = GameSpeedEnum.Pause;      // Начальный режим времени
         private DateTime stDataGM = new DateTime(2001, 1, 1);       // Начальная дата игры
@@ -103,6 +104,10 @@ namespace PH4_WPF
         /// Открытые ресурсы с которых можно скачать 
         /// </summary>
         public Dictionary<string, FileServerClass> OpenUrl = new Dictionary<string, FileServerClass>();
+        /// <summary>
+        /// Список вирусов работающих в сети 
+        /// </summary>
+        public VirusListClass VirusList = new VirusListClass();
 
         /// <summary>
         /// создает карту серверов
@@ -235,12 +240,11 @@ namespace PH4_WPF
         {
             if (srvA.NameSrv != srvB.NameSrv)
             {
-
                 RouterClass.LineArgumentStruct lineArgument = new RouterClass.LineArgumentStruct(2,
-                    srvA.DrawingHub.GetLocateRec.Y + (App.H_GRIND / 2),
-                                                        srvB.DrawingHub.GetLocateRec.Y + (App.H_GRIND / 2),
-                                                        srvA.DrawingHub.GetLocateRec.X + (App.W_GRIND / 2),
-                                                        srvB.DrawingHub.GetLocateRec.X + (App.W_GRIND / 2));
+                                                        y1:srvA.DrawingHub.GetLocateRec.Y + (App.H_GRIND / 2),
+                                                        y2:srvB.DrawingHub.GetLocateRec.Y + (App.H_GRIND / 2),
+                                                        x1:srvA.DrawingHub.GetLocateRec.X + (App.W_GRIND / 2),
+                                                        x2:srvB.DrawingHub.GetLocateRec.X + (App.W_GRIND / 2));
                 Routers.Add(new RouterClass() { FirstServer = srvA, EndServer = srvB, LineArgument = lineArgument });
                 MainWindow.AddLineRoute(Routers[^1]);
             }
@@ -312,7 +316,7 @@ namespace PH4_WPF
                     if (tv.NameTitle == "Unknown") continue;
                     if (tv.Rationo <= GamerInfo.HiTecLevel) //Тех уровень игрока высокий он обнаружит уязвимость 
                     {
-                        if (VulnerabilitiesList.Find(x => x.NameBug == tv.NameTitle & x.VerB == tv.Rationo) == null)
+                        if (VulnerabilitiesList.Any(x => x.NameBug == tv.NameTitle & x.VerB == tv.Rationo) )
                         {
                             int fg = (App.GameGlobal.GamerInfo.HiTecLevel/10)+1;                         
                             Vulnerabilities vulnerabilities = new Vulnerabilities()
@@ -338,8 +342,11 @@ namespace PH4_WPF
         
         }
 
+        /// <summary>
+        /// Чат в игре
+        /// </summary>
         [Serializable]
-        public class GameChatClass {
+        public sealed class GameChatClass {
             public int IndexChat = 1;
             public GameScen.ScenStruct.ICQ MyChat;
             [NonSerialized] public FrmSoft.FrmICQ ICQ_Win;
@@ -364,7 +371,6 @@ namespace PH4_WPF
                 ICQ_Win.WindowState = WindowState.Minimized;
             }
         }
-
        
         /// <summary>
         /// Игровые режимы времени

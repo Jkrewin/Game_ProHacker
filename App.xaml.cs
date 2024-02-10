@@ -41,7 +41,7 @@ namespace PH4_WPF
         private static bool _CheatCode = false;
         private static bool _DebugMode = false;
         private static bool _SoundDisable = false;
-        private static bool _StartUP = false;
+        private static bool _StartUP = true;
 
         /// <summary>
         /// Использовать режим отладки

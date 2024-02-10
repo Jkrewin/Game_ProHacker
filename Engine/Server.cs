@@ -18,6 +18,7 @@ namespace PH4_WPF.Engine
         /// </summary>
         [field: NonSerialized] public event UpdateFileSystem ChangeFileSys;
 
+        private StatisticInfoClass StatisticInfo = new StatisticInfoClass();
         private TypeOSEnum PrvOS = TypeOSEnum.Unknown;
         private const int MAXPORTS = 10;                                               //масксимально число портов на сервере 
         private System.Drawing.Point _LocateTextura = new System.Drawing.Point(0, 0);  // сохраняет положение на карте 
@@ -248,6 +249,10 @@ namespace PH4_WPF.Engine
         /// Виртуальные сервера
         /// </summary>
         public Virtualization VirtualizationServer;
+        /// <summary>
+        /// Текствые файлы на сервере которые содержат информацию тут находиться <i>(имя файла : текст)</i>
+        /// </summary>
+        public Dictionary<string, string> FileTextInfo = new Dictionary<string, string>();
 
         /// <summary>
         /// Закрывает дыры в безопасности 
@@ -280,10 +285,10 @@ namespace PH4_WPF.Engine
         /// создает логин и пароль или обновляет его 
         /// </summary>
         public void CreateLoginPass() {
-            string[] login = (PH4_WPF.Properties.Resources.login).Split('\n');
-            string[] pass = (PH4_WPF.Properties.Resources.pwd).Split('\n');
+            string[] login = Properties.Resources.login.Split("\r\n");
+            string[] pass = Properties.Resources.pwd.Split("\r\n");
             Random rnd = new Random();
-            LoginAndPass = (login[rnd.Next(0, login.Length - 1)] + ":" + pass[rnd.Next(0, pass.Length - 1)]).Replace (@"\r", "");
+            LoginAndPass = login[rnd.Next(0, login.Length - 1)] + ":" + pass[rnd.Next(0, pass.Length - 1)];
         }
         /// <summary>
         /// Создает файл на сервере
@@ -542,8 +547,9 @@ namespace PH4_WPF.Engine
             GameEvenStruct gameEven = new GameEvenStruct
             {
                 DataStart = App.GameGlobal.DataGM.AddMonths(1),
-                GameEvent = new GameEvenStruct.EventShutdown() { UrlServer = NameSrv }
+                GameEvent = new GameEvenStruct.EventShutdown(  NameSrv )
             };
+            StatisticInfo.UnitsShutdown++;
             App.GameGlobal.AllEventGame.Add(gameEven);
             List<string> TextAnimation = new List<string>
             {
@@ -567,6 +573,24 @@ namespace PH4_WPF.Engine
             // Проверка засветился в логах игрок
             if (LogSaver != 0) {
                 App.GameGlobal.Msg("","в логах", FrmSoft.FrmError.InformEnum.Критическая_ошибка );
+            }
+        }
+        /// <summary>
+        ///  Дефейс сервера
+        /// </summary>
+        /// <param name="lvl">Уровень скрипта дефейса, если ниже то работать не будет дефейс </param>
+        public void Deface(int lvl, string msg) {
+            if (lvl >= StatisticInfo.UnitDefece)
+            {
+                GameEvenStruct gameEven = new GameEvenStruct
+                {
+                    DataStart = App.GameGlobal.DataGM.AddMonths(1),
+                    GameEvent = new GameEvenStruct.RestatService(this)
+                };
+                App.GameGlobal.AllEventGame.Add(gameEven);
+                StatisticInfo.UnitDefece++;
+                App.GameGlobal.GamerInfo.AddExp(85);
+                VirtualizationServer.DefeceString = msg;
             }
         }
         /// <summary>
@@ -632,6 +656,39 @@ namespace PH4_WPF.Engine
             foreach (var item in defaultTypes) VirtualizationServer.Instance.Add(VirtualizationServer.Role_Templates(item));
             
             VirtualizationServer.Hardware = new Virtualization.HardwareClass(VirtualizationServer);
+        }
+        /// <summary>
+        ///  Сумирующий рейтинг всех взломов этого сервера
+        /// </summary>
+        /// <returns></returns>
+        public int RatingSrv() => StatisticInfo.UnitsShutdown + StatisticInfo.UnitDefece;
+        /// <summary>
+        /// Сканирует сервер на наличие данных банка
+        /// </summary>
+        /// <param name="info">Текст сообщения</param>
+        /// <returns>true - завершено успешно</returns>
+        public bool ScanBankInfo(out string info)
+        {
+            if (StatisticInfo.ScannedBank == false & NameSrv != "localhost")
+            {
+                StatisticInfo.ScannedBank = true;
+                var rnd = new Random();
+                if (rnd.Next(0, 4) == 0)
+                {
+                    info = "[УСПЕХ] Удалось найти данные на этом сервер";
+                    return true;
+                }
+                else
+                {
+                    info = "[ПРОВАЛ] Не удалось найти данные на сервере";
+                    return false;
+                }
+            }
+            else
+            {
+                info = "На сервере нет банковской информации";
+                return false;
+            }
         }
 
         #region "Структуры и перечисления"
@@ -723,5 +780,27 @@ namespace PH4_WPF.Engine
             Mainframe = 7
         }
         #endregion
+
+        /// <summary>
+        /// Статистика этого сервера 
+        /// </summary>
+        [Serializable]
+        private sealed class StatisticInfoClass
+        {
+
+            /// <summary>
+            /// Ранее сканнер просканировал на наличие банковских счетов
+            /// </summary>
+            public bool ScannedBank = false;
+            /// <summary>
+            /// Число событий отключений
+            /// </summary>
+            public int UnitsShutdown=0;
+            /// <summary>
+            /// Число дефейсов на сервере
+            /// </summary>
+            public int UnitDefece=0;
+                       
+        }
     }
 }

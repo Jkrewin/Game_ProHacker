@@ -15,11 +15,12 @@
             <RowDefinition Height="72"/>
         </Grid.RowDefinitions>
         <Grid x:Name="Grid_Menu" Visibility="Visible"  Height="365" Width="650" Background="#FF4B566A" Panel.ZIndex="2" HorizontalAlignment="Right" VerticalAlignment="Bottom" Margin="0,0,10,0" MinWidth="650" MinHeight="360">
-            <Button x:Name="Cancel" Content="Cancel" HorizontalAlignment="Center" Height="46" Margin="0,242,0,0" VerticalAlignment="Top" Width="216" Click="ВыходИзПроекта" Background="#FFF10F0F" RenderTransformOrigin="0.5,0.5"></Button>
+            <Button x:Name="Cancel" Content="Cancel" HorizontalAlignment="Center" Height="46" Margin="0,242,0,0" VerticalAlignment="Top" Width="216" Click="ВыходИзПроекта" Background="#FFF10F0F" RenderTransformOrigin="0.5,0.5" FontFamily="Berlin Sans FB Demi"></Button>
             <Button x:Name="Save" Content="Save" HorizontalAlignment="Center" Height="46" Margin="0,80,0,0" VerticalAlignment="Top" Width="216" Click="SaveGame" Background="#FF1BCB70" RenderTransformOrigin="0.5,0.5"></Button>
             <Button x:Name="Load" Content="Load" HorizontalAlignment="Center" Height="46" Margin="0,162,0,0" VerticalAlignment="Top" Width="216" Click="LoadGame" Background="#FFDABD05" RenderTransformOrigin="0.5,0.5"></Button>
             <Button x:Name="NewGame_1" Content="NewGame" HorizontalAlignment="Center" Height="46" Margin="0,10,0,0" VerticalAlignment="Top" Width="216" Click="NewGame" Background="#FF1148C8" RenderTransformOrigin="0.5,0.5"></Button>
             <Button x:Name="Grid_Menu_Hide" Content="***" HorizontalAlignment="Left" Height="46" Margin="586,304,0,0" VerticalAlignment="Top" Width="54" Click="ЗакрытьМенюИгры" Background="#FF4B566A" RenderTransformOrigin="0.5,0.5"></Button>
+            <Button Content="Test" HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top" Width="71" Height="38" Click="ТестоваяКнопка" RenderTransformOrigin="11.02,85.908"/>
         </Grid>
 
         <Canvas x:Name="MyCanvas"  ClipToBounds="True" MouseEnter="ВыходИзПоиска" MouseDown="ЗахватПеремещение" MouseUp="КупсорОтпущен" MouseMove="ПеремещениеКурсор" >
@@ -31,6 +32,7 @@
                     <DropShadowEffect      ShadowDepth="4"      Direction="330"      Color="Yellow"      Opacity="0.5"     BlurRadius="4"/>
                 </TextBlock.Effect>
             </TextBlock>
+            <ListBox x:Name="RingTest" Visibility="Hidden" Height="958" Canvas.Left="773" Canvas.Top="40" Width="660" MouseDoubleClick="ТествоеКольцо" FontSize="10" SelectionChanged="RingTest_SelectionChanged"/>
 
 
         </Canvas>
@@ -120,7 +122,14 @@
             <Button BorderBrush="#FF3F3F3F" BorderThickness="0" Click="ОткрытьИД" Background="{x:Null}"  Width="80"  >
                 <Image Source="/Content/Desktop/bPanel/profile.png" Stretch="Uniform" StretchDirection="Both" />
             </Button>
-
+            <Rectangle Stroke="#FF4B566A" StrokeThickness="0" Width="9"/>
+            <Button x:Name="BrutoforceSoft"  Visibility="Visible"  BorderBrush="#FF3F3F3F" BorderThickness="0" Click="ОткрытьПереборщик"  Width="80" Height="77" Background="{x:Null}" FontFamily="Wingdings 2"  >
+                <Image x:Name="BrutoforceSoftIcon" Source="/Content/soft/Brute.png" Stretch="Uniform" Visibility="Visible"  />
+            </Button>
+            <Rectangle Stroke="#FF4B566A" StrokeThickness="0" Width="9"/>
+            <Button x:Name="IDESoft"  Visibility="Visible"  BorderBrush="#FF3F3F3F" BorderThickness="0" Click="ОткрытьIDE"  Width="80" Height="77" Background="{x:Null}" FontFamily="Wingdings 2"  >
+                <Image x:Name="IDESoftIcon" Source="/Content/soft/Brute.png" Stretch="Uniform" Visibility="Visible"/> </Button>
+           
         </DockPanel>
 
         <Button x:Name="ButtonOption" Content="" BorderThickness="4" HorizontalAlignment="Right" Height="72" Margin="1850,0,0,0" Grid.Row="1" VerticalAlignment="Stretch" Width="70" Background="#FF4B566A" BorderBrush="#FF3F3F3F" FontFamily="Wingdings 2" FontSize="36" Foreground="#FF2C2D2F" FontWeight="Bold" Click="MenuOpen" HorizontalContentAlignment="Center"/>
@@ -147,7 +156,7 @@
             <!-- Сюда ниже не лезь тут список поверх кнопок-->
             <ListBox Visibility="Hidden"  x:Name="LB_FindEl" Background="#FF4B566A" FontSize="14" Foreground="#FF599F84" SelectionChanged="ВыделенниеЭлементаПоиска"/>
             <Button x:Name="AddRouteButton" Content="Создать маршрут" HorizontalAlignment="Center" Height="31" Margin="0,320,0,0" VerticalAlignment="Top" Width="342" Click="СоздатьМаршрут" Background="#FF294376" RenderTransformOrigin="0.5,0.5" Foreground="#FFCDC8C8" BorderBrush="#FF2B2929"/>
-
+            <Button x:Name="SiteButton" Content="Просмотреть Веб Сервис" HorizontalAlignment="Center" Height="31" Margin="0,356,0,0" VerticalAlignment="Top" Width="342" Click="ПереходНаВебСервис" Background="#FF294376" RenderTransformOrigin="0.5,0.5" Foreground="#FFCDC8C8" BorderBrush="#FF2B2929"/>
         </Grid>
 
     </Grid>

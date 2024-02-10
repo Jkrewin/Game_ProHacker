@@ -1,130 +1,114 @@
 ﻿using PH4_WPF.Engine;
 using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
-using System.Windows.Shapes;
 
 namespace PH4_WPF.FrmSoft
 {
 
     public partial class FrmIdUser : Window
     {
-        readonly string[,] DefecerInfo = new string[10,2];
-        readonly string[,] CrackerInfo = new string[10,2];
-        readonly string[,] VirInfo = new string[10,2];
-        readonly string[,] CorderInfo = new string[10,2];
+        readonly SkillInfo[] DefecerInfo;
+        readonly SkillInfo[] CrackerInfo;
+        readonly SkillInfo[] VirInfo;
+        readonly SkillInfo[] CorderInfo;
 
         byte SelectK = 0; 
         const char STARS = '';
         readonly GamerInfoClass GamerInfo;
+
+        readonly struct SkillInfo
+        {
+            public readonly string Title { get; }
+            public readonly string Info { get; }
+            public readonly byte Level { get; }
+
+            public SkillInfo(byte level, string title, string info)
+            {
+                Title = title;
+                Info = info;
+                Level = level;
+            }
+        }
+        
         public FrmIdUser()
         {
             InitializeComponent();
             GamerInfo = App.GameGlobal.GamerInfo;
 
-            DefecerInfo[0, 0] = "НАВЫК: Перезапуск сервера и отключение";
-            DefecerInfo[1, 0] = "НАВЫК: Взлом сайта, сообщить о deface";
-            DefecerInfo[2, 0] = "АКТИВНОСТЬ: Повышает скрытность на сервере";
-            DefecerInfo[3, 0] = "НАВЫК: Возможность создавать маршруты серверов";
-            DefecerInfo[4, 0] = "";
-            DefecerInfo[5, 0] = "";
-            DefecerInfo[6, 0] = "";
-            DefecerInfo[7, 0] = "";
-            DefecerInfo[8, 0] = "";
-            DefecerInfo[9, 0] = "";
+            SkillInfo[] skill;
 
-            DefecerInfo[0, 1] = "Теперь вы знаете, как вырубить сервер, после этого он перезапустить через некоторое время. Вы получите опыт. Сервер после этого повысит свою безопасность. Доступно в статусе сервера.  ";
-            DefecerInfo[1, 1] = "";
-            DefecerInfo[2, 1] = "";
-            DefecerInfo[3, 1] = "";
-            DefecerInfo[4, 1] = "";
-            DefecerInfo[5, 1] = "";
-            DefecerInfo[6, 1] = "";
-            DefecerInfo[7, 1] = "";
-            DefecerInfo[8, 1] = "";
-            DefecerInfo[9, 1] = "";
+            // перевое значение level это значение  SkillDefecer 
+            skill = new SkillInfo[] {
+                new SkillInfo ( 1, "[Н] Перезапуск сервера и отключение", "Теперь вы знаете, как вырубить сервер, после этого он перезапустить через некоторое время. Вы получите опыт. Сервер после этого повысит свою безопасность. Доступно в статусе сервера. "),
+                new SkillInfo ( 2, "[Н] Взлом сайта, сообщить о deface", " "),
+                new SkillInfo ( 4, "[A] Повышает скрытность на сервере", " "),
+                new SkillInfo ( 3, "[Н] Возможность создавать маршруты серверов", " "),
+                new SkillInfo ( 5, "[S] Очистка логов", " "),
+                new SkillInfo ( 6, "Открыть шкалу рейтинга", " "),
+                new SkillInfo ( 7, "Возможность избежать обнаружения", " "),
+                new SkillInfo ( 8, "", " "),
+                new SkillInfo ( 10, "Финальное задание", " "),
+                new SkillInfo ( 9, "Доступ к уязвимостям 0 day", " ")               
+            };
 
-            CrackerInfo[0, 0] = "СОФТ: Brute-force программа";           
-            CrackerInfo[1, 0] = "СОФТ: Очистка логов";
-            CrackerInfo[2, 0] = "Собирать хеш-пароли в сети и серверов";
-            CrackerInfo[3, 0] = "Делать заказы на перебор хешей";
-            CrackerInfo[4, 0] = "Торговля хешами (кодами)";
-            CrackerInfo[5, 0] = "Доступ к криптовалюте";
-            CrackerInfo[6, 0] = "Новая крипта";
-            CrackerInfo[7, 0] = "Взлом ";
-            CrackerInfo[8, 0] = "+";
-            CrackerInfo[9, 0] = "+";
+            DefecerInfo =  skill.OrderBy(x => x.Level ).ToArray();
 
-            CrackerInfo[0, 1] = "Термин brute-force обычно используется в контексте хакерских атак на логины/пароли. Перебор паролей для получение доступа к серверу";
-            CrackerInfo[1, 1] = "Сервера собирают информацию об активности на сервере, очистка логов повысит ваши шансы быть скрытым.";
-            CrackerInfo[2, 1] = "";
-            CrackerInfo[3, 1] = "";
-            CrackerInfo[4, 1] = "";
-            CrackerInfo[5, 1] = "";
-            CrackerInfo[6, 1] = "";
-            CrackerInfo[7, 1] = "";
-            CrackerInfo[8, 1] = "";
-            CrackerInfo[9, 1] = "";
+            skill = new SkillInfo[] {
+                new SkillInfo ( 1, "Собирать хеш-пароли в сети и серверов", "Термин brute-force обычно используется в контексте хакерских атак на логины/пароли. Перебор паролей для получение доступа к серверу"),
+                new SkillInfo ( 2, "Скидка на все программы", "Сервера собирают информацию об активности на сервере, очистка логов повысит ваши шансы быть скрытым."),
+                new SkillInfo ( 3, "Торговля хешами (кодами)", " "),
+                new SkillInfo ( 4, "Делать заказы на перебор хешей", " "),
+                new SkillInfo ( 5, "Доступ к криптовалюте", " "),
+                new SkillInfo ( 6, "Новая крипта", " "),
+                new SkillInfo ( 7, "", " "),
+                new SkillInfo ( 8, "", " "),
+                new SkillInfo ( 9, "Снижает стоимость железа", " "),
+                new SkillInfo ( 10, "Большая скидка на программы", " ")
+            };
 
-            VirInfo[0, 0] = "КОД: Вирус по краже паролей";
-            VirInfo[1, 0] = "КОД: Вирус Зомби";
-            VirInfo[2, 0] = "КОД: Вирус Червя";
-            VirInfo[3, 0] = "КОД: Вирус DDoS";
-            VirInfo[4, 0] = "КОД: Вирус Вымогатель";
-            VirInfo[5, 0] = "КОД: Вирус для *UNIX Зомби";
-            VirInfo[6, 0] = "КОД: Вирус для *UNIX Червя";
-            VirInfo[7, 0] = "КОД: Вирус для *UNIX Вымогатель";
-            VirInfo[8, 0] = "КОД: Глобальный Вирус";
-            VirInfo[9, 0] = "КОД: Вирус кража паролей";
+            CrackerInfo = skill.OrderBy(x => x.Level).ToArray();
 
-            VirInfo[0, 1] = "";
-            VirInfo[1, 1] = "";
-            VirInfo[2, 1] = "";
-            VirInfo[3, 1] = "";
-            VirInfo[4, 1] = "";
-            VirInfo[5, 1] = "";
-            VirInfo[6, 1] = "";
-            VirInfo[7, 1] = "";
-            VirInfo[8, 1] = "";
-            VirInfo[9, 1] = "";
+            skill = new SkillInfo[] {
+                new SkillInfo ( 1, "[C] Тело Вируса для Win систем", " "),
+                new SkillInfo ( 2, "[C] Вирус Зомби", " "),
+                new SkillInfo ( 3, "[C] Вирус Червя", " "),
+                new SkillInfo ( 4, "[C] Тело Вируса для *nix систем", " "),
+                new SkillInfo ( 5, "[C] Вирус Вымогатель", " "),
+                new SkillInfo ( 6, "[C] Вирус для *UNIX Зомби", " "),
+                new SkillInfo ( 7, "[C] Вирус для *UNIX Червя", " "),
+                new SkillInfo ( 8, "[C] Вирус для *UNIX Вымогатель", " "),
+                new SkillInfo ( 9, "[C] Глобальный Вирус", " "),
+                new SkillInfo ( 10, "[C] Вирус кража паролей", " ")
+            };
 
-            CorderInfo[0, 0] = "НАВЫК: Писать код, улучшать программы ";
-            CorderInfo[1, 0] = "";
-            CorderInfo[2, 0] = "";
-            CorderInfo[3, 0] = "";
-            CorderInfo[4, 0] = "";
-            CorderInfo[5, 0] = "";
-            CorderInfo[6, 0] = "";
-            CorderInfo[7, 0] = "";
-            CorderInfo[8, 0] = "";
-            CorderInfo[9, 0] = "";
+            VirInfo = skill.OrderBy(x => x.Level).ToArray();
 
-            CorderInfo[0, 1] = "Вы можете писать программы, это поможет вам обновлять программы дописывая код в Админ Панели.";
-            CorderInfo[1, 1] = "";
-            CorderInfo[2, 1] = "";
-            CorderInfo[3, 1] = "";
-            CorderInfo[4, 1] = "";
-            CorderInfo[5, 1] = "";
-            CorderInfo[6, 1] = "";
-            CorderInfo[7, 1] = "";
-            CorderInfo[8, 1] = "";
-            CorderInfo[9, 1] = "";
+            skill = new SkillInfo[] {
+                new SkillInfo ( 1, "[Н] Писать код, улучшать программы", "Вы можете писать программы, это поможет вам обновлять программы дописывая код в Админ Панели."),
+                new SkillInfo ( 2, "[S] Исходник для поиска данных о банковских счетах", "Помогает искать банковские данные на сервере, скрип доступен в браузере на стартовой странице в разделе Мои Скрипты."),
+                new SkillInfo ( 3, "[S] Улучшает Brute-force", " "),
+                new SkillInfo ( 4, "[S] Улучшает сканер", " "),
+                new SkillInfo ( 5, "[S] Код для поиска важных файлов на сервере", " "),
+                new SkillInfo ( 6, "[Н] Писать код как профи", "Повышает качество кода, увеличивает полезность кода"),
+                new SkillInfo ( 7, "[Н] Ускоряет майнинг крипты", " "),
+                new SkillInfo ( 8, "Падение ваших серверов не влияет на результат", " "),
+                new SkillInfo ( 9, "Ошибки на серверах не случаються", " "),
+                new SkillInfo ( 10, "Продвитуный софт оптимизирует сервере", " ")
+            };
 
+            CorderInfo = skill.OrderBy(x => x.Level).ToArray();
 
         }
 
         private void Загруженно(object sender, RoutedEventArgs e)
         {
             if (System.IO.File.Exists(App.PatchAB + GamerInfo.Ava))
-                ElipsAva.Fill = new ImageBrush() { ImageSource = new BitmapImage(new Uri(App.PatchAB + @"face\" + GamerInfo.Ava)) };
+                ElipsAva.Fill = new ImageBrush() { ImageSource = new BitmapImage(new Uri(App.PatchAB  + GamerInfo.Ava)) };
 
             NickName.Content = GamerInfo.GameName;
             AgeUser.Content = GamerInfo.Age;
@@ -143,6 +127,7 @@ namespace PH4_WPF.FrmSoft
             AddStars(VirStars, GamerInfo.VirLvl);
             AddStars(CrackerStars, GamerInfo.CrackLvl);
 
+            L_MissionInfo.Text = App.GameGlobal.GameScen.ActiveScen.Title;
 
         }
 
@@ -160,7 +145,8 @@ namespace PH4_WPF.FrmSoft
             }
         }
 
-        private void SelectTem(Label sender, string [,] mass, byte lvl) {
+
+        private void SelectTem(Label sender, SkillInfo[] mass, byte lvl) {
 
             L_Coder.Background = null;
             L_Craker.Background = null;
@@ -180,10 +166,10 @@ namespace PH4_WPF.FrmSoft
                     if (lvl >= (i+1)) b = Brushes.GreenYellow;
                     Label label = new Label()
                     {
-                        Content = mass[i, 0],
+                        Content = mass[i].Title,
                         Padding = new Thickness(5, 0, 5, 0),
                         Background = b,
-                        Tag = mass[i, 1],
+                        Tag = mass[i].Info,
                         Width = 385
                     };
                     LB_Info.Items.Add(label);
@@ -291,6 +277,7 @@ namespace PH4_WPF.FrmSoft
                 default:
                     break;
             }
+
             Label_point.Content = GamerInfo.ExtraPoint;
             if (GamerInfo.ExtraPoint == 0) ButtonUPLvl.Visibility = Visibility.Hidden;
         }
