@@ -1,23 +1,19 @@
 ﻿using PH4_WPF.Engine;
 using System;
 using System.Collections.Generic;
-using System.Text;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Effects;
 using System.Windows.Media.Imaging;
-using System.Windows.Shapes;
 using System.Windows.Threading;
 
 namespace PH4_WPF.FrmSoft
 {    
     public partial class PortScaner : Window
     {
-        private readonly DispatcherTimer DisTimer = new System.Windows.Threading.DispatcherTimer();
+        private readonly DispatcherTimer DisTimer = new DispatcherTimer();
         private readonly BitmapImage Img1Port;
         private readonly BitmapImage Img2Port;
         private readonly BitmapImage ImgAlert;
@@ -27,7 +23,8 @@ namespace PH4_WPF.FrmSoft
         private Button LastButton;
         private int PossPort=0;
         private Server SelectServer;
-        
+        private bool chImg;
+        private Vulnerabilities SelVulnerabilities;
 
         public PortScaner()
         {
@@ -43,7 +40,7 @@ namespace PH4_WPF.FrmSoft
             Msg_UI.Visibility = Visibility.Hidden;
         }
 
-        public void CreateUnitPort() {
+        private void CreateUnitPort() {
             var bc = new BrushConverter();
 
             Border border = new Border()
@@ -134,7 +131,18 @@ namespace PH4_WPF.FrmSoft
             MapGm.Children.Add (grid);
         }
 
-        Vulnerabilities SelVulnerabilities;
+        private Vulnerabilities FindVulnerabilities(string txt)
+        {
+            foreach (var item in App.GameGlobal.VulnerabilitiesList)
+            {
+                if (item.CName == txt)
+                {
+                    return item;
+                }
+            }
+            return null;
+        }
+
         private void ClickBugButton(object sender, RoutedEventArgs e)
         {
             SelVulnerabilities = ((Button)sender).Tag as Engine.Vulnerabilities;
@@ -167,9 +175,7 @@ namespace PH4_WPF.FrmSoft
                     break;
             }
 
-        }
-
-        bool chImg;
+        }        
         private void DispatcherTimer_Tick(object sender, EventArgs e)
         {
             if (LastProgressBar.Value >= LastProgressBar.Maximum)
@@ -202,25 +208,10 @@ namespace PH4_WPF.FrmSoft
             chImg = !chImg;
             LastImage.Source = chImg ? Img1Port : Img2Port;
             LastProgressBar.Value++;
-        }
-
-        private Vulnerabilities FindVulnerabilities(string txt) {
-            foreach (var item in App.GameGlobal.VulnerabilitiesList )
-            {
-                if (item.CName == txt) {
-                    return item;
-                }
-            }
-            return null;
-        }
-
-        private void ФормаЗакрыта(object sender, EventArgs e)
-        {
-            App.GameGlobal.ActiveApp.Remove(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType.FullName);
-        }
-
+        }       
+        private void ФормаЗакрыта(object sender, EventArgs e)=> App.GameGlobal.ActiveApp.Remove(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType.FullName);
         private void НачатьПоиск(object sender, RoutedEventArgs e)
-        {
+        {           
             SelectServer = App.GameGlobal.FindServer(Search.Text);
             if (SelectServer == null)
             {
@@ -232,19 +223,25 @@ namespace PH4_WPF.FrmSoft
                 return;
             }
 
-            if (App.GameGlobal.GamerInfo.HiTecLevel >= SelectServer.PopularSRV) L_ИнформацияОбОС.Content = "На сервере вероятно " + SelectServer.OSName;
-            else L_ИнформацияОбОС.Content = "Не удалось определить ОС ";
+            if (App.GameGlobal.GamerInfo.Defecer(Enums.SkillDefecer.УскоренныйПоиск))
+            {
+                DisTimer.Interval = TimeSpan.FromMilliseconds(100);
+                L_ИнформацияОбОС.Content = "На сервере вероятно " + SelectServer.OSName;
+            }
+            else
+            {
+                if (App.GameGlobal.GamerInfo.HiTecLevel >= SelectServer.PopularSRV) L_ИнформацияОбОС.Content = "На сервере вероятно " + SelectServer.OSName;
+                else L_ИнформацияОбОС.Content = "Не удалось определить ОС ";
+            }
 
             UIerrorTab.Visibility = Visibility.Hidden;
             PossPort = 0;
             CreateUnitPort();
         }
-
         private void ВыделениеКнопки(object sender, MouseEventArgs e)
         {
 
         }
-
         private void КурсорНадЗакрыть(object sender, MouseEventArgs e)
         {
             DropShadowEffect dropShadow = new DropShadowEffect()
@@ -255,19 +252,14 @@ namespace PH4_WPF.FrmSoft
                 BlurRadius = 20
             };
             ((Image)sender).Effect = dropShadow;
-
         }
-
         private void КурсорУшелЗакрыто(object sender, MouseEventArgs e)
         {
             ((Image)sender).Effect = null;
         }
-
-        private void НажатьЗакрыть(object sender, MouseButtonEventArgs e)
-        {
+        private void НажатьЗакрыть(object sender, MouseButtonEventArgs e)        {
             if (e.LeftButton == MouseButtonState.Pressed ) this.Close();
         }
-
         private void КурсорНадСвернуть(object sender, MouseEventArgs e)
         {
             DropShadowEffect dropShadow = new DropShadowEffect()
@@ -279,37 +271,26 @@ namespace PH4_WPF.FrmSoft
             }; 
             ((Image)sender).Effect = dropShadow;
         }
-
         private void КурсорУшелСвернуть(object sender, MouseEventArgs e)
         {
             ((Image)sender).Effect = null; 
         }
-
-        private void КурсорНажатСвернуть(object sender, MouseButtonEventArgs e)
-        {
+        private void КурсорНажатСвернуть(object sender, MouseButtonEventArgs e)        {
             if (e.LeftButton == MouseButtonState.Pressed) { }
         }
-
         private void НажатиеПеретаскивание(object sender, MouseButtonEventArgs e)
         {
             if (e.LeftButton == MouseButtonState.Pressed) DragMove();
         }
-
         private void КнопкаЕнтер(object sender, KeyEventArgs e)
         {
             if (e.Key == Key.Enter) НачатьПоиск(null, null);
         }
-
-        private void ЗакрытьОкно(object sender, RoutedEventArgs e)
-        {
-            Msg_UI.Visibility = Visibility.Hidden;
-        }
-
+        private void ЗакрытьОкно(object sender, RoutedEventArgs e) => Msg_UI.Visibility = Visibility.Hidden;
         private void СвернутьОкно(object sender, MouseButtonEventArgs e)
         {
             if (e.LeftButton == MouseButtonState.Pressed) this.WindowState = WindowState.Minimized;
         }
-
         private void СкачатьОписание(object sender, RoutedEventArgs e)
         {
             Browser.FrmBrowser frm = new Browser.FrmBrowser();
@@ -319,7 +300,6 @@ namespace PH4_WPF.FrmSoft
             frm.FrameBrouser.Navigate(page);
             page.Refreh_News(new List<Vulnerabilities>() { SelVulnerabilities });
         }
-
         private void СкачатьСплойт(object sender, RoutedEventArgs e)
         {
             Browser.FrmBrowser frm = new Browser.FrmBrowser();

@@ -129,7 +129,7 @@ namespace PH4_WPF.FrmSoft
         }       
         private void ОткрытьПрикрКомманду(object sender, RoutedEventArgs e)
         {
-            if (AttachMail.CommandList  is Engine.GameEvenStruct.GetMoney t)
+            if (AttachMail.CommandList  is Engine.GameEvenClass.GetMoney t)
             {
                 string txt = "";
                 if (t.CheckLogik(ref txt) == false)

@@ -17,6 +17,7 @@
                 <Label x:Name="L_Type" Content="L_Type" HorizontalAlignment="Left" Height="32" Margin="235,40,0,0" VerticalAlignment="Top" Width="226" FontSize="14" FontFamily="Arial"/>
                 <Label Content="Цена программы:" HorizontalAlignment="Left" Height="28" Margin="10,71,0,0" VerticalAlignment="Top" Width="231" FontFamily="Arial" Foreground="#FF261A1A" FontWeight="Bold" FontSize="14"/>
                 <Label x:Name="L_Price" Content="L_Price" HorizontalAlignment="Left" Height="32" Margin="235,70,0,0" VerticalAlignment="Top" Width="226" FontSize="14" FontFamily="Arial"/>
+                <Label x:Name="L_Sale" Content="L_Sale" HorizontalAlignment="Left" Height="32" Margin="361,71,0,0" VerticalAlignment="Top" Width="88" FontSize="14" FontFamily="Arial" Foreground="#FFD11515" FontWeight="Bold"/>
                 <Rectangle HorizontalAlignment="Left" Height="254" VerticalAlignment="Center" Width="8" Fill="#FFA525B6"/>
                 <Rectangle HorizontalAlignment="Left" Height="254" VerticalAlignment="Center" Width="8" Fill="#FFA525B6" Margin="454,0,0,0"/>
                 <Label Content=" У вас должен быть создан банковский счет и указан этот счет &#10; по умолчанию. Для бесплатных программ  можно&#10; сразу скачивать, без счета  " HorizontalAlignment="Center" Height="82" Margin="0,107,0,0" VerticalAlignment="Top" Width="436" FontSize="14"/>

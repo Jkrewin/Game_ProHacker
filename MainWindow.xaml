@@ -14,13 +14,14 @@
             <RowDefinition/>
             <RowDefinition Height="72"/>
         </Grid.RowDefinitions>
+        <Image VerticalAlignment="Top"  Source="/Content/bird.png" Stretch="UniformToFill" StretchDirection="Both" Height="Auto" Grid.RowSpan="2"/>
         <Grid x:Name="Grid_Menu" Visibility="Visible"  Height="365" Width="650" Background="#FF4B566A" Panel.ZIndex="2" HorizontalAlignment="Right" VerticalAlignment="Bottom" Margin="0,0,10,0" MinWidth="650" MinHeight="360">
             <Button x:Name="Cancel" Content="Cancel" HorizontalAlignment="Center" Height="46" Margin="0,242,0,0" VerticalAlignment="Top" Width="216" Click="ВыходИзПроекта" Background="#FFF10F0F" RenderTransformOrigin="0.5,0.5" FontFamily="Berlin Sans FB Demi"></Button>
             <Button x:Name="Save" Content="Save" HorizontalAlignment="Center" Height="46" Margin="0,80,0,0" VerticalAlignment="Top" Width="216" Click="SaveGame" Background="#FF1BCB70" RenderTransformOrigin="0.5,0.5"></Button>
             <Button x:Name="Load" Content="Load" HorizontalAlignment="Center" Height="46" Margin="0,162,0,0" VerticalAlignment="Top" Width="216" Click="LoadGame" Background="#FFDABD05" RenderTransformOrigin="0.5,0.5"></Button>
             <Button x:Name="NewGame_1" Content="NewGame" HorizontalAlignment="Center" Height="46" Margin="0,10,0,0" VerticalAlignment="Top" Width="216" Click="NewGame" Background="#FF1148C8" RenderTransformOrigin="0.5,0.5"></Button>
             <Button x:Name="Grid_Menu_Hide" Content="***" HorizontalAlignment="Left" Height="46" Margin="586,304,0,0" VerticalAlignment="Top" Width="54" Click="ЗакрытьМенюИгры" Background="#FF4B566A" RenderTransformOrigin="0.5,0.5"></Button>
-            <Button Content="Test" HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top" Width="71" Height="38" Click="ТестоваяКнопка" RenderTransformOrigin="11.02,85.908"/>
+
         </Grid>
 
         <Canvas x:Name="MyCanvas"  ClipToBounds="True" MouseEnter="ВыходИзПоиска" MouseDown="ЗахватПеремещение" MouseUp="КупсорОтпущен" MouseMove="ПеремещениеКурсор" >
@@ -97,9 +98,9 @@
                 <Label x:Name="DateGameIndicator" Content="01.01.2001" Width="108" FontSize="18" FontWeight="Bold" ScrollViewer.VerticalScrollBarVisibility="Disabled" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" Foreground="#FF323438" Margin="207,0,0,0"/>
 
             </Grid>
-            <Button  Width="80" BorderBrush="#FF3F3F3F" BorderThickness="0" Click="Открыть_консоль" Height="79" Background="{x:Null}"  >
-                <Image Source="/Content/CmdImg/console.png" Stretch="None"/>
-            </Button>
+            <Button BorderBrush="#FF3F3F3F" BorderThickness="0" Click="ОткрытьИД" Background="{x:Null}"  Width="80"  >
+                <Image Source="/Content/Desktop/bPanel/profile.png" Stretch="Uniform" StretchDirection="Both" />
+            </Button>            
             <Rectangle Stroke="#FF4B566A" Width="9" StrokeThickness="0"/>
             <Button BorderBrush="#FF3F3F3F" BorderThickness="0" Width="80" Height="78" Click="ОткрытьФайло" Background="{x:Null}"  >
 
@@ -107,8 +108,9 @@
 
             </Button>
             <Rectangle Stroke="#FF4B566A" StrokeThickness="0" Width="9"/>
-            <Button x:Name="PortScanerIcon1"  Visibility="Visible"  BorderBrush="#FF3F3F3F" BorderThickness="0" Click="ОткрытьСканер"  Width="80" Height="77" Background="{x:Null}" FontFamily="Wingdings 2"  >
-                <Image x:Name="PortScanerIcon" Source="/Content/soft/scaner_server/ScanerG1.png" Stretch="Uniform" Visibility="Visible"  />
+            <!--3-->
+            <Button  Width="80" BorderBrush="#FF3F3F3F" BorderThickness="0" Click="Открыть_консоль" Height="79" Background="{x:Null}"  >
+                <Image Source="/Content/CmdImg/console.png" Stretch="None"/>
             </Button>
             <Rectangle Stroke="#FF4B566A" StrokeThickness="0" Width="9"/>
             <Button BorderBrush="#FF3F3F3F" BorderThickness="0" Click="ОткрытьБраузер" Background="{x:Null}"  Width="80"  >
@@ -119,21 +121,24 @@
                 <Image x:Name="MessageIcon" Source="/Content/soft/IQ.png" Stretch="Uniform" StretchDirection="Both" Opacity="0.5" />
             </Button>
             <Rectangle Stroke="#FF4B566A" StrokeThickness="0" Width="9"/>
-            <Button BorderBrush="#FF3F3F3F" BorderThickness="0" Click="ОткрытьИД" Background="{x:Null}"  Width="80"  >
-                <Image Source="/Content/Desktop/bPanel/profile.png" Stretch="Uniform" StretchDirection="Both" />
+            <!--2-->
+            <Button x:Name="PortScanerIcon1"  Visibility="Visible"  BorderBrush="#FF3F3F3F" BorderThickness="0" Click="ОткрытьСканер"  Width="80" Height="77" Background="{x:Null}" FontFamily="Wingdings 2"  >
+                <Image x:Name="PortScanerIcon" Source="/Content/soft/scaner_server/ScanerG1.png" Stretch="Uniform" Visibility="Visible"  />
             </Button>
+            
             <Rectangle Stroke="#FF4B566A" StrokeThickness="0" Width="9"/>
             <Button x:Name="BrutoforceSoft"  Visibility="Visible"  BorderBrush="#FF3F3F3F" BorderThickness="0" Click="ОткрытьПереборщик"  Width="80" Height="77" Background="{x:Null}" FontFamily="Wingdings 2"  >
                 <Image x:Name="BrutoforceSoftIcon" Source="/Content/soft/Brute.png" Stretch="Uniform" Visibility="Visible"  />
             </Button>
             <Rectangle Stroke="#FF4B566A" StrokeThickness="0" Width="9"/>
             <Button x:Name="IDESoft"  Visibility="Visible"  BorderBrush="#FF3F3F3F" BorderThickness="0" Click="ОткрытьIDE"  Width="80" Height="77" Background="{x:Null}" FontFamily="Wingdings 2"  >
-                <Image x:Name="IDESoftIcon" Source="/Content/soft/Brute.png" Stretch="Uniform" Visibility="Visible"/> </Button>
-           
+                <Image x:Name="IDESoftIcon" Source="/Content/soft/Brute.png" Stretch="Uniform" Visibility="Visible"/>
+            </Button>
+
         </DockPanel>
 
         <Button x:Name="ButtonOption" Content="" BorderThickness="4" HorizontalAlignment="Right" Height="72" Margin="1850,0,0,0" Grid.Row="1" VerticalAlignment="Stretch" Width="70" Background="#FF4B566A" BorderBrush="#FF3F3F3F" FontFamily="Wingdings 2" FontSize="36" Foreground="#FF2C2D2F" FontWeight="Bold" Click="MenuOpen" HorizontalContentAlignment="Center"/>
-        <Grid Background="#FF4B566A" Height="45" VerticalAlignment="Top" HorizontalAlignment="Right" Width="374">
+        <Grid x:Name="G_FindElement" Background="#FF4B566A" Height="45" VerticalAlignment="Top" HorizontalAlignment="Right" Width="374">
             <TextBox x:Name="T_Search" HorizontalAlignment="Left" Margin="19,0,0,0" TextWrapping="Wrap" VerticalAlignment="Center" Width="296" FontSize="16" Height="27" Background="#FF4B566A" Foreground="#FFCDC8C8" TextChanged="ПоисковаяСтрока" KeyDown="ПоискЭлементаНачало">
                 <TextBox.ContextMenu>
                     <ContextMenu Visibility="Collapsed">
@@ -143,7 +148,7 @@
             <Button Content="&#xE11A;" HorizontalAlignment="Left" Height="25" Margin="320,0,0,0" VerticalAlignment="Center" Width="31" Background="#FF4B566A" BorderBrush="#FFABADB3" FontFamily="Segoe MDL2 Assets" FontSize="18" Foreground="#FFBFB6B6" Click="НачатьПоискСервера"/>
         </Grid>
         <Grid x:Name="G_BackPanel" Background="#FF4B566A" Height="433" VerticalAlignment="Top" HorizontalAlignment="Right" Width="374" Margin="0,45,0,0">
-
+            <ListBox Visibility="Hidden"  x:Name="LB_FindEl" Background="#FF4B566A" FontSize="14" Foreground="#FF599F84" SelectionChanged="ВыделенниеЭлементаПоиска"/>
             <Label x:Name="L_Status" Content="Активный" HorizontalAlignment="Center" Margin="0,31,0,0" VerticalAlignment="Top" FontSize="16" Width="374" VerticalContentAlignment="Center" HorizontalContentAlignment="Center" Background="LawnGreen" Foreground="#FF4B566A" BorderBrush="#FF382A2A" FontWeight="Bold"/>
             <Label x:Name="L_SrvName" Content="" HorizontalAlignment="Left" Margin="119,64,0,0" VerticalAlignment="Top" Foreground="#FFCDC8C8" FontSize="14" Width="245"/>
             <Label Content="Сервер" HorizontalAlignment="Left" Margin="7,63,0,0" VerticalAlignment="Top" Foreground="#FFCDC8C8" FontSize="14" Width="122" FontWeight="Bold"/>
@@ -153,11 +158,10 @@
             <TextBlock x:Name="L_StatusLine" TextWrapping="WrapWithOverflow" Text="У вас нет доступа к этому серверу, сервер не был взломан." HorizontalAlignment="Center" VerticalAlignment="Center" Width="341" Height="79" FontSize="14" FontWeight="Normal" Foreground="#FFEFF476" TextAlignment="Center"/>
             <Button x:Name="ShutdownServer" Content="Перезапуск сервера" HorizontalAlignment="Center" Height="31" Margin="0,248,0,0" VerticalAlignment="Top" Width="342" Click="Перезапустить_сервер" Background="#FF3F4B62" RenderTransformOrigin="0.5,0.5" Foreground="#FFCDC8C8" BorderBrush="#FF2B2929"/>
             <Button x:Name="AdminPanel" Content="Панель Администратора" HorizontalAlignment="Center" Height="31" Margin="0,284,0,0" VerticalAlignment="Top" Width="342" Click="ОткрАдминПанел" Background="#FF623C38" RenderTransformOrigin="0.5,0.5" Foreground="White" BorderBrush="#FF0E1E34" FontSize="14"/>
-            <!-- Сюда ниже не лезь тут список поверх кнопок-->
-            <ListBox Visibility="Hidden"  x:Name="LB_FindEl" Background="#FF4B566A" FontSize="14" Foreground="#FF599F84" SelectionChanged="ВыделенниеЭлементаПоиска"/>
             <Button x:Name="AddRouteButton" Content="Создать маршрут" HorizontalAlignment="Center" Height="31" Margin="0,320,0,0" VerticalAlignment="Top" Width="342" Click="СоздатьМаршрут" Background="#FF294376" RenderTransformOrigin="0.5,0.5" Foreground="#FFCDC8C8" BorderBrush="#FF2B2929"/>
             <Button x:Name="SiteButton" Content="Просмотреть Веб Сервис" HorizontalAlignment="Center" Height="31" Margin="0,356,0,0" VerticalAlignment="Top" Width="342" Click="ПереходНаВебСервис" Background="#FF294376" RenderTransformOrigin="0.5,0.5" Foreground="#FFCDC8C8" BorderBrush="#FF2B2929"/>
         </Grid>
 
+        <Button Content="Test" HorizontalAlignment="Left" Margin="1733,0,0,0" VerticalAlignment="Center" Width="71" Height="38" Click="ТестоваяКнопка" RenderTransformOrigin="11.02,85.908" Grid.Row="1"/>
     </Grid>
 </Window>

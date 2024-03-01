@@ -41,7 +41,7 @@ namespace PH4_WPF
         /// <summary>
         /// Cписок всех заплаинированых событий в игре
         /// </summary>
-        public List<GameEvenStruct> AllEventGame = new List<GameEvenStruct>();
+        public List<GameEvenClass> AllEventGame = new List<GameEvenClass>();
         /// <summary>
         /// Список уязвимостей доступных в игре 
         /// </summary>
@@ -272,43 +272,43 @@ namespace PH4_WPF
             GameScen.ActiveScen.EventIntroduce(condition, StringElemen);
         }
 
-
         /// <summary>
         /// Находит уязвимости для серверов по портам, создает инструкции 
         /// </summary>
-        public void Instructions_V() {  
-            string[] aa = new string[31];
-            aa[0] = "SuperMace";
-            aa[1] = "Avico";
-            aa[2] = "Selica";
-            aa[3] = "GaudSys";
-            aa[4] = "Evo";
-            aa[5] = "Rec";
-            aa[6] = "TVB";
-            aa[7] = "GF";
-            aa[8] = "IMMP";
-            aa[9] = "Forces";
-            aa[10] = "Bloker";
-            aa[11] = "Infin";
-            aa[12] = "Tema";
-            aa[13] = "Werty";
-            aa[14] = "Raizor";
-            aa[15] = "Taiman";
-            aa[16] = "Ui";
-            aa[17] = "R";
-            aa[18] = "Fixer";
-            aa[19] = "mWMR";
-            aa[20] = "DEF";
-            aa[21] = "AKT";
-            aa[22] = "Lev";
-            aa[23] = "Soft";
-            aa[24] = "SoftS";
-            aa[25] = "11xc";
-            aa[26] = "Rextor";
-            aa[27] = "Admin";
-            aa[28] = "Sys";
-            aa[29] = "Trabbt";
-            aa[30] = "Suspetch";
+        public void Instructions_V() {
+            string[] aa = new string[] {
+             "SuperMace",
+             "Avico",
+             "Selica",
+             "GaudSys",
+             "Evo",
+             "Rec",
+             "TVB",
+             "GF",
+             "IMMP",
+             "Forces",
+             "Bloker",
+             "Infin",
+             "Tema",
+             "Werty",
+             "Raizor",
+             "Taiman",
+             "Ui",
+             "R",
+             "Fixer",
+             "mWMR",
+             "DEF",
+             "AKT",
+             "Lev",
+             "Soft",
+             "SoftS",
+             "11xc",
+             "Rextor",
+             "Admin",
+             "Sys",
+             "Trabbt",
+             "Suspetch"};
+
             var rand = new Random();
             foreach (var item in Servers )
             {
@@ -316,7 +316,7 @@ namespace PH4_WPF
                     if (tv.NameTitle == "Unknown") continue;
                     if (tv.Rationo <= GamerInfo.HiTecLevel) //Тех уровень игрока высокий он обнаружит уязвимость 
                     {
-                        if (VulnerabilitiesList.Any(x => x.NameBug == tv.NameTitle & x.VerB == tv.Rationo) )
+                        if (VulnerabilitiesList.Any(x => x.NameBug == tv.NameTitle & x.VerB == tv.Rationo) ==false )
                         {
                             int fg = (App.GameGlobal.GamerInfo.HiTecLevel/10)+1;                         
                             Vulnerabilities vulnerabilities = new Vulnerabilities()
@@ -331,8 +331,8 @@ namespace PH4_WPF
                             };
                             //случайно создает эксплойт 
                             int pp = rand.Next(0, fg);
-                            if (pp == 1) { vulnerabilities.Exploid = true; }
-                            else if (pp == 2) { vulnerabilities.Shareware = false; }
+                            if (pp == 1)  vulnerabilities.Exploid = true; 
+                            else if (pp == 2)  vulnerabilities.Shareware = false; 
 
                             VulnerabilitiesList.Add(vulnerabilities);
                         }

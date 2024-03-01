@@ -65,7 +65,7 @@ namespace PH4_WPF.Engine
             public Enums.TypeParam TypeInformation = Enums.TypeParam.file;
             public int IntParam = 0;
             public byte ByteParam = 0;
-            public GameEvenStruct.IEventGame EventGame;
+            public GameEvenClass.IEventGame EventGame;
 
         }
 
@@ -113,7 +113,11 @@ namespace PH4_WPF.Engine
         /// <param name="patch">Путь к файлу</param>
         /// <param name="srv">Сервер</param>
         /// <returns></returns>
-        public static FileServerClass GetFile(string patch, Server srv) => EnFileSys(srv.FileSys, patch.Split('/'));
+        public static FileServerClass GetFile(string patch, Server srv)
+        {
+            string[] vs = patch.Split('/');
+            return EnFileSys(srv.FileSys, vs);
+        }
         /// <summary>
         /// Существует ли эта директория
         /// </summary>
@@ -158,7 +162,7 @@ namespace PH4_WPF.Engine
                 {
                     if (item.FileName == nameDotperfix)
                     {
-                        return true;
+                        return !item.hasDel;
                     }
                 }
             }
@@ -198,15 +202,16 @@ namespace PH4_WPF.Engine
         public static bool CheckAccess(string patch, Server srv)
         {
             var tv = GetFile(patch, srv);
+            if (tv == null) return false;
             int pr = 1;
-            if (srv.Premision == Server.PremissionServerEnum.FullControl) { pr = 3; }
-            else if (srv.Premision == Server.PremissionServerEnum.UserControl)            { pr = 2; }
-            else if (srv.Premision == Server.PremissionServerEnum.GuestControl) { pr = 1; }
+            if (srv.Premision == Server.PremissionServerEnum.FullControl)  pr = 3; 
+            else if (srv.Premision == Server.PremissionServerEnum.UserControl)  pr = 2; 
+            else if (srv.Premision == Server.PremissionServerEnum.GuestControl)  pr = 1; 
 
             int fl = 0;
-            if (tv.Rights == PremisionEnum.OnlyAdmin) { fl = 3; }
-            else if (tv.Rights == PremisionEnum.AdminAndUser) { fl = 2; }
-            else if (tv.Rights == PremisionEnum.AdminUserGuest) { fl = 1; }
+            if (tv.Rights == PremisionEnum.OnlyAdmin)  fl = 3; 
+            else if (tv.Rights == PremisionEnum.AdminAndUser)  fl = 2; 
+            else if (tv.Rights == PremisionEnum.AdminUserGuest)  fl = 1; 
             
             return pr >= fl;
         }

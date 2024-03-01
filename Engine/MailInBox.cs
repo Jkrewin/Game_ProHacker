@@ -26,7 +26,7 @@ namespace PH4_WPF.Engine
         /// <summary>
         /// Комманды действия совершаемые этим письмом
         /// </summary>
-        public Engine.GameEvenStruct.IEventGame  CommandList { get; set; }
+        public Engine.GameEvenClass.IEventGame  CommandList { get; set; }
         /// <summary>
         /// Прочитано или нет 
         /// </summary>
@@ -40,7 +40,7 @@ namespace PH4_WPF.Engine
         /// <summary>
         /// Создает почтовое сообщение с учетом оповещения
         /// </summary>
-        public static void NewMail(string mailto, string title, string bodytext, Engine.GameEvenStruct.IEventGame command)
+        public static void NewMail(string mailto, string title, string bodytext, Engine.GameEvenClass.IEventGame command)
         {
             ref var ls = ref App.GameGlobal.Servers[0].Mails;
             if (ls == null) ls = new List<MailInBox>();

@@ -201,6 +201,8 @@ namespace PH4_WPF
             App.GameGlobal.MainWindow.Show();
             App.GameGlobal.MainWindow.NewGame();
             App.GameGlobal.GamerInfo = gamer;
+            App.GameGlobal.MainWindow.MyCanvas.Visibility = Visibility.Hidden;
+            App.GameGlobal.MainWindow.G_FindElement.Visibility = Visibility.Hidden;
             this.Hide();
 
         }

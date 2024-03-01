@@ -33,7 +33,7 @@ namespace PH4_WPF.Browser
         }
 
         public void StartDownload(string fileName, FileServerClass.ParameterClass exe, int size, string perfix) {
-            bool b = FileServerClass.Exist("/user/Hpro4/Download/", fileName, perfix , App.GameGlobal .MyServer );
+            bool b = FileServerClass.Exist(FrmSoft.FrmFile.PatchEnviron.Download, fileName, perfix , App.GameGlobal .MyServer );
 
             if (b) {
                 FrmSoft.FrmError msg = new FrmSoft.FrmError(Title, "Этот файл был скачен ранее", FrmSoft.FrmError.InformEnum.УстановкаПрограммы );
@@ -57,7 +57,7 @@ namespace PH4_WPF.Browser
             ProgressDownload.Value++;
             if (ProgressDownload.Value == ProgressDownload.Maximum)
             {
-                App.GameGlobal.MyServer.CreateFiles("/user/Hpro4/Download/", DownloadFl.FileName, DownloadFl.FileСontents, (int)DownloadFl.Size, FileServerClass.PremisionEnum.AdminUserGuest,  false, false);
+                App.GameGlobal.MyServer.CreateFiles(FrmSoft.FrmFile.PatchEnviron.Download, DownloadFl.FileName, DownloadFl.FileСontents, (int)DownloadFl.Size, FileServerClass.PremisionEnum.AdminUserGuest,  false, false);
                 PanelDownload.Visibility = Visibility.Hidden;
                 DownloadFile.Stop ();
             }

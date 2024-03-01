@@ -96,6 +96,13 @@
 		<Info>Компилирует и создает исполнительный файл под систему. Пробел следует заменить на %20</Info>
 		<Menu>3</Menu>
 	</XmlInfoCommand>
+	<XmlInfoCommand NameCommand="run">
+		<Comment>
+			<string>;[путь%20к%20exe]</string>
+		</Comment>
+		<Info>Запускает файл на системе *win</Info>
+		<Menu>3</Menu>
+	</XmlInfoCommand>
 	<XmlInfoCommand NameCommand="copy">
 		<Comment>
 			<string>;[файл для копированя] [место куда скопировать]</string>			

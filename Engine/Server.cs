@@ -218,7 +218,13 @@ namespace PH4_WPF.Engine
                 }
                 return Allports;
             }
-            set => Allports = value;
+            set
+            {
+                Allports = value;
+                while (Allports.Count > MAXPORTS) { 
+                    Allports.RemoveAt(0);
+                }
+            }
         }
         /// <summary>
         /// Файлы на сервере
@@ -237,7 +243,7 @@ namespace PH4_WPF.Engine
         /// </summary>
         public List<MailInBox> Mails = new List<MailInBox>();
         /// <summary>
-        /// Логин и пароль для доступа к серверу
+        /// Логин и пароль для доступа к серверу <i>Разделитель :</i>
         /// </summary>
         public string LoginAndPass = "";
         /// <summary>
@@ -379,7 +385,7 @@ namespace PH4_WPF.Engine
         /// <summary>
         /// Создание для файлов авто генерации
         /// </summary>        
-        public void CreateFiles(string patch, string nameFile, string comment, int size, Engine.FileServerClass.PremisionEnum rights,  bool systemFile = false, bool createDirAuto = true)
+        public void CreateFiles(string patch, string nameFile, string comment, int size, FileServerClass.PremisionEnum rights,  bool systemFile = false, bool createDirAuto = true)
         {
             CreateFiles(patch, nameFile, new FileServerClass.ParameterClass()
             {
@@ -394,7 +400,7 @@ namespace PH4_WPF.Engine
         /// <param name="dirName"></param>
         /// <param name="rights"></param>
         /// <param name="systemFile"></param>
-        public void CreateDir(string patch, string dirName, Engine.FileServerClass.PremisionEnum rights, bool systemFile = false)
+        public void CreateDir(string patch, string dirName, FileServerClass.PremisionEnum rights, bool systemFile = false)
         {
             string[] p = patch.Split('/');
             Engine.FileServerClass dir = FileSys;
@@ -528,9 +534,9 @@ namespace PH4_WPF.Engine
                     CreateFiles("/apps/", "gb", ".bin", 2210, FileServerClass.PremisionEnum.OnlyAdmin,  true);
                     CreateFiles("/user/Hpro4/", "set", ".bin", 411, FileServerClass.PremisionEnum.AdminAndUser,  true);
                     CreateFiles("/user/Hpro4/docs", "", "", 0, FileServerClass.PremisionEnum.AdminAndUser,  true);
-                    CreateFiles("/user/Hpro4/Download/", "", "", 0, FileServerClass.PremisionEnum.AdminUserGuest,  true);
-                    CreateFiles("/user/Hpro4/Exploit/", "", "", 0, FileServerClass.PremisionEnum.AdminUserGuest,  true);
-                    CreateFiles("/user/Hpro4/HDoc/", "", "", 0, FileServerClass.PremisionEnum.AdminUserGuest,  true);
+                    CreateFiles(FrmSoft.FrmFile.PatchEnviron.Download, "", "", 0, FileServerClass.PremisionEnum.AdminUserGuest,  true);
+                    CreateFiles(FrmSoft.FrmFile.PatchEnviron.Exploit, "", "", 0, FileServerClass.PremisionEnum.AdminUserGuest,  true);
+                    CreateFiles(FrmSoft.FrmFile.PatchEnviron.HDoc, "", "", 0, FileServerClass.PremisionEnum.AdminUserGuest,  true);
                     CreateFiles("/user/Hpro4/Tools/", "", "", 0, FileServerClass.PremisionEnum.AdminUserGuest, true);
                     break;
                 default:
@@ -544,11 +550,7 @@ namespace PH4_WPF.Engine
         /// </summary>
         public void Shutdown() {
             ActSrv = false;
-            GameEvenStruct gameEven = new GameEvenStruct
-            {
-                DataStart = App.GameGlobal.DataGM.AddMonths(1),
-                GameEvent = new GameEvenStruct.EventShutdown(  NameSrv )
-            };
+            GameEvenClass gameEven = new GameEvenClass(App.GameGlobal.DataGM.AddMonths(1), new GameEvenClass.EventShutdown(NameSrv));           
             StatisticInfo.UnitsShutdown++;
             App.GameGlobal.AllEventGame.Add(gameEven);
             List<string> TextAnimation = new List<string>
@@ -570,10 +572,8 @@ namespace PH4_WPF.Engine
             App.GameGlobal.MainWindow.StartConsoleText(TextAnimation);
             App.GameGlobal.GamerInfo.AddExp(PopularSRV / 2);
             CheckAuditSecurity();
-            // Проверка засветился в логах игрок
-            if (LogSaver != 0) {
-                App.GameGlobal.Msg("","в логах", FrmSoft.FrmError.InformEnum.Критическая_ошибка );
-            }
+            AdministratorWarning();
+            
         }
         /// <summary>
         ///  Дефейс сервера
@@ -582,15 +582,12 @@ namespace PH4_WPF.Engine
         public void Deface(int lvl, string msg) {
             if (lvl >= StatisticInfo.UnitDefece)
             {
-                GameEvenStruct gameEven = new GameEvenStruct
-                {
-                    DataStart = App.GameGlobal.DataGM.AddMonths(1),
-                    GameEvent = new GameEvenStruct.RestatService(this)
-                };
+                GameEvenClass gameEven = new GameEvenClass(App.GameGlobal.DataGM.AddMonths(1), new GameEvenClass.RestatService(this));              
                 App.GameGlobal.AllEventGame.Add(gameEven);
                 StatisticInfo.UnitDefece++;
                 App.GameGlobal.GamerInfo.AddExp(85);
                 VirtualizationServer.DefeceString = msg;
+                AdministratorWarning();
             }
         }
         /// <summary>
@@ -690,6 +687,20 @@ namespace PH4_WPF.Engine
                 return false;
             }
         }
+        /// <summary>
+        /// администратор предупрежден об ваших действиях на этом сервере 
+        /// </summary>
+        public void AdministratorWarning() {
+
+            // Проверка засветился в логах игрок
+            if (LogSaver != 0)
+            {
+                App.GameGlobal.Msg("", "в логах", FrmSoft.FrmError.InformEnum.Критическая_ошибка);
+            }
+
+            //предупреждение и выписка штрафа если юзер был обнаружен
+        }      
+               
 
         #region "Структуры и перечисления"
         [Serializable]

@@ -1,9 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Text;
-using System.Linq;
 using Com = PH4_WPF.GameScen.ScenStruct.ICQ.Message.Answer.CommandAnswerEnum;
-using Script = PH4_WPF.Engine.GameEvenStruct;
+using Script = PH4_WPF.Engine.GameEvenClass;
 using PH4_WPF.Engine;
 
 /*
@@ -85,7 +83,7 @@ namespace PH4_WPF
             scen.AddAnswer("Это вроде не трудно", Com.Переход, 8);
 
             scen.AddNewMessage(8, "И так ты хочешь научится ломать сервера", 2);
-            scen.AddAnswer("Научи меня", Com.ВыходЗапуститьЧат, 0, "icq_beginer");
+            scen.AddAnswer("Научи меня", Com.ВыходЗапуститьСкрипт, 0, "icq_beginer");
             scen.AddAnswer("Не надо я  уже эксперт", Com.Переход, 9);
 
             scen.AddNewMessage(9, "Ну давай, ты хочешь сейчас поговорить с ним сейчас", 1);
@@ -93,7 +91,7 @@ namespace PH4_WPF
 
             // icq_beginer
             scen.CreateNewICQChat("icq_beginer", "Cheterman", "DDC.jpg");
-            scen.AddNewMessage(1, "Good сначало мы должны в [Сетевом Окружении] (на вашем рабочем столе) найти нужней сервер ", 6);
+            scen.AddNewMessage(1, "Good сначало мы должны в [Сетевом Окружении] (на вашем рабочем столе) найти нужный сервер ", 6);
             scen.AddAnswer("Да, я вошёл сюда", Com.Переход, 3);
             scen.AddAnswer("Для чего оно нужно", Com.Переход, 2);
 
@@ -105,7 +103,7 @@ namespace PH4_WPF
             scen.AddAnswer("Ну вот нашёл", Com.Переход, 4);
             scen.AddAnswer("Что дальше делать", Com.Переход, 4);
 
-            scen.AddNewMessage(4, "Скачай себе сканер уязвимостей, скачать новые сканеры уязвимостей сможешь на сайте explot.in. И жди результат сканирования.", 4);
+            scen.AddNewMessage(4, "Скачай себе сканер портов, скачать новые сканеры уязвимостей сможешь на сайте explot.in. И жди результат сканирования.", 4);
             scen.AddAnswer("Очень долго сканит", Com.Переход, 5);
             scen.AddAnswer("Всё сканинг закончен", Com.Переход, 6);
             scen.AddAnswer("Расскажи подробнее о сканирование уязвимостей", Com.Переход, 17);
@@ -169,9 +167,17 @@ namespace PH4_WPF
                 Mailto ="boticq@q.com"  } ),
                 new Script.GetNews("В последнее время образовалась очень высокая хакерская активность.", Enums.TopicEnum.НовостиКасательноИгрока ),
                 new Script.NextScen("Scen_2mis"),
-                new Script.GetExp(20)
+                new Script.GetExp(20),
+                new Script.ShowMyCanvas()
             };
             scen.Script.Add("start", ls);
+
+            // icq_beginer
+            ls = new List<Script.IEventGame> {            
+                new Script.ShowMyCanvas(),
+                new Script.StartChat("icq_beginer")
+            };
+            scen.Script.Add("icq_beginer", ls);
 
             //Инцилизация сценария начальные настройки
             ls = new List<Script.IEventGame> { new Script.StartChat("icq") };
@@ -384,7 +390,7 @@ namespace PH4_WPF
             srv.CreateFiles("/", "Programming PHP.doc", new FileServerClass.ParameterClass()
             {
                 TypeInformation = Enums.TypeParam.goal_file,
-                EventGame = new GameEvenStruct.GetProf(Script.GetProf.ProfEnum.GetCoder)
+                EventGame = new GameEvenClass.GetProf(Script.GetProf.ProfEnum.GetCoder)
             },
             5410, FileServerClass.PremisionEnum.AdminUserGuest);
 
@@ -571,7 +577,7 @@ namespace PH4_WPF
 
             //start
             ls = new List<Script.IEventGame> {
-             new GameEvenStruct.GetNews (true),
+             new GameEvenClass.GetNews (true),
               new   Script.SendMail(new MailInBox (){
                 Title ="Деньги на обновление софта",
                 BodyText ="Лишнее можешь забрать себе ",
@@ -831,7 +837,7 @@ namespace PH4_WPF
         {
             public string Title;
             public Dictionary<string, ICQ> Chat;
-            public Dictionary<string, List<GameEvenStruct.IEventGame>> Script;
+            public Dictionary<string, List<GameEvenClass.IEventGame>> Script;
 
             /// <summary>
             /// Условия установленные сценарием
@@ -895,14 +901,14 @@ namespace PH4_WPF
             /// <summary>
             /// Добавить ответ к прош. сообщению
             /// </summary>          
-            public void AddAnswer(string text, ICQ.Message.Answer.CommandAnswerEnum command, int i = 0, string t = "")
+            public void AddAnswer(string text, Com command, int i = 0, string t = "")
             {
                 lastMessage.Answers.Add(new ICQ.Message.Answer() { CommandAnswer = command, IntArgument = i, StrArgument = t, TextAnswer = text });
             }
             /// <summary>
             /// Добавить ответ к прош. сообщению
             /// </summary>          
-            public void AddAnswer(string text, ICQ.Message.Answer.CommandAnswerEnum command,  string t = "")
+            public void AddAnswer(string text, Com command,  string t = "")
             {
                 lastMessage.Answers.Add(new ICQ.Message.Answer() { CommandAnswer = command, IntArgument = 0, StrArgument = t, TextAnswer = text });
             }

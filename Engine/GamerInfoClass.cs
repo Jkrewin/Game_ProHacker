@@ -130,7 +130,7 @@ namespace PH4_WPF.Engine
         /// Добавить экста поинт для навыков
         /// </summary>
         /// <param name="prof"></param>
-        public void Add_Bonus(PH4_WPF.Engine.GameEvenStruct.GetProf.ProfEnum prof ) => _BonusExtraPoint.Add(prof.ToString ());
+        public void Add_Bonus(PH4_WPF.Engine.GameEvenClass.GetProf.ProfEnum prof ) => _BonusExtraPoint.Add(prof.ToString ());
         /// <summary>
         /// Добавить опыт к игроку
         /// </summary>

@@ -81,7 +81,7 @@ namespace PH4_WPF.FrmSoft
                         break;
                     case Message.Answer.CommandAnswerEnum.ВыходЗапуститьСкрипт:
                         App.GameGlobal.GameChat = null;
-                       List <Engine.GameEvenStruct.IEventGame> script = App.GameGlobal.GameScen.ActiveScen.Script[r.StrArgument];
+                       List <Engine.GameEvenClass.IEventGame> script = App.GameGlobal.GameScen.ActiveScen.Script[r.StrArgument];
                         script.ForEach(x => x.Run());
                         App.GameGlobal.MainWindow.MessageIcon.Opacity = 50;                        
                         this.Close();

@@ -65,7 +65,7 @@ namespace PH4_WPF.Engine
         /// <param name="dateEnd">Дата заврешения</param>
         /// <param name="svr_name">Какой сервер</param>
         public void UpgadeSoft(InstaceClass new_instace, DateTime dateEnd, string svr_name ) {
-            GameEvenStruct evenStruct = new GameEvenStruct(dateEnd, new GameEvenStruct.UpgradeSoft()
+            GameEvenClass evenStruct = new GameEvenClass(dateEnd, new GameEvenClass.UpgradeSoft()
             {
                 Instace = new_instace,
                 ServerName = svr_name,
@@ -339,7 +339,7 @@ namespace PH4_WPF.Engine
         {
             public DateTime DataStart;
             public InstaceClass NewVer;
-            public GameEvenStruct EvenLink;
+            public GameEvenClass EvenLink;
         }
 
        

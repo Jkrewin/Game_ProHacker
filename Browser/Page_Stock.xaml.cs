@@ -21,7 +21,7 @@ namespace PH4_WPF.Browser
             App.GameGlobal.MainWindow.NewDayEvent += AutoRefreh;
         }
 
-        private void AutoRefreh()
+        private void AutoRefreh(int days)
         {
             if (_TypeMoney != Enums.TypeMoneyEnum.none) Refreh_Stocks();
         }
@@ -144,7 +144,6 @@ namespace PH4_WPF.Browser
                 ListBoxStock.Items.Add(grid);
             }
         }
-
       
         private void Загруженно(object sender, RoutedEventArgs e)
         {

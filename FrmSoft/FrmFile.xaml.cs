@@ -83,26 +83,10 @@ namespace PH4_WPF.FrmSoft
             }
         }
 
-
-        private void ФормаЗакрыта(object sender, EventArgs e)
-        {
-            App.GameGlobal.ActiveApp.Remove(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType.FullName);
-        }
-
-        private void Выделяет_кнопку_выход(object sender, MouseEventArgs e)
-        {
-            ExitButton.Fill = Brushes.IndianRed;
-        }
-
-        private void ПрекращаетВыделение(object sender, MouseEventArgs e)
-        {
-            ExitButton.Fill = Brushes.DarkRed;
-        }
-
-        private void УдалениеКнопка(object sender, MouseButtonEventArgs e)
-        {
-            this.Close();
-        }
+        private void ФормаЗакрыта(object sender, EventArgs e)=> App.GameGlobal.ActiveApp.Remove(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType.FullName);
+        private void Выделяет_кнопку_выход(object sender, MouseEventArgs e)=> ExitButton.Fill = Brushes.IndianRed;
+        private void ПрекращаетВыделение(object sender, MouseEventArgs e)=> ExitButton.Fill = Brushes.DarkRed;
+        private void УдалениеКнопка(object sender, MouseButtonEventArgs e)=> this.Close();
 
         private void КликПоЭлементу(object sender, MouseButtonEventArgs e)
         {
@@ -114,16 +98,16 @@ namespace PH4_WPF.FrmSoft
                 var f = Engine.FileServerClass.GetFile(MyPath + l.File.FileName, App.GameGlobal.MyServer);
 
                                // Переместить сполйт
-                 if (f.FileСontents.TypeInformation == Enums.TypeParam.exploit & MyPath == "/user/Hpro4/Download/")
+                 if (f.FileСontents.TypeInformation == Enums.TypeParam.exploit & MyPath == PatchEnviron.Download )
                 {
-                    var h = Engine.FileServerClass.GetFile("/user/Hpro4/Exploit/", App.GameGlobal.MyServer);
+                    var h = Engine.FileServerClass.GetFile(FrmSoft.FrmFile.PatchEnviron.Exploit, App.GameGlobal.MyServer);
                     if (h.Dir.Find(x => x.FileName == f.FileName) == null)
                     {
 
                         FrmSoft.FrmError msg = new FrmError("Перемещение файла", "Переместить файл " + h.FileName + " в папку exploit ?", delegate
                         {
                             h.Dir.Add(f);
-                            Engine.FileServerClass.GetFile("/user/Hpro4/Download/", App.GameGlobal.MyServer).Dir.Remove(f);
+                            Engine.FileServerClass.GetFile(PatchEnviron.Download, App.GameGlobal.MyServer).Dir.Remove(f);
                             Папкаexploit(null, null);
                         });
                         msg.Show();
@@ -160,7 +144,7 @@ namespace PH4_WPF.FrmSoft
 
         public void ПапкаЗагрузка(object sender, RoutedEventArgs e)
         {
-            PatchDisplay = "/user/Hpro4/Download/";
+            PatchDisplay = PatchEnviron.Download;
             RefFiles();
         }
 
@@ -218,7 +202,7 @@ namespace PH4_WPF.FrmSoft
 
         private void ВставитьФайл(object sender, RoutedEventArgs e)
         {
-            var ls = Engine.FileServerClass.GetInfoFiles(MyPath, App.GameGlobal.MyServer);
+            var ls = FileServerClass.GetInfoFiles(MyPath, App.GameGlobal.MyServer);
             if (ls.Find(x => x.FileName == CutFile.FileName) != null)
             {
                 App.GameGlobal.Msg("Ошибка", "Такой файл тут уже существует", FrmError.InformEnum.Критическая_ошибка);
@@ -267,7 +251,7 @@ namespace PH4_WPF.FrmSoft
 
         private void Папкаexploit(object sender, RoutedEventArgs e)
         {
-            PatchDisplay = "/user/Hpro4/Exploit/";
+            PatchDisplay = PatchEnviron.Exploit;
             RefFiles();           
         }
 
@@ -364,5 +348,18 @@ namespace PH4_WPF.FrmSoft
             RenameFile.FileName = RenameTexBox.Text;
             ОК_ПереименоватьФайл(null, null);
         }
+
+        /// <summary>
+        /// Быстрый доступ к папкам
+        /// </summary>
+        static public class PatchEnviron
+        {
+            static public string Download { get => "/user/Hpro4/Download/"; }
+            static public string Exploit { get => "/user/Hpro4/Exploit/"; }
+            static public string HDoc { get => "/user/Hpro4/HDoc/"; }
+           
+
+        }
+
     }
 }

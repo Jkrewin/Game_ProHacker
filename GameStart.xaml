@@ -155,7 +155,7 @@
 
         </Grid>
 
-        <Grid x:Name="LoadList" Margin="286,0,0,0" HorizontalAlignment="Left" VerticalAlignment="Top" Width="474" Height="440" Visibility="Visible">
+        <Grid x:Name="LoadList" Margin="286,0,0,0" HorizontalAlignment="Left" VerticalAlignment="Top" Width="474" Height="440" Visibility="Hidden">
             <Grid.Background>
                 <ImageBrush ImageSource="/Content/Desktop/ambiend.bmp"/>
             </Grid.Background>

@@ -32,17 +32,27 @@
             <ScrollViewer VerticalScrollBarVisibility="Auto">
                 <StackPanel x:Name="StackP_main" HorizontalAlignment="Center" Height="588" VerticalAlignment="Center" Width="780" Background="Black">
                     <Grid Width="780" Height="22" Background="Black">
-                        <Label Content="Server * 452 Fr0" HorizontalAlignment="Left" Height="22" VerticalAlignment="Center" Width="206" FontFamily="Arial" Padding="5,4,5,5" Foreground="White"/>
-                        <Label Content="T1 type" HorizontalAlignment="Left" Height="22" VerticalAlignment="Center" Width="206" FontFamily="Arial" Margin="211,0,0,0" Padding="5,4,5,5" Foreground="White"/>
-                        <Label Content="comment" HorizontalAlignment="Left" Height="22" VerticalAlignment="Center" Width="206" FontFamily="Arial" Margin="423,0,0,0" Padding="5,4,5,5" Foreground="White"/>
+                        <Label Content="000" HorizontalAlignment="Left" Height="22" VerticalAlignment="Center" Width="206" FontFamily="Arial" Margin=  "0,0,0,0" Padding="5,4,5,5" Foreground="White"/>
+                        <Label Content="001" HorizontalAlignment="Left" Height="22" VerticalAlignment="Center" Width="206" FontFamily="Arial" Margin="211,0,0,0" Padding="5,4,5,5" Foreground="White"/>
+                        <Label Content="002" HorizontalAlignment="Left" Height="22" VerticalAlignment="Center" Width="301" FontFamily="Arial" Margin="423,0,0,0" Padding="5,4,5,5" Foreground="White"/>
                     </Grid>
                 </StackPanel>
             </ScrollViewer>
         </Grid>
-        <Label Content="Label" HorizontalAlignment="Center" Grid.Row="2" VerticalAlignment="Center" Height="23" Width="800" Background="#FF5D6B99" Foreground="White" Padding="5,3,5,5"/>
+        <Label Content="         Зараженная система                          Тип                                                                                       Описание" HorizontalAlignment="Center" Grid.Row="2" VerticalAlignment="Center" Height="23" Width="800" Background="#FF5D6B99" Foreground="White" Padding="5,3,5,5"/>
         <ComboBox x:Name="CB_ListVirus" HorizontalAlignment="Left" Margin="133,4,0,0" Grid.Row="1" VerticalAlignment="Top" Width="259" FontFamily="Arial Unicode MS" FontSize="14" Height="22" DropDownOpened="МенюОткрыто"/>
-        <Label Content="Начать разработку" HorizontalAlignment="Left" VerticalAlignment="Top" FontFamily="Arial Unicode MS" FontSize="14" Foreground="#FF232932" Margin="0,29,0,0" Grid.RowSpan="2"/>
+        <Label Content="Начать разработку" HorizontalAlignment="Left" VerticalAlignment="Center" FontFamily="Arial Unicode MS" FontSize="14" Foreground="#FF232932" Grid.RowSpan="2"/>
         <Ellipse x:Name="RedButton" HorizontalAlignment="Left" Height="20" Margin="765,0,0,0" Stroke="#FF4F68EE" VerticalAlignment="Center" Width="20" Fill="#FFD31F11" MouseEnter="КурсорНадКружком" MouseLeave="КурсорУшелКружок" MouseDown="НажатКрасный"/>
         <Ellipse x:Name="BlueButton" HorizontalAlignment="Left" Height="20" Margin="737,0,0,0" Stroke="#FF4F68EE" VerticalAlignment="Center" Width="20" Fill="#FF118AD3" MouseEnter="КурсорНадКружком" MouseLeave="КурсорУшелКружок" MouseDown="НажатСиний"/>
+        <Button x:Name="B_StrProc" HorizontalAlignment="Left" Margin="400,4,0,0" Grid.Row="1" VerticalAlignment="Top" Width="140" Click="ЗапускПроцесса">
+            <Grid Width="140" Height="18">
+
+                <Label Content="Запустить процесс"  VerticalAlignment="Center" FontSize="11" HorizontalContentAlignment="Center" Padding="5,1,5,5" Foreground="#FF201919"/>
+                <ProgressBar x:Name="PB_Process" Visibility="Hidden"  Height="18"  VerticalAlignment="Top" Width="140" Value="0" Background="#FFCCD5F0" Foreground="#FFA1A2E8" Maximum="45"/>
+            </Grid>
+        </Button>
+        <Label Content="Разработка может занять больше месяца" HorizontalAlignment="Left" VerticalAlignment="Top" FontFamily="Arial Unicode MS" FontSize="10" Foreground="#FF232932" Margin="545,4,0,0" Grid.Row="1"/>
+        <Label Content="TIDE " HorizontalAlignment="Left" VerticalAlignment="Center" FontFamily="Arial Unicode MS" FontSize="14" Foreground="#FFDAE0E8" Margin="8,0,0,0"/>
+        <Button Content="Обновить" HorizontalAlignment="Left" Margin="733,0,0,0" Grid.Row="2" VerticalAlignment="Center" Height="22" Width="66" Background="#FF697BB6" Foreground="White" Click="Button_Click"/>
     </Grid>
 </Window>

@@ -9,7 +9,7 @@ namespace PH4_WPF.Engine
     /// Игровое событие
     /// </summary>
     [Serializable]
-    public struct GameEvenStruct
+    public class GameEvenClass
     {
         /// <summary>
         /// Когда наступает событие или прошла эта дата уже
@@ -20,7 +20,7 @@ namespace PH4_WPF.Engine
         /// </summary>
         public IEventGame GameEvent;
 
-        public GameEvenStruct(DateTime dataStart, IEventGame gameEven) {
+        public GameEvenClass(DateTime dataStart, IEventGame gameEven) {
             DataStart = dataStart;
             GameEvent = gameEven;
         }
@@ -157,7 +157,7 @@ namespace PH4_WPF.Engine
                 }
                 DateTime date = App.GameGlobal.DataGM.AddDays(35);               
                 App.GameGlobal.Msg("Сообщение", "Улучшение будет запланированно на " + date.ToString("d"), FrmSoft.FrmError.InformEnum.Информация);
-                App.GameGlobal.AllEventGame.Add(new GameEvenStruct() { DataStart = date, GameEvent = UpStart });
+                App.GameGlobal.AllEventGame.Add(new GameEvenClass(date,  UpStart ));
                 AllReady = true;
             }
         }
@@ -200,10 +200,10 @@ namespace PH4_WPF.Engine
 
             public void Run() => MailInBox.NewMail(Mail);
         }  
-            /// <summary>
+        /// <summary>
             /// Добавить свою уязвимость
             /// </summary>
-            [Serializable]
+        [Serializable]
         public struct VulnerabilitiesAdd : IEventGame
         {           
             public string CName;           
@@ -370,7 +370,7 @@ namespace PH4_WPF.Engine
 
             public void Run()
             {
-                List<GameEvenStruct.IEventGame> script = App.GameGlobal.GameScen.ActiveScen.Script[NameScript];
+                List<GameEvenClass.IEventGame> script = App.GameGlobal.GameScen.ActiveScen.Script[NameScript];
                 script.ForEach(x => x.Run());
             }
         }
@@ -424,6 +424,18 @@ namespace PH4_WPF.Engine
             public void Run()
             {
                 App.GameGlobal.GamerInfo.HiTecLevel++;
+            }
+        }
+        /// <summary>
+        /// Убрать картинку на рабочем столе, рабочий стол показать 
+        /// </summary>
+        [Serializable]
+        public readonly struct ShowMyCanvas : IEventGame
+        {
+            public void Run()
+            {
+                App.GameGlobal.MainWindow.MyCanvas.Visibility = Visibility.Visible;
+                App.GameGlobal.MainWindow.G_FindElement.Visibility = Visibility.Visible;
             }
         }
         /// <summary>
@@ -574,12 +586,12 @@ namespace PH4_WPF.Engine
         {
             public string Path;
             public string NameFile;
-            public string Comment;
+            public FileServerClass.ParameterClass  Comment;
             public int Size;
             public FileServerClass.PremisionEnum Premision;
             public string Perfix;
             public bool SystemFile;
-            public void Run() => App.GameGlobal.MyServer.CreateFiles(Path, NameFile, Comment, Size, Premision,  SystemFile);
+            public void Run() => App.GameGlobal.MyServer.CreateFiles(Path, NameFile, Comment,  Size, Premision, Perfix, SystemFile);
         }
         /// <summary>
         /// Создает это событие во времени игры
@@ -599,7 +611,7 @@ namespace PH4_WPF.Engine
                 GameEvent = gameEvent;
             }
 
-            public void Run() => App.GameGlobal.AllEventGame.Add(new GameEvenStruct() { DataStart = DataStart, GameEvent = GameEvent });
+            public void Run() => App.GameGlobal.AllEventGame.Add(new GameEvenClass(DataStart, GameEvent));
         }
 
     }

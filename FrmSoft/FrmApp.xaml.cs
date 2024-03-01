@@ -58,7 +58,7 @@ namespace PH4_WPF.FrmSoft
             Сluster = 1;
         }
          
-        private void StepHash() {        
+        private void StepHash(int days) {        
             if (_isWork == false) return;
 
             switch (App.GameGlobal.GameSpeed)
@@ -114,7 +114,11 @@ namespace PH4_WPF.FrmSoft
             LabelResBrute.Content = new string  (cr);
         }
 
-        private void ФормаЗакрыта(object sender, EventArgs e) => App.GameGlobal.ActiveApp.Remove(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType.FullName);       
+        private void ФормаЗакрыта(object sender, EventArgs e)
+        {
+            App.GameGlobal.ActiveApp.Remove(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType.FullName);
+            App.GameGlobal.MainWindow.NewDayEvent -= StepHash;
+        }
         private void Выделяет_кнопку_выход(object sender, MouseEventArgs e) => ExitButton.Fill = Brushes.IndianRed;
         private void ПрекращаетВыделение(object sender, MouseEventArgs e)=> ExitButton.Fill = Brushes.DarkRed;
         private void УдалениеКнопка(object sender, MouseButtonEventArgs e)=> this.Close();

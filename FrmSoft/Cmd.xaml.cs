@@ -3,15 +3,12 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Text;
 using System.Timers;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
 using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Media;
-using System.Windows.Media.Imaging;
 using EventEnum= PH4_WPF.Enums.ConditionEnum;
 using System.Xml.Serialization;
 
@@ -20,24 +17,37 @@ namespace PH4_WPF.FrmSoft
    
     public partial class Cmd : Window
     {
-        readonly List<string> FF00_ls = new List<string>(); // Ускоряет доступ к списку файлов Продвинутый уровень  
-
-        private string Pwd = "/";                                // Начальный каталог
-        private Server GameSrv;                           // Куда на какой сервер подключена консоль 
-        private readonly Button[] BBSelectButton;                         // Кнопки которые нужны для меню
-        private readonly Brush StTextColor = Brushes.LawnGreen;  // Цвет текста по умолчанию
-        private const short MAX_STRING = 110;                    // Максимальное количество символов в строке 
-        private const short MAX_LINES = 37;                      // Максимальное количество строк в консоли 
+        private readonly List<string> FF00_ls = new List<string>();                  // Ускоряет доступ к списку файлов Продвинутый уровень  
+        private Stack<string> StackBuffer = new Stack<string>();                     // Стек для буфера
+        private string Pwd = "/";                                                    // Начальный каталог
+        private Server GameSrv;                                                      // Куда на какой сервер подключена консоль 
+        private readonly Button[] BBSelectButton;                                    // Кнопки которые нужны для меню
+        private readonly Brush StTextColor = Brushes.LawnGreen;                      // Цвет текста по умолчанию
+        private const short MAX_STRING = 110;                                        // Максимальное количество символов в строке 
+        private const short MAX_LINES = 37;                                          // Максимальное количество строк в консоли 
         private readonly List<string> StoresList = new List<string>();               // История ввода текста 
         private List<ConsoleText> ScriptConsole = new List<ConsoleText>();           // Скрипт для консоли
         private readonly Timer ConsoleTimer = new Timer(100);                        // Таймер для ввода текста
-        private readonly System.Windows.Threading.DispatcherTimer CursorTimer;       // Мигающий курсор
-        private Point PointOos = new Point(0, 0);                                    // Управление перетаскиванием
-        private readonly List<XmlInfoCommand> XmlInfoCommandList;                    // Описание комманд
-        private string ClipBoard = "";                                               // Тут текст котрый сохраняеться в буфере при нажатии Insert он выводиться 
+        private readonly System.Windows.Threading.DispatcherTimer CursorTimer;       // Мигающий курсор        
+        private readonly List<XmlInfoCommand> XmlInfoCommandList;                    // Описание комманд       
         private readonly string[] VisualTimer;                                       // Виуализация работы таймера
-       
-
+        private int indexText = 0;                                                   //Положение скрипта текста для консоли 
+        private readonly Stack<Inline> lastLine = new Stack<Inline>();               //Строки для чтения скрипта текста
+        private bool flicker = false;                                                //Нужен для мигания курсора
+        private int indexTimerAdmin = 0;                                             //таймер обнаружения 
+                
+        /// <summary>
+        /// Тут текст котрый сохраняеться в буфере при нажатии Insert он выводиться 
+        /// </summary>
+        private string ClipBoard
+        {
+            get
+            {
+                if (StackBuffer.Count == 0) return "";
+                return StackBuffer.Pop();
+            }
+            set => StackBuffer.Push(value);
+        }
         /// <summary>
         /// Текст приветствие
         /// </summary>
@@ -105,6 +115,11 @@ namespace PH4_WPF.FrmSoft
             CmdText.Text = "";
             AddTextConsole("Welcome v0.1", 1, true);
             BashConsole();
+
+            ClipBoard = "make Virus.exe";
+            ClipBoard = "copy $HDoc$Virus.exe /";
+            ClipBoard = "connect -adress www.test.ru -auth";
+                    
         }
 
 
@@ -138,7 +153,6 @@ namespace PH4_WPF.FrmSoft
         {
             ConsoleTimer.Stop();
             CursorTimer.Stop();
-
         }
 
         /// <summary>
@@ -171,9 +185,7 @@ namespace PH4_WPF.FrmSoft
         }
 
 
-        //+++ Работа таймера и скрипта
-        int indexText = 0;
-        readonly Stack<Inline> lastLine = new Stack<Inline>();
+        //+++ Работа таймера и скрипта        
         private void Bash(Object source, ElapsedEventArgs e)
         {
             if (indexText == ScriptConsole.Count)
@@ -233,7 +245,6 @@ namespace PH4_WPF.FrmSoft
                     ConsoleTimer.Stop();
                     indexText = 0;
                     ScriptConsole.Clear();
-
                 }
                 else
                 {
@@ -247,17 +258,16 @@ namespace PH4_WPF.FrmSoft
                     lastLine.Push(CmdText.Inlines.LastInline);
                     ClearUpperText();                                       // Удаляет переизбыток строк 
                     if (ScriptConsole[indexText].TiggerAction != null)
-                    {
-                        ScriptConsole[indexText].TiggerAction.Invoke();// Выполяен действие если оно есть 
+                    {          
+                        //если будет ошибка в этом потоке то консоль уйдет в массовую создание строк
+                        ScriptConsole[indexText].TiggerAction.Invoke();// Выполяен действие если оно есть                        
                     }   
                 }
             });
             indexText++;
         }
 
-        //+++ обновление курсора
-        bool flicker = false;
-        int indexTimerAdmin = 0;
+        //+++ обновление курсора       
         private void CursorUpdate(object sender, EventArgs e)
         {
             flicker = !flicker;
@@ -270,9 +280,10 @@ namespace PH4_WPF.FrmSoft
             if (TimerAdminLog.Content.ToString() != "---")
             {
                 TimerLog--;
-                TimerAdminStr.Content = VisualTimer[indexTimerAdmin];
+               // TimerAdminStr.Content = VisualTimer[indexTimerAdmin];
                 indexTimerAdmin++;
                 if (indexTimerAdmin == VisualTimer.Length) indexTimerAdmin = 0;
+              //  GameSrv.AdministratorWarning();
             }
         }
 
@@ -305,8 +316,6 @@ namespace PH4_WPF.FrmSoft
             BashConsole();
         }
 
-
-
         /// <summary>
         /// Создает текст для консоли 
         /// </summary>
@@ -321,17 +330,19 @@ namespace PH4_WPF.FrmSoft
 
             foreach (string item in text.Split('Ъ', StringSplitOptions.RemoveEmptyEntries))
             {
-                if (item.Substring(0, 1) == "`")
+                if (item.Length <= 1) { }
+                else if (item.Substring(0, 1) == "`")
                 {
                     Brush brush = (Brush)bc.ConvertFrom(item.Split('=')[0][1..]);
                     txt.Add(new Run(item[(item.IndexOf('=') + 1)..]) { Foreground = brush });
                 }
-                else if (item.Substring(0, 2) == "~u") {
+                else if (item.Substring(0, 2) == "~u")
+                {
                     txt.Add(new Run(item[(item.IndexOf('=') + 1)..]) { TextDecorations = TextDecorations.Underline });
                 }
                 else if (item.Substring(0, 2) == "~b")
                 {
-                    txt.Add(new Run(item[(item.IndexOf('=') + 1)..]) {FontFamily  =new FontFamily ("Berlin Sans FB Demi")  });
+                    txt.Add(new Run(item[(item.IndexOf('=') + 1)..]) { FontFamily = new FontFamily("Berlin Sans FB Demi") });
                 }
                 else
                 {
@@ -362,9 +373,7 @@ namespace PH4_WPF.FrmSoft
             public Action TiggerAction;  
         }
 
-
-
-                    #region "Кнопки Синий и красный кружок"
+        #region "Кнопки Синий и красный кружок"
         Brush SaveColor;
         private void КурсорНадКраснымКружком(object sender, MouseEventArgs e)
         {
@@ -396,12 +405,11 @@ namespace PH4_WPF.FrmSoft
         }
                     #endregion
 
-                    #region "Консоль текста ввод"    
+        #region "Консоль текста ввод"    
 
         int cellText = 0;
         int linesText = 0;
         int nowElement = 0;
-
 
         private void ClearUpperText()
         {
@@ -479,7 +487,7 @@ namespace PH4_WPF.FrmSoft
                 EnteringText.Text += HaText + StoresList[nowElement];
                 cellText = (short)(StoresList[nowElement].Length + HaText.Length);
             }
-            else if (e.Key == Key.Down && nowElement != StoresList[nowElement].Length)  //История ввода вниз
+            else if (e.Key == Key.Down & nowElement != StoresList.Count)  //История ввода вниз
             {
                 nowElement++;
                 EnteringText.Text = EnteringText.Text.Substring(0, EnteringText.Text.Length - cellText);
@@ -495,6 +503,7 @@ namespace PH4_WPF.FrmSoft
             else if (txt == "Oem5") { txt = "\\"; }
             else if (txt == "Oem3") { txt = "~"; }
             else if (txt == "OemPeriod" | txt == "Decimal") { txt = "."; }
+            
 
             if (MAX_STRING == cellText) return;
 
@@ -507,14 +516,16 @@ namespace PH4_WPF.FrmSoft
             {
                 if (txt == "-") { txt = "_"; }
                 else if (txt == "5") { txt = "%"; }
+                else if (txt == "4") { txt = "$"; }
                 EnteringText.Text += txt;
                 cellText += 1;
             }
 
             if (e.Key == Key.Insert) // Вставка из буфера
             {
-                EnteringText.Text += ClipBoard;
-                cellText += ClipBoard.Length;
+                var ss = ClipBoard;
+                EnteringText.Text += ss;
+                cellText += ss.Length;
             }
             else
             {
@@ -576,18 +587,12 @@ namespace PH4_WPF.FrmSoft
         {
             ShowMenu(1, -5);
             Button01.Focusable = false;
-
         }
 
         private void СистемКлик(object sender, RoutedEventArgs e)
         {
             ShowMenu(2, 155);
             Button02.Focusable = false;
-        }
-
-        private void КурсорНадКонсольюТекст(object sender, MouseEventArgs e)
-        {
-
         }
 
         private void КурсорВышелИзМеню(object sender, MouseEventArgs e)
@@ -612,12 +617,9 @@ namespace PH4_WPF.FrmSoft
         {
             ShowMenu(3, 317);
             Button03.Focusable = false;
-        }
+        }     
 
-        private void TestSub(object sender, RoutedEventArgs e)
-        {
-            Cmd_route("r localhost www.test.ru");
-        }
+
     }
 
 
@@ -630,102 +632,32 @@ namespace PH4_WPF.FrmSoft
     /// </summary>
     public partial class Cmd
     {
-        public void Cmd_make(string txt)
-        {
+
+        public void Cmd_run(string txt) {
             if (GameSrv.OS == Server.TypeOSEnum.WinSrv)
             {
-                AddTextConsole("bg.exe -f " + txt, 1);
+                AddTextConsole("run.exe -f " + txt, 1);
                 AddTextConsole("ver. 1.4", 1);
-                AddTextConsole("", 1);
+                AddTextConsole("-------> x01", 1);
+                ApplicationDoWork(txt, true);
             }
-            string[] vs = txt.Split(' ');
-            if (vs.Length == 1)
+            else {
+                AddTextConsole("Ъ`Red=Файл н являеться исполнительным файломЪ", 1);
+            }
+        }
+
+        public void Cmd_make(string txt)
+        {
+            if (GameSrv.OS != Server.TypeOSEnum.WinSrv)
             {
-                AddTextConsole("Ъ`Red=Вы не указали путь к файлу или файл Ъ");
-                return;
+                AddTextConsole("make -file " + txt, 1);
+                AddTextConsole("start", 1);
+                AddTextConsole("", 5);
+                ApplicationDoWork(txt, false);
             }
-            FileServerClass fileServer = OpenFileEx(txt[5..]);
-            if (fileServer == null) return;
-
-            switch (fileServer.FileСontents.TypeInformation)
-            {
-                case Enums.TypeParam.sbank:
-                    AddTextConsole("Поиск на наличие банковской информации на сервере ", 2);
-                    AddTextConsole("Поиск .. ", 5);
-                    AddTextConsole("Поиск ... ", 8, false);
-                    AddTextConsole("Поиск ... ", 7, false);
-                    AddTextConsole("Поиск .... ", 9, false);
-                    AddTextConsole("Поиск ..... ", 10, false);
-                    AddTextConsole("Поиск завершен ", 5, false);
-                    if (GameSrv.ScanBankInfo(out string message))
-                    {
-                        AddTextConsole(message, 2);
-                        string[] login = Properties.Resources.login.Split("\r\n");
-                        string[] pass = Properties.Resources.pwd.Split("\r\n");
-
-                        Random rnd = new Random();
-                        char gen() => Convert.ToChar(rnd.Next(48, 58));
-
-                        App.GameGlobal.Bank.Accounts.Add(new BankClass.BankAccount() { 
-                           Login = login[rnd.Next(0, login.Length - 1)],
-                           Pass = pass[rnd.Next(0, pass.Length - 1)],
-                           TypeMoney = (Enums.TypeMoneyEnum)rnd.Next (1,3),
-                           Rs = new string (new char[] { gen(), gen(), gen(), gen(), gen() }),
-                           MyCash =false,
-                           Money = rnd.Next (10,150)
-                        });
-
-                        var bank = App.GameGlobal.Bank.Accounts.Last();
-
-                        if (FileServerClass.Exist("/user/Hpro4/HDoc/", "bank_info.txt", App.GameGlobal.MyServer)==false) {
-                            var ff = new FileServerClass.ParameterClass() {
-                             TypeInformation = Enums.TypeParam.text,
-                              TextCommand ="bankinfo"
-                            };
-                            App.GameGlobal.MyServer.CreateFiles("/user/Hpro4/HDoc/", "bank_info.txt", ff, 500, FileServerClass.PremisionEnum.AdminAndUser);
-                            App.GameGlobal.MyServer.FileTextInfo.Add("bank_info.txt", "");
-                        }
-                        App.GameGlobal.MyServer.FileTextInfo["bank_info.txt"] = App.GameGlobal.MyServer.FileTextInfo["bank_info.txt"] + 
-                            "/n Логин:" + bank.Login + " Пароль: "+ bank.Pass + " №" + bank.Rs   + " Найден на сервере " + GameSrv.NameSrv ;
-                    }
-                    else
-                    {
-                        AddTextConsole(message, 2);
-                    }                    
-                    break;
-                case Enums.TypeParam.script_deface:
-                    AddTextConsole("Создать на сервере свое сообщение об взломе этого сервера ", 2);
-                    AddTextConsole("Ъ`White= ОтменаЪ - оставить текст пустым", 1);
-                    AddTextConsole("Введите текст ", 2);
-                    TextConsoleOpenBuffer("Text", 1);
-                    BufferConsole.WaitCommand = delegate
-                    {
-                        if (BufferConsole.Text == "") {
-                            AddTextConsole("Ъ`Yellow=Отмена действийЪ", 1);
-                            BashConsole();
-                            return;
-                        }
-                        AddTextConsole("Запись Title сайта", 1);
-                        AddTextConsole("Ъ~b=MEM 3: 4, 5, 6Ъ", 2);
-                        AddTextConsole("Ъ~b=MEM 5: 0, 0, 1Ъ", 3);
-                        AddTextConsole("Ъ~b=SET MEM 3 : MEM 5", 3);
-                        if (GameSrv.VirtualizationServer == null) {
-                            AddTextConsole("Ъ`Yellow=На этом сервере нет веб-сайтаЪ", 1);
-                            BashConsole();
-                            return;
-                        }
-                        AddTextConsole("<html lang='' dir='ltr'><head>", 3);
-                        AddTextConsole("a.l=function(e){function g(b){var c={};c[b]=k();a.cc_latency.push(c)}function m(b){var c=n('iml');b.setAttribute('1data - iml", 3);
-                        AddTextConsole("var x=this||self;.Ja=function(a){a=Error(a);a.__closure__error__context__984382||(a.__closure__error__context__984382=", 5);
-                        AddTextConsole("Уровень скрипта: любитель. Этот скрипт дважды работать не будет.", 1);
-                        GameSrv.Deface(fileServer.FileСontents.IntParam, BufferConsole.Text);
-                        BashConsole();
-                    };
-                    break;
-                default:
-                    AddTextConsole("Ъ`OrangeRed=Файл не соотвествует рабочему исполнительному файлуЪ", 1);
-                    break;
-            }
+            else { 
+             AddTextConsole("Ъ`OrangeRed=Файл не соотвествует рабочему исполнительному файлуЪ", 1);
+            }          
         }
 
         public void Cmd_copy(string txt)
@@ -735,21 +667,26 @@ namespace PH4_WPF.FrmSoft
             Server serverOUT = GameSrv;
             Server serverIn = GameSrv;
 
-           FileServerClass fileServer= OpenFileEx(vs[1]);
-            if (fileServer != null)
+            FileServerClass fileServer = OpenFileEx(vs[1]);
+
+            // проверка на своем компе файл ести его нет на удаленном сервере
+            if (fileServer == null)
             {
-                if (vs[2] == "download")
-                {
-                    serverIn = App.GameGlobal.MyServer;
-                    vs[2] = "/user/Hpro4/Download/";
-                }
-                var ls = FileServerClass.GetInfoFiles(vs[2], serverIn);
+                AddTextConsole("Проверяю на вашем сервере файл ", 1, false);
+                serverIn = App.GameGlobal.MyServer;
+                vs[1] = Shielding(vs[1]);
+                fileServer = OpenFileEx(vs[1], serverIn);
+            }
+
+            if (fileServer != null)
+            {               
+                var ls = FileServerClass.GetInfoFiles(vs[2], serverOUT);
                 if (ls.Find(x => x.FileName == fileServer.FileName) != null)
                 {
                     AddTextConsole("Ъ`Red= Такой файл тут уже существует в папке: " + serverIn.NameSrv + "://" + vs[2] + "Ъ", 1);
                     return;
                 }
-                // имитируем загрузку с другова сервера
+                // имитируем загрузку с левого сервера
                 if (serverIn == App.GameGlobal.MyServer & serverOUT != App.GameGlobal.MyServer)
                 {
                     AddTextConsole("Download: [          ]", 1);
@@ -765,8 +702,15 @@ namespace PH4_WPF.FrmSoft
                     AddTextConsole("Download: [==========]", 3, false);
                     AddTextConsole("Download: [  = ok=   ]", 3, false);
                 }
-                AddTextConsole("Файл скопирован успешно в каталог " + serverIn.NameSrv + "://" + vs[2], () => serverIn.CreateFiles(vs[2], fileServer),  1);
-                App.GameGlobal.EventIntroduce(EventEnum.ФайлСкачан, fileServer.FileName);
+
+                if (fileServer.Perfix == "") fileServer.Perfix = "none";
+
+                Action act = () => {
+                    serverOUT.CreateFiles(vs[2], fileServer);
+                    App.GameGlobal.EventIntroduce(EventEnum.ФайлСкачан, fileServer.FileName);
+                };
+
+                AddTextConsole("Файл скопирован успешно в каталог " + serverOUT.NameSrv + "://" + vs[2], act, 1);                
             }
         }
 
@@ -798,7 +742,7 @@ namespace PH4_WPF.FrmSoft
 
         public void Cmd_logclear(string txt)
         {
-            if (App.GameGlobal.GamerInfo.DefecerLvl == 0) { 
+            if (!App.GameGlobal.GamerInfo.Defecer(Enums.SkillDefecer.ЧисткаЛогов)) { 
                 AddTextConsole("У вас пока отсутствуют навыки, для этой команды. (См. ваш профиль)", 1);
                 return;            
             }
@@ -888,9 +832,9 @@ namespace PH4_WPF.FrmSoft
                         AddTextConsole("Статус: Доступ к файлу закрыт.");
                         return;
                     }
-                    if (FileServerClass.Exist("/user/Hpro4/Download/", file.FileName, GameSrv) == false) action = () =>
+                    if (FileServerClass.Exist(FrmFile.PatchEnviron.Download, file.FileName, GameSrv) == false) action = () =>
                     {
-                        App.GameGlobal.MyServer.CreateFiles("/user/Hpro4/Download/", file);
+                        App.GameGlobal.MyServer.CreateFiles(FrmFile.PatchEnviron.Download, file);
                         App.GameGlobal.EventIntroduce(EventEnum.ФайлСкачан, file.FileName );
                     };
                 }
@@ -1005,14 +949,14 @@ namespace PH4_WPF.FrmSoft
                     AddTextConsole("Статус: Доступ к файлу закрыт.");
                     return;
                 }
-                if (FileServerClass.Exist("/user/Hpro4/Download/", file.FileName, GameSrv))
+                if (FileServerClass.Exist(FrmSoft.FrmFile.PatchEnviron.Download, file.FileName, GameSrv))
                 {
                     AddTextConsole("Статус: Такой файл уже существует " + Pwd + "/" + file.FileName);
                     return;
                 }
                 action = () =>
                 {
-                    App.GameGlobal.MyServer.CreateFiles("/user/Hpro4/Download/", file);
+                    App.GameGlobal.MyServer.CreateFiles(FrmSoft.FrmFile.PatchEnviron.Download , file);
                     App.GameGlobal.EventIntroduce(EventEnum.ФайлСкачан, file.FileName);
                 };
             } else
@@ -1183,7 +1127,7 @@ namespace PH4_WPF.FrmSoft
                             AddTextConsole("");
                             AddTextConsole("Проверка ...", 1);
                             ///dsadsdas
-                            if ((BufferConsole.Login + ":" + BufferConsole.Password) != srv.LoginAndPass)
+                            if ((BufferConsole.Login + ":" + BufferConsole.Password) == srv.LoginAndPass)
                             {
                                 ConnectServer(srv);
                             }
@@ -1241,6 +1185,7 @@ namespace PH4_WPF.FrmSoft
             vs[1] = txt[3..]; // объеденяет все строки в одну
             FileServerClass fileServer = OpenFileEx(vs[1]);
             if (fileServer == null) return;
+
             // Сплойты или нет 
             if (fileServer.FileСontents.TypeInformation == Enums.TypeParam.exploit)
             {
@@ -1257,6 +1202,7 @@ namespace PH4_WPF.FrmSoft
                     se = fileServer.FileСontents.ByteParam;
                 }
 
+                BufferConsole.FileStart = fileServer;
                 UpperTxt(se);
                 AddTextConsole("Укажите IP Сервера для атаки ::");
                 TextConsoleOpenBuffer("ServerIP", 1);
@@ -1579,7 +1525,7 @@ namespace PH4_WPF.FrmSoft
 
                 if (vs[1].Substring(0, 1) != "/") vs[1] = Pwd + "/" + vs[1];
 
-                FileServerClass file = FileServerClass.GetFile(vs[1], GameSrv);
+                FileServerClass file = OpenFileEx(vs[1]);
 
                 if (file == null)
                 {
@@ -1594,7 +1540,7 @@ namespace PH4_WPF.FrmSoft
                     AddTextConsole("Ъ`GreenYellow=( " + file.FileСontents.TypeInformation.ToString() + " )Ъ");
                 }
             }
-            catch (Exception)
+            catch 
             {
                 AddTextConsole("Ъ`Red=Неверно составлена команда, нужен точный путь к файлу Ъ");
             }
@@ -1713,7 +1659,7 @@ namespace PH4_WPF.FrmSoft
             try
             {
                 vs[1] = vs[1].Replace('\\', '/');
-                vs[1] = vs[1].Replace("%20", " ");
+                vs[1] = Shielding(vs[1]);  //Экранизация и Environ
                 if (vs[1] == "../" | vs[1] == "/../")
                 {
                     string[] c = Pwd.Split('/');
@@ -1724,9 +1670,7 @@ namespace PH4_WPF.FrmSoft
                     }
                     vs[1] = vs[1].Replace("//", "/");
                 }
-                else if (vs[1] == "download" | vs[1] == "Download") vs[1] = "/user/Hpro4/Download/";
-                else if (vs[1].Substring(0, 1) != "/") vs[1] = Pwd + vs[1]; // эта строка должна быть всегда в конце этого условия               
-
+                else if (vs[1].Substring(0, 1) != "/") vs[1] = Pwd + "/" + vs[1]; // эта строка должна быть всегда в конце этого условия             
 
                 if (FileServerClass.ExistDir(vs[1], GameSrv))
                 {
@@ -1742,11 +1686,15 @@ namespace PH4_WPF.FrmSoft
             {
                 AddTextConsole("Ъ`Red=Неверное написание команды, синтаксиса Ъ");
             }
-
         }
 
         public void Cmd_route(string txt)
         {
+            if (!App.GameGlobal.GamerInfo.Defecer ( Enums.SkillDefecer.СоздаватьМаршруты))
+            {
+                AddTextConsole("У вас пока отсутствуют навыки, для этой команды. (См. ваш профиль)", 1);
+                return;
+            }
             string[] vs = txt.Split(' ');
             if (vs.Length > 3)
             {
@@ -1893,8 +1841,124 @@ namespace PH4_WPF.FrmSoft
         }
 
         /* Тут общие методы */
-        private FileServerClass OpenFileEx(string file)
+        private void ApplicationDoWork(string txt, bool isWin)
         {
+            string[] vs = txt.Split(' ');
+            if (vs.Length == 1)
+            {
+                AddTextConsole("Ъ`Red=Вы не указали путь к файлу или файл Ъ");
+                return;
+            }
+            FileServerClass fileServer = OpenFileEx(txt[5..]);
+            if (fileServer == null) return;
+
+            if (fileServer.FileСontents.TypeInformation == Enums.TypeParam.sbank)
+            {
+                AddTextConsole("Поиск на наличие банковской информации на сервере ", 2);
+                AddTextConsole("Поиск .. ", 5);
+                AddTextConsole("Поиск ... ", 8, false);
+                AddTextConsole("Поиск ... ", 7, false);
+                AddTextConsole("Поиск .... ", 9, false);
+                AddTextConsole("Поиск ..... ", 10, false);
+                AddTextConsole("Поиск завершен ", 5, false);
+                if (GameSrv.ScanBankInfo(out string message))
+                {
+                    AddTextConsole(message, 2);
+                    string[] login = Properties.Resources.login.Split("\r\n");
+                    string[] pass = Properties.Resources.pwd.Split("\r\n");
+
+                    Random rnd = new Random();
+                    char gen() => Convert.ToChar(rnd.Next(48, 58));
+
+                    App.GameGlobal.Bank.Accounts.Add(new BankClass.BankAccount()
+                    {
+                        Login = login[rnd.Next(0, login.Length - 1)],
+                        Pass = pass[rnd.Next(0, pass.Length - 1)],
+                        TypeMoney = (Enums.TypeMoneyEnum)rnd.Next(1, 3),
+                        Rs = new string(new char[] { gen(), gen(), gen(), gen(), gen() }),
+                        MyCash = false,
+                        Money = rnd.Next(10, 150)
+                    });
+
+                    var bank = App.GameGlobal.Bank.Accounts.Last();
+
+                    if (FileServerClass.Exist("/user/Hpro4/HDoc/", "bank_info.txt", App.GameGlobal.MyServer) == false)
+                    {
+                        var ff = new FileServerClass.ParameterClass()
+                        {
+                            TypeInformation = Enums.TypeParam.text,
+                            TextCommand = "bankinfo"
+                        };
+                        App.GameGlobal.MyServer.CreateFiles("/user/Hpro4/HDoc/", "bank_info.txt", ff, 500, FileServerClass.PremisionEnum.AdminAndUser);
+                        App.GameGlobal.MyServer.FileTextInfo.Add("bank_info.txt", "");
+                    }
+                    App.GameGlobal.MyServer.FileTextInfo["bank_info.txt"] = App.GameGlobal.MyServer.FileTextInfo["bank_info.txt"] +
+                        "/n Логин:" + bank.Login + " Пароль: " + bank.Pass + " №" + bank.Rs + " Найден на сервере " + GameSrv.NameSrv;
+                }
+                else
+                {
+                    AddTextConsole(message, 2);
+                }
+            }
+            else if (fileServer.FileСontents.TypeInformation == Enums.TypeParam.script_deface)
+            {
+                AddTextConsole("Создать на сервере свое сообщение об взломе этого сервера ", 2);
+                AddTextConsole("Ъ`White= ОтменаЪ - оставить текст пустым", 1);
+                AddTextConsole("Введите текст ", 2);
+                TextConsoleOpenBuffer("Text", 1);
+                BufferConsole.WaitCommand = delegate
+                {
+                    if (BufferConsole.Text == "")
+                    {
+                        AddTextConsole("Ъ`Yellow=Отмена действийЪ", 1);
+                        BashConsole();
+                        return;
+                    }
+                    AddTextConsole("Запись Title сайта", 1);
+                    AddTextConsole("Ъ~b=MEM 3: 4, 5, 6Ъ", 2);
+                    AddTextConsole("Ъ~b=MEM 5: 0, 0, 1Ъ", 3);
+                    AddTextConsole("Ъ~b=SET MEM 3 : MEM 5", 3);
+                    if (GameSrv.VirtualizationServer == null)
+                    {
+                        AddTextConsole("Ъ`Yellow=На этом сервере нет веб-сайтаЪ", 1);
+                        BashConsole();
+                        return;
+                    }
+                    AddTextConsole("<html lang='' dir='ltr'><head>", 3);
+                    AddTextConsole("a.l=function(e){function g(b){var c={};c[b]=k();a.cc_latency.push(c)}function m(b){var c=n('iml');b.setAttribute('1data - iml", 3);
+                    AddTextConsole("var x=this||self;.Ja=function(a){a=Error(a);a.__closure__error__context__984382||(a.__closure__error__context__984382=", 5);
+                    AddTextConsole("Уровень скрипта: любитель. Этот скрипт дважды работать не будет.", 1);
+                    GameSrv.Deface(fileServer.FileСontents.IntParam, BufferConsole.Text);
+                    BashConsole();
+                };
+            }
+            else if (fileServer.FileСontents.TypeInformation == Enums.TypeParam.virus_win)
+            {
+                if (!isWin)
+                {
+                    AddTextConsole("Ъ`OrangeRed=Ошибка запуска приложения 0x00000001-0x0000007eЪ", 1);
+                    return;
+                }
+                App.GameGlobal.VirusList.InfectedVirA(GameSrv, ref fileServer);
+                AddTextConsole("Вирус установлен", 1);
+            }
+            else AddTextConsole("Ъ`OrangeRed=Файл не соотвествует рабочему исполнительному файлуЪ", 1);
+        }
+        private string Shielding(string str) {
+            str = str.Replace("%20", " "); // Экранизация
+                                           // Environ переменные быстрый вввод
+            var ss = str.Split('$');
+            if (ss.Length == 3)
+            {
+                var tv = typeof(FrmFile.PatchEnviron).GetProperty(ss[1]);
+                if (tv is null) return str;
+                str = str.Replace("$" + ss[1] + "$", tv.GetValue(tv).ToString());
+            }
+            return str;
+        }
+        private FileServerClass OpenFileEx(string file, Server srv = null)
+        {
+            if (srv == null) srv = GameSrv;
             try
             {               
                 if (file.Substring(0, 5) == "~FF00")
@@ -1907,15 +1971,17 @@ namespace PH4_WPF.FrmSoft
                     catch (Exception)
                     {
                         App.GameGlobal.Msg("Системная ошибка", "Критическая ошибка. Индекс находиться за пределами массива. Приложение будет закрыто ", FrmError.InformEnum.Критическая_ошибка);
-                        this.Close();
+                        Close();
                     }
                 }
-                file = file.Replace("%20", " "); // Экранизация
+
+                file = Shielding(file);  //Экранизация и Environ
+
                 // Поиск файла по пути или но названию в текущей папке
-                if (FileServerClass.Exist(Pwd, FileServerClass.PatchToFileNamePerfix(file), GameSrv) == false)
+                if (FileServerClass.Exist(Pwd, FileServerClass.PatchToFileNamePerfix(file), srv) == false)
                 {
                     //поиск по названию в этой папке
-                    if (FileServerClass.Exist(FileServerClass.PatchOnly(file), FileServerClass.PatchToFileNamePerfix(file), GameSrv) == false)
+                    if (FileServerClass.Exist(FileServerClass.PatchOnly(file), FileServerClass.PatchToFileNamePerfix(file), srv) == false)
                     {
                         AddTextConsole("Ъ`Red=Файл указан не верно: нет такого файла по пути " + file + " Ъ");
                         return null;
@@ -1924,15 +1990,15 @@ namespace PH4_WPF.FrmSoft
                 else
                 {
                     file = Pwd + file;
-                }
+                }               
 
                 // Проверка доступа к файлу
-                if (FileServerClass.CheckAccess(file, GameSrv) == false)
+                if (FileServerClass.CheckAccess(file, srv) == false)
                 {
                     AddTextConsole("Ъ`Red=(OpenFileEx) Нет доступа к файлу." + file + " Ъ");
                     return null;
                 }
-                return FileServerClass.GetFile(file, GameSrv);
+                return FileServerClass.GetFile(file, srv);
             }
             catch
             {
@@ -2000,14 +2066,85 @@ namespace PH4_WPF.FrmSoft
         private readonly BufferCmd BufferConsole = new BufferCmd();
         private class BufferCmd
         {
-            public FileServerClass FileStart { get; set; }
-            public string ServerName { get; set; }
-            public string ServerIP { get; set; }
-            public string Login { get; set; }
-            public string Password { get; set; }
-            public string NumberPort { get; set; }
-            public string Text { get; set; }
-            public Server Srv { get; set; }
+            private bool _isEmpty = true;
+            private FileServerClass _FileStart;
+            private string _ServerName;
+            private string _ServerIP;
+            private string _Login;
+            private string _Password;
+            private string _NumberPort;
+            private string _Text;
+            private Server _Srv;
+
+
+            public bool IsEmpty { get => _isEmpty; }
+            public FileServerClass FileStart
+            {
+                get => _FileStart;
+                set
+                {
+                    _FileStart = value;
+                    _isEmpty = false;
+                }
+            }
+            public string ServerName
+            {
+                get => _ServerName; set
+                {
+                    _ServerName = value;
+                    _isEmpty = false;
+                }
+            }
+            public string ServerIP
+            {
+                get => _ServerIP; set
+                {
+                    _ServerIP = value;
+                    _isEmpty = false;
+                }
+            }
+            public string Login
+            {
+                get => _Login; set
+                {
+                    _Login = value;
+                    _isEmpty = false;
+                }
+            }
+            public string Password
+            {
+                get => _Password;
+                set
+                {
+                    _Password = value;
+                    _isEmpty = false;
+                }
+            }
+            public string NumberPort
+            {
+                get => _NumberPort;
+                set
+                {
+                    _NumberPort = value;
+                    _isEmpty = false;
+                }
+            }
+            public string Text
+            {
+                get => _Text; set
+                {
+                    _Text = value;
+                    _isEmpty = false;
+                }
+            }
+            public Server Srv
+            {
+                get => _Srv; set
+                {
+                    _Srv = value;
+                    _isEmpty = false;
+                }
+            }
 
             public NextMetod WaitCommand;
             public delegate void NextMetod();
@@ -2023,11 +2160,16 @@ namespace PH4_WPF.FrmSoft
                 Password = "";
                 Srv = null;
                 WaitCommand = null;
+                _isEmpty = true;
             }
         }
 
         private void UpperTxt(int i)
         {
+            if (BufferConsole.IsEmpty) {
+                AddTextConsole("Buffer Console Empty !", 1);
+                return;
+            }
             switch (i)
             {
                 case 1:
@@ -2144,6 +2286,11 @@ namespace PH4_WPF.FrmSoft
 
         private void ErrorTxt(int i)
         {
+            if (BufferConsole.IsEmpty)
+            {
+                AddTextConsole("Buffer Console Empty !", 1);
+                return;
+            }
             switch (i)
             {
                 case 0:
@@ -2194,6 +2341,11 @@ namespace PH4_WPF.FrmSoft
 
         private void SuccessTxt(int i)
         {
+            if (BufferConsole.IsEmpty)
+            {
+                AddTextConsole("Buffer Console Empty !", 1);
+                return;
+            }
             switch (i)
             {
                 case 1:

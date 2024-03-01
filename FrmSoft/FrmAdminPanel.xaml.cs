@@ -58,15 +58,13 @@ namespace PH4_WPF.FrmSoft
             Page2.Visibility = Visibility.Hidden;
             Page3.Visibility = Visibility.Hidden;
         }
-
-        private void EventComplited(GameEvenStruct.IEventGame eventGame) {
-            if (eventGame is GameEvenStruct.UpgradeSoft soft) {
+        private void EventComplited(GameEvenClass.IEventGame eventGame) {
+            if (eventGame is GameEvenClass.UpgradeSoft soft) {
                 if (soft.ServerName == MainServer.NameSrv) {
                     Refreh_ListVM();
                 }
             }
         }
-
         private void АнимацияЗадержки(object sender, EventArgs e) {
             if (TagInstace.StatusInstance != Enums.StatusInstanceEnum.Working)
             {
@@ -102,7 +100,6 @@ namespace PH4_WPF.FrmSoft
             PG_InProcess.Visibility = Visibility.Hidden;
             EchoCm.Stop();
         }
-
         private void Refreh_ListVM()
         {
             var bc = new BrushConverter();
@@ -137,8 +134,7 @@ namespace PH4_WPF.FrmSoft
             App.GameGlobal.EventIntroduce(Enums.ConditionEnum.ПосещениеСервера, MainServer.NameSrv, PB_popular.Value.ToString());
             
         }
-
-        private void UpdateDayUpgrade() {
+        private void UpdateDayUpgrade(int day) {
             if (Page2.Visibility == Visibility.Visible & VirtualSrv.CheckUpgradeNow)
             {
                 LabelProdNow.Content = VirtualSrv.ProccesNowUpgade.Value.NewVer.InstaceType.ToString();
@@ -151,7 +147,6 @@ namespace PH4_WPF.FrmSoft
                 LabelProdNow.Content = "Жду разработки....";
             }
         }
-
         private void Перетаскивание(object sender, MouseButtonEventArgs e)
         {
             if (e.LeftButton == MouseButtonState.Pressed)
@@ -160,7 +155,10 @@ namespace PH4_WPF.FrmSoft
         private void Выделяет_кнопку_выход(object sender, MouseEventArgs e) => ExitButton.Fill = Brushes.IndianRed;
         private void ПрекращаетВыделение(object sender, MouseEventArgs e) => ExitButton.Fill = Brushes.DarkRed;
         private void УдалениеКнопка(object sender, MouseButtonEventArgs e) => this.Close();
-        private void ФормаЗакрыта(object sender, EventArgs e) => App.GameGlobal.ActiveApp.Remove(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType.FullName);
+        private void ФормаЗакрыта(object sender, EventArgs e) { 
+            App.GameGlobal.ActiveApp.Remove(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType.FullName);
+            App.GameGlobal.MainWindow.NewDayEvent -= UpdateDayUpgrade;
+        }
         private void МышкаНадКнопкой(object sender, MouseEventArgs e)
         {
             Selector.Visibility = Visibility.Visible;
@@ -276,7 +274,6 @@ namespace PH4_WPF.FrmSoft
 
             }
         }
-
         private void UgProg(object sender, MouseButtonEventArgs e)
         {
             if (MainServer.VirtualizationServer.ProccesNowUpgade == null) return;
@@ -304,36 +301,29 @@ namespace PH4_WPF.FrmSoft
             if (App.GameGlobal.GameSpeed == Game.GameSpeedEnum.Pause) LabelProdNow.Content = "Запустите время игры";
             StartUpProg.Visibility = Visibility.Hidden;
         }
-
         private void КликПоВерсиям(object sender, MouseButtonEventArgs e)
         {
             HideAllPage();
             Page3.Visibility = Visibility.Visible;
         }
-
         private void Маштабирование(object sender, MouseButtonEventArgs e)
         {
             Curtain.Visibility = Visibility.Hidden;           
         }
-
         private void МышкаНадВерхнемNumeric(object sender, MouseEventArgs e)
         {
             ButtonUp.Margin = new Thickness(654, 149, 0, 0);
             ButtonDown.Margin = new Thickness(654, 165, 0, 0);
             _NumericSelect = NumericProcessRam;
         }
-
         private void МышкаНадНижнемNumeric(object sender, MouseEventArgs e)
         {
             ButtonUp.Margin = new Thickness(654, 178, 0, 0);
             ButtonDown.Margin = new Thickness(654, 193, 0, 0);
             _NumericSelect = NumericHDD;
         }
-
         private void ButtonUpКлик(object sender, RoutedEventArgs e) => NumericBox++;
-
-        private void ButtonDownклик(object sender, RoutedEventArgs e) => NumericBox--;
-      
+        private void ButtonDownклик(object sender, RoutedEventArgs e) => NumericBox--;      
         private void ПроверкаNumericОснова(object sender, TextChangedEventArgs e)
         {
             if (_loadded == false) return;
@@ -342,7 +332,6 @@ namespace PH4_WPF.FrmSoft
                 int sum = int.Parse(NumericProcessRam.Text) * (int)(App.GameGlobal.GamerInfo.MultiplierPrices * 12) + int.Parse(NumericHDD.Text) * (int)(App.GameGlobal.GamerInfo.MultiplierPrices * 4);
                 SumNumeric.Content = "Стоимость: " + sum + "$";            
         }
-
         private void ЗаказатьЖелезо(object sender, MouseButtonEventArgs e)
         {
             if (SumNumeric.Content.ToString() == "") return;
@@ -355,13 +344,12 @@ namespace PH4_WPF.FrmSoft
                   "Итого: " + (proc + hdd) + "\n" +                  
                   "\n - срок выполнение заказа не более 60 дней \n" +
                   "Выберете действие чтобы оплатить этот заказ ";
-            GameEvenStruct.RequestHardwareUp c = new GameEvenStruct.RequestHardwareUp(proc + hdd, new GameEvenStruct.HardwareUpStart( MainServer, int.Parse(NumericProcessRam.Text), int.Parse(NumericHDD.Text)));
+            GameEvenClass.RequestHardwareUp c = new GameEvenClass.RequestHardwareUp(proc + hdd, new GameEvenClass.HardwareUpStart( MainServer, int.Parse(NumericProcessRam.Text), int.Parse(NumericHDD.Text)));
 
             MainServer.Mails.Add(new MailInBox() { DateTo = App.GameGlobal.DataGM, Title ="Запрос предложения на сервера", Mailto = "hardware@advertte.com", ReadMail =false , BodyText =b, CommandList = c });
             App.GameGlobal.Msg("Сообщение", "Счет выслан на почту " + MainServer.NameSrv, FrmError.InformEnum.Информация);
             SumNumeric.Content = "";
         }
-
         private void ЗагруженнаФорма(object sender, RoutedEventArgs e) => _loadded = true;
     }
 }

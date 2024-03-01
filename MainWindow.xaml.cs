@@ -30,9 +30,19 @@ namespace PH4_WPF
         private readonly List<string> LogGame = new List<string>();
         private readonly List<string> TextAnimation = new List<string> ();
 
-        public delegate void NewDay();
+        /// <summary>
+        /// Делегат прошел день(дни)
+        /// </summary>
+        /// <param name="days">количество дней прошло, зависит от включенной скорости 1, 2, 4</param>
+        public delegate void NewDay(int days);
+        /// <summary>
+        /// Новый день событие
+        /// </summary>
         public event NewDay NewDayEvent;
-        public delegate void GameEventFinish(GameEvenStruct.IEventGame eventGame);
+        public delegate void GameEventFinish(GameEvenClass.IEventGame eventGame);
+        /// <summary>
+        /// Событие было завершено 
+        /// </summary>
         public event GameEventFinish Event_Completed;
 
         //Данные из файлов
@@ -163,11 +173,14 @@ namespace PH4_WPF
             //Маштабирование UI
             ButtonOption.Margin = new Thickness(DownPanel.Margin.Left + ButtonOption.Height, 0, 0, 0);
             // проверка событий в игре 
-            App.GameGlobal.MainWindow.NewDayEvent += GameEventCheck; 
-            
-                        
+            App.GameGlobal.MainWindow.NewDayEvent += GameEventCheck;
+            // перемещает лист поиска поверх всех элементов 
+            Canvas.SetZIndex(LB_FindEl, G_BackPanel.Children.Count);
+
+           
+
         }
-        
+
         private void АнимацияТекста(object sender, EventArgs e)
         {
             if (_possTextAnm == TextAnimation.Count)
@@ -193,26 +206,26 @@ namespace PH4_WPF
             {           
                 case Game.GameSpeedEnum.Speed1X:
                     App.GameGlobal.DataGM = App.GameGlobal.DataGM.AddDays(1);
-                    NewDayEvent();
+                    NewDayEvent(1);
                     App.GameGlobal.Bank.Monetary();
                     break;
                 case Game.GameSpeedEnum.Speed2X:
                     App.GameGlobal.DataGM= App.GameGlobal.DataGM.AddDays(2);
-                    NewDayEvent();
+                    NewDayEvent(2);
                     App.GameGlobal.Bank.Monetary();
                     break;
                 case Game.GameSpeedEnum.Speed4X:
                     App.GameGlobal.DataGM = App.GameGlobal.DataGM.AddDays(4);
-                    NewDayEvent();
+                    NewDayEvent(4);
                     App.GameGlobal.Bank.Monetary();
                     break;
                 case Game.GameSpeedEnum.Pause:
                 default:
                     break;
-            }           
+            }              
         }      
 
-        private void GameEventCheck() {
+        private void GameEventCheck(int days) {
             DateGameIndicator.Content = App.GameGlobal.DataGM.ToString("dd.MM.yyyy");
             // Логика обновления статуса серверов
 
@@ -232,6 +245,8 @@ namespace PH4_WPF
                 Event_Completed?.Invoke(item.GameEvent);
                 App.GameGlobal.AllEventGame.Remove(item);
             }
+            // логика заражения работы вирусов типа Worms  
+            App.GameGlobal.VirusList.Worms_Work(days);
         }
                
 
@@ -743,18 +758,19 @@ namespace PH4_WPF
 
         private void ПоисковаяСтрока(object sender, TextChangedEventArgs e)
         {
-            if (T_Search .Text.Length >= 2){
+            if (T_Search.Text.Length >= 2)
+            {
                 G_BackPanel.Visibility = Visibility.Visible;
                 LB_FindEl.Visibility = Visibility.Visible;
                 LB_FindEl.Items.Clear();
-              var x= App.GameGlobal.Servers.FindAll(x => x.NameSrv.Contains(T_Search.Text));
-                for (int i = 0; i < Math.Min (x.Count ,10); i++)
+                var x = App.GameGlobal.Servers.FindAll(x => x.NameSrv.Contains(T_Search.Text));
+                for (int i = 0; i < Math.Min(x.Count, 10); i++)
                 {
-                    LB_FindEl.Items.Add(x[i].NameSrv );
+                    LB_FindEl.Items.Add(x[i].NameSrv);
                 }
 
             }
-        }      
+        }
 
         private void ВыходИзПоиска(object sender, MouseEventArgs e)
         {
@@ -803,10 +819,6 @@ namespace PH4_WPF
         private void ЗакрытьМенюИгры(object sender, RoutedEventArgs e)
         { 
             Grid_Menu.Visibility = Visibility.Hidden;
-            var frm = new FrmApp();
-            frm.ShowForm();
-
-
         }
 
         private void ОткрытьИД(object sender, RoutedEventArgs e)
@@ -851,7 +863,7 @@ namespace PH4_WPF
                 App.GameGlobal.FindServer(L_SrvName.Content.ToString()).ActSrv = false;
                 DateTime date = App.GameGlobal.DataGM;
                 date.AddMonths(1);
-                App.GameGlobal.AllEventGame.Add(new GameEvenStruct(date, new GameEvenStruct.EventShutdown(L_SrvName.Content.ToString() )));
+                App.GameGlobal.AllEventGame.Add(new GameEvenClass(date, new GameEvenClass.EventShutdown(L_SrvName.Content.ToString() )));
                 App.GameGlobal.MainWindow.G_BackPanel.Visibility = Visibility.Hidden;               
             });
             msg.Show();
@@ -956,8 +968,6 @@ namespace PH4_WPF
                 RingTest.Items.Add(item.ToString());
                 s.Append ("\r\n"+ item.ToString()) ;
             }
-
-
             Clipboard.SetText(s.ToString());
         }
 
@@ -968,9 +978,8 @@ namespace PH4_WPF
 
         private void ТестоваяКнопка(object sender, RoutedEventArgs e)
         {
-
-
-           
+            App.GameGlobal.GamerInfo.HiTecLevel += 5;
+            App.GameGlobal.Instructions_V();
 
 
         }

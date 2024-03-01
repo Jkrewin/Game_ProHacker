@@ -20,7 +20,7 @@
             <Label x:Name="InfoArgument" Content="&lt;нет&gt;" HorizontalAlignment="Center" VerticalAlignment="Top" Height="46" Width="780" Foreground="#FFBABABA" FontWeight="Normal" Margin="0,20,0,0"/>
             <TextBlock x:Name="CommandInfo" HorizontalAlignment="Center" VerticalAlignment="Top" Height="24" Width="780" Foreground="#FFBABABA" FontWeight="Normal"/>
         </Grid>
-        <Grid x:Name="CmdPanel" Height="583" Margin="5,51,5,0" VerticalAlignment="Top" Background="#FF222735" MouseMove="КурсорНадКонсольюТекст">
+        <Grid x:Name="CmdPanel" Height="583" Margin="5,51,5,0" VerticalAlignment="Top" Background="#FF222735" >
             <TextBlock x:Name="CmdText" Foreground="#FF34C354" FontSize="13" Text="1" FontFamily="Consolas" ></TextBlock>
             <TextBlock x:Name="EnteringText" Foreground="#FF8AF0A1" FontSize="13" Text="" FontFamily="Consolas" ></TextBlock>
             <TextBlock x:Name="CursorText" Foreground="#FF8AF0A1" FontSize="13" Text="_" FontFamily="Consolas" FontWeight="Bold" ></TextBlock>

@@ -29,6 +29,7 @@ namespace PH4_WPF.Browser
             {
                 LinkMyScr.Text = str2;
                 Rtf.Visibility = Visibility.Hidden;
+                St_List.Visibility = Visibility.Visible;
 
                 if (App.GameGlobal.GamerInfo.Coder(Enums.SkillCoder.ПоискБанковскойИнформации) == false) ScriptOneBank.Visibility =  Visibility.Hidden ;
                 if (App.GameGlobal.GamerInfo.Defecer(Enums.SkillDefecer.СообщитьДефейсе) == false) ScriptOneDeface.Visibility = Visibility.Hidden;
@@ -36,12 +37,14 @@ namespace PH4_WPF.Browser
             else {
                 LinkMyScr.Text = str1;
                 Rtf.Visibility = Visibility.Visible;
+                St_List.Visibility = Visibility.Hidden;
             }
         }
 
         private void Загруженна(object sender, RoutedEventArgs e)
         {
             Rtf.Visibility = Visibility.Visible;
+            St_List.Visibility = Visibility.Hidden;
         }
 
         private void СкачатьСкрипт(object sender, RoutedEventArgs e)

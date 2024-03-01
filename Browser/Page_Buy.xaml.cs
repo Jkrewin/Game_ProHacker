@@ -1,16 +1,7 @@
 ﻿using PH4_WPF.Engine;
 using System;
-using System.Collections.Generic;
-using System.Text;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
 
 namespace PH4_WPF.Browser
 {
@@ -22,19 +13,36 @@ namespace PH4_WPF.Browser
         public Page_Buy(DownloadText downloadText , Page oldPage )
         {
             InitializeComponent();
+            L_Sale.Content = "";
+            if (App.GameGlobal.GamerInfo.Cracker(Enums.SkillCrack.СкидкаНаСофт20)) L_Sale.Content = "Скидка 20%";
+
             DT = downloadText;
             PageOld = oldPage;
             L_NameText.Content = DT.NameBug;
             L_Type.Content = DT.TypeProg.ToString ();
-            L_Price.Content = DT.Price+"$";
+            L_Price.Content = DT.Price + "$";
         }
 
-        public  struct DownloadText
+        /// <summary>
+        /// Передача файла для скачки 
+        /// </summary>
+        public struct DownloadText
         {
+            private double _Price;
+
             public string NameBug;
-            public Enums.TypeParam  TypeProg;
+            public Enums.TypeParam TypeProg;
             public string ID;
-            public string Price;
+            public string Price
+            {
+                get
+                {
+                    double u = _Price;
+                    if (App.GameGlobal.GamerInfo.Cracker(Enums.SkillCrack.СкидкаНаСофт20)) u -= u * 0.2;
+                    return u.ToString();
+                }
+                set => _Price = double.Parse(value);
+            }
             public string ValueString;
         }
 
@@ -67,7 +75,7 @@ namespace PH4_WPF.Browser
                     ErrorText("У вас недостаточно средств на счете");
                     return;
                 }
-                if (FileServerClass.Exist("/user/Hpro4/Download/", DT.NameBug, "pl", App.GameGlobal.MyServer))
+                if (FileServerClass.Exist(FrmSoft.FrmFile.PatchEnviron.Download, DT.NameBug, "pl", App.GameGlobal.MyServer))
                 {
                     ErrorText("Этот файл был скачен ранее");
                     return;
@@ -87,7 +95,7 @@ namespace PH4_WPF.Browser
             }
             else
             {
-                if (FileServerClass.Exist("/user/Hpro4/Download/", DT.NameBug, "pl", App.GameGlobal.MyServer))
+                if (FileServerClass.Exist(FrmSoft.FrmFile.PatchEnviron.Download, DT.NameBug, "pl", App.GameGlobal.MyServer))
                 {
                     ErrorText("Этот файл был скачен ранее");
                 }

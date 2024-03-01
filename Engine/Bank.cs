@@ -33,8 +33,8 @@ namespace PH4_WPF.Engine
         public BankClass() {
             MonetarySystem = new List<Stock>();          
             MonetarySystem.Add(new Stock(0.01, Enums.TypeMoneyEnum.Karbovantsy));
-            MonetarySystem.Add(new BankClass.Stock(2, Enums.TypeMoneyEnum.Ether));
-            MonetarySystem.Add(new BankClass.Stock(10, Enums.TypeMoneyEnum.BitCoin));
+            MonetarySystem.Add(new Stock(2, Enums.TypeMoneyEnum.Ether));
+            MonetarySystem.Add(new Stock(10, Enums.TypeMoneyEnum.BitCoin));
         }
 
         /// <summary>
