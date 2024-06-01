@@ -3,6 +3,7 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Documents;
 using System.Windows.Input;
+using System.Windows.Media;
 
 namespace PH4_WPF.Browser
 {
@@ -13,7 +14,8 @@ namespace PH4_WPF.Browser
             if (File.Exists(App.PatchAB + @"\rtf\" + s + ".rtf"))
             {
                 TextRange doc = new TextRange(Rtf.Document.ContentStart, Rtf.Document.ContentEnd);
-                using (FileStream fs = new FileStream(App.PatchAB + @"\rtf\" + s + ".rtf", FileMode.Open)) doc.Load(fs, DataFormats.Rtf);
+                using FileStream fs = new FileStream(App.PatchAB + @"\rtf\" + s + ".rtf", FileMode.Open); 
+                doc.Load(fs, DataFormats.Rtf);
             }
         }
 
@@ -71,6 +73,14 @@ namespace PH4_WPF.Browser
                 default:
                     break;
             }            
+        }
+
+        private void СкачатьПрограмму(object sender, MouseButtonEventArgs e)
+        {
+            ((FrmBrowser)App.GameGlobal.ActiveApp["PH4_WPF.Browser.FrmBrowser"]).StartDownload("tide",
+              new Engine.FileServerClass.ParameterClass() { TypeInformation = Enums.TypeParam.exe, TextCommand = "tide" },
+              5800, "exe");
+            ((TextBlock)L_Download.Content).Foreground = Brushes.Gray;
         }
     }
 }

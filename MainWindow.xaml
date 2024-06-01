@@ -120,20 +120,7 @@
             <Button BorderBrush="#FF3F3F3F" BorderThickness="0" Click="ОткрытьQMess" Background="{x:Null}"  Width="80"  >
                 <Image x:Name="MessageIcon" Source="/Content/soft/IQ.png" Stretch="Uniform" StretchDirection="Both" Opacity="0.5" />
             </Button>
-            <Rectangle Stroke="#FF4B566A" StrokeThickness="0" Width="9"/>
             <!--2-->
-            <Button x:Name="PortScanerIcon1"  Visibility="Visible"  BorderBrush="#FF3F3F3F" BorderThickness="0" Click="ОткрытьСканер"  Width="80" Height="77" Background="{x:Null}" FontFamily="Wingdings 2"  >
-                <Image x:Name="PortScanerIcon" Source="/Content/soft/scaner_server/ScanerG1.png" Stretch="Uniform" Visibility="Visible"  />
-            </Button>
-            
-            <Rectangle Stroke="#FF4B566A" StrokeThickness="0" Width="9"/>
-            <Button x:Name="BrutoforceSoft"  Visibility="Visible"  BorderBrush="#FF3F3F3F" BorderThickness="0" Click="ОткрытьПереборщик"  Width="80" Height="77" Background="{x:Null}" FontFamily="Wingdings 2"  >
-                <Image x:Name="BrutoforceSoftIcon" Source="/Content/soft/Brute.png" Stretch="Uniform" Visibility="Visible"  />
-            </Button>
-            <Rectangle Stroke="#FF4B566A" StrokeThickness="0" Width="9"/>
-            <Button x:Name="IDESoft"  Visibility="Visible"  BorderBrush="#FF3F3F3F" BorderThickness="0" Click="ОткрытьIDE"  Width="80" Height="77" Background="{x:Null}" FontFamily="Wingdings 2"  >
-                <Image x:Name="IDESoftIcon" Source="/Content/soft/Brute.png" Stretch="Uniform" Visibility="Visible"/>
-            </Button>
 
         </DockPanel>
 

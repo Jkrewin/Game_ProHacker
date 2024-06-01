@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using System.Windows;
+﻿using System.Windows;
 
 namespace PH4_WPF
 {
@@ -30,5 +27,5 @@ namespace PH4_WPF
                 App.GameGlobal.ActiveApp[s].WindowState  = WindowState.Normal;
             }
         }
-    }
+    }    
 }

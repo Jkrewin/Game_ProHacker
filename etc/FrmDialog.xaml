@@ -1,0 +1,31 @@
+﻿<Window x:Class="PH4_WPF.etc.FrmDialog"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:PH4_WPF.etc"
+        mc:Ignorable="d"
+         WindowStyle="None"
+        WindowStartupLocation="CenterScreen"
+        AllowsTransparency="True"
+        Background="#FF649C91"
+        Title="Выбор файла" Height="363" Width="605" Loaded="Загруженно">
+    <Grid>
+        <ListBox x:Name="FileList" Margin="0,29,0,37" ScrollViewer.HorizontalScrollBarVisibility="Disabled" SelectionChanged="ВыборЭлемента" Background="#FFD2EAD1">
+            <ListBox.ItemsPanel>
+                <ItemsPanelTemplate>
+                    <WrapPanel IsItemsHost="True" />
+                </ItemsPanelTemplate>
+            </ListBox.ItemsPanel>
+            <ListBoxItem>
+                <Grid Height="18" Width="205">
+                    <Image Margin="0,0,185,0" Source="/Content/chat_avators/Alaub.gif" Stretch="Uniform"></Image>
+                    <Label Content="Label" HorizontalAlignment="Left" VerticalAlignment="Center" Width="172" Margin="23,0,0,0" Padding="5,0,5,0" Foreground="#FF0A422A"/>
+                </Grid>
+            </ListBoxItem>
+        </ListBox>
+        <Button Content="Выбрать Файл" HorizontalAlignment="Left" Margin="350,331,0,0" VerticalAlignment="Top" Height="32" Width="120" Click="ВыборФайла" Background="#FF356F73" BorderBrush="#FF4B3E3E" Foreground="#FFF1FFDE" FontSize="14"/>
+        <Button Content="Закрыть" HorizontalAlignment="Left" Margin="475,331,0,0" VerticalAlignment="Top" Height="32" Width="120" Click="ЗакрытиеФормы" Background="#FF356F73" BorderBrush="#FF4B3E3E" Foreground="#FFF1FFDE" FontSize="14"/>
+        <Label x:Name="InfoSelector" Content="Выбор исходного файла" Margin="0,-1,0,0" VerticalAlignment="Top" Height="26" Foreground="White" FontSize="14"/>
+    </Grid>
+</Window>

@@ -90,7 +90,7 @@ namespace PH4_WPF.Browser
                         IntParam = int.Parse(dt),
                         TextCommand = DT.ValueString
                     }, rand.Next(150, 800), "pl");
-                App.GameGlobal.SoundSignal("buy");
+                App.GameGlobal.SoundSignal(Enums.Sounds.buy);
                 Отмена(null, null);
             }
             else

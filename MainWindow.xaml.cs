@@ -11,6 +11,7 @@ using System.IO;
 using System.Runtime.Serialization.Formatters.Binary;
 using PH4_WPF.Engine;
 using static PH4_WPF.Engine.BankClass;
+using System.Windows.Shapes;
 
 namespace PH4_WPF
 {    
@@ -145,7 +146,7 @@ namespace PH4_WPF
             if (AnmIndex == 6) AnmIndex = 0;
             foreach (var item in App.GameGlobal.Servers)
             {
-                 item.DrawingHub .TexturaSrv .Source = ImageArr[(int)item.TypesSrv, AnmIndex];
+                 item.DrawingHub .TexturaSrv.Source = ImageArr[(int)item.TypesSrv, AnmIndex];
             }          
 
             AnmIndex++;        
@@ -176,9 +177,7 @@ namespace PH4_WPF
             App.GameGlobal.MainWindow.NewDayEvent += GameEventCheck;
             // перемещает лист поиска поверх всех элементов 
             Canvas.SetZIndex(LB_FindEl, G_BackPanel.Children.Count);
-
            
-
         }
 
         private void АнимацияТекста(object sender, EventArgs e)
@@ -248,24 +247,75 @@ namespace PH4_WPF
             // логика заражения работы вирусов типа Worms  
             App.GameGlobal.VirusList.Worms_Work(days);
         }
-               
+
+        /// <summary>
+        /// Changes the image of the speed icon at the bottom of the screen
+        /// </summary>
+        public void IconTimeSpeed(Game.GameSpeedEnum value) {
+            switch (value)
+            {
+                case Game.GameSpeedEnum.Pause:
+                    StatusSpeedImg.Source = App.UriResImage("Content/Desktop/bPanel/SpeedPause.png");
+                    break;
+                case Game.GameSpeedEnum.Speed1X:
+                    StatusSpeedImg.Source = App.UriResImage("Content/Desktop/bPanel/Speed1x.png");
+                    break;
+                case Game.GameSpeedEnum.Speed2X:
+                    StatusSpeedImg.Source = App.UriResImage("Content/Desktop/bPanel/Speed2x.png");
+                    break;
+                case Game.GameSpeedEnum.Speed4X:
+                    StatusSpeedImg.Source = App.UriResImage("Content/Desktop/bPanel/Speed4x.png");
+                    break;
+                default:
+                    break;
+            }
+        }
 
         /// <summary>
         /// обновляет список программ ниже
         /// </summary>
         public void Refreh_AppDeck() {
-            PortScanerIcon1.Visibility = Visibility.Hidden;
-            BrutoforceSoft.Visibility = Visibility.Hidden;
+            //очистить список
+            for (int i = DownPanel.Children.Count - 1; i >= 0; i--)
+            {
+                if (DownPanel.Children[i].Uid == "Removed") DownPanel.Children.RemoveAt(i);
+            }
 
+            void act (string img)
+            {
+                DownPanel.Children.Add(new Rectangle() { Stroke = App.BrushConv("#FF4B566A"), StrokeThickness = 0, Width = 9, Uid = "Removed" });
+                DownPanel.Children.Add(new Button()
+                {
+                    BorderBrush = App.BrushConv("#FF3F3F3F"),
+                    BorderThickness = new Thickness(),
+                    Width = 80,
+                    Height = 77,
+                    Background = null,
+                    Uid = "Removed",
+                    Content = new Image()
+                    {
+                        Source = App.UriResImage(img),
+                        Stretch = Stretch.Uniform
+                    }
+                });
+            }
+           
+            //создать список
             foreach (var item in FileServerClass.GetInfoFiles("/apps/", App.GameGlobal.MyServer))
             {
                 switch (FileServerClass.PatchToFileName (item.FileName.ToLower ()))
                 {
                     case "portscaner":
-                        PortScanerIcon1.Visibility = Visibility.Visible;
+                        act("/Content/soft/scaner_server/ScanerG1.png");
+                        ((Button) DownPanel.Children[^1]).Click += ОткрытьСканер;
                         break;
                     case "bruteforce":
-                        BrutoforceSoft.Visibility = Visibility.Visible;
+                        act("/Content/soft/Brute.png");
+                        ((Button)DownPanel.Children[^1]).Click += ОткрытьПереборщик;
+                        break;
+                    case "tide":
+                        act("/Content/soft/tide.png");
+                        ((Button)DownPanel.Children[^1]).Click += ОткрытьIDE;
                         break;
                     default:
                         break;
@@ -298,33 +348,30 @@ namespace PH4_WPF
             _selectedServer.DrawingHub.Ellipse.Stroke  = Brushes.Blue ;
             LB_FindEl.Visibility = Visibility.Hidden;
             L_Status.Background = _selectedServer.ActSrv ? Brushes.LawnGreen : Brushes.OrangeRed;
-            if (_selectedServer.ActSrv) {
-                L_Status.Content = "Активный";
-            } else if(_selectedServer.ActSrv==false ) {
-                L_Status.Content = "Не работает";
-            }// сюда добавить еще основания не работы сервера
+            L_Status.Content = _selectedServer.ActSrv ? "Активный" : "Не работает";
+            // сюда добавить еще основания не работы сервера
             var bc = new BrushConverter();
             switch (_selectedServer.Premision)
             {
                 case Server.PremissionServerEnum.none:
                     L_StatusLine.Text = "У вас нет доступа к этому серверу, сервер не был взломан.";
-                    L_StatusLine.Foreground = (System.Windows.Media.Brush)bc.ConvertFrom("#FF060505"); 
+                    L_StatusLine.Foreground = (Brush)bc.ConvertFrom("#FF060505"); 
                     break;
                 case Server.PremissionServerEnum.FullControl:
                     L_StatusLine.Text = "У вас есть полный доступ к серверу. ";
-                    L_StatusLine.Foreground = (System.Windows.Media.Brush)bc.ConvertFrom("#FFEE4949");
+                    L_StatusLine.Foreground = (Brush)bc.ConvertFrom("#FFEE4949");
                     break;
                 case Server.PremissionServerEnum.UserControl:
                     L_StatusLine.Text = "У вас есть ограниченный доступ к серверу, но вы можете оказывать влияние на работу.";
-                    L_StatusLine.Foreground = (System.Windows.Media.Brush)bc.ConvertFrom("#FFEFF476");
+                    L_StatusLine.Foreground = (Brush)bc.ConvertFrom("#FFEFF476");
                     break;
                 case Server.PremissionServerEnum.GuestControl:
                     L_StatusLine.Text = "У вас есть ограниченный доступ к информации и к паролям этого сервера.";
-                    L_StatusLine.Foreground = (System.Windows.Media.Brush)bc.ConvertFrom("#FF17BDA2");
+                    L_StatusLine.Foreground = (Brush)bc.ConvertFrom("#FF17BDA2");
                     break;
                 case Server.PremissionServerEnum.Zombies:
                     L_StatusLine.Text = "Сервер заражен вирусом и может управляться вами, в зависимость от типа вируса. ";
-                    L_StatusLine.Foreground = (System.Windows.Media.Brush)bc.ConvertFrom("#FF7CFC00");
+                    L_StatusLine.Foreground = (Brush)bc.ConvertFrom("#FF7CFC00");
                     break;
                 default:
                     break;
@@ -334,10 +381,7 @@ namespace PH4_WPF
             AdminPanel.Visibility = Visibility.Hidden;
 
             //тут проверка маршрута
-            if (RouteList.Find(_selectedServer) != null)
-                AddRouteButton.Content = "Сбросить ВСЕ Маршруты";
-            else
-                AddRouteButton.Content = "Создать маршрут";
+            AddRouteButton.Content = RouteList.Find(_selectedServer) is null ? "Создать маршрут" : "Сбросить ВСЕ Маршруты";            
 
             if (_selectedServer.Premision == Server.PremissionServerEnum.FullControl) AdminPanel.Visibility = Visibility.Visible;
             if (App.GameGlobal.GamerInfo.Defecer (Enums.SkillDefecer.ПерезапускСервера )) ShutdownServer.Visibility = Visibility.Visible ;
@@ -368,7 +412,9 @@ namespace PH4_WPF
                 // Нотификация для почты
                 MailInBox.MailNotification();
                 // Первый маршрут всегда ваш сервер
-                RouteList.AddFirst(App.GameGlobal.MyServer);   
+                RouteList.AddFirst(App.GameGlobal.MyServer);
+                // Change time icon
+                IconTimeSpeed(App.GameGlobal.GameSpeed);
 
             }
 
@@ -637,6 +683,7 @@ namespace PH4_WPF
             NewGame();
         }
 
+
         private void КлавишиУправление(object sender, KeyEventArgs e)
         {
             if (e.Key == Key.Left) { 
@@ -815,7 +862,12 @@ namespace PH4_WPF
             }
         }
 
-        private void MenuOpen(object sender, RoutedEventArgs e)=> Grid_Menu.Visibility = Visibility.Visible;
+        private void MenuOpen(object sender, RoutedEventArgs e) {
+            etc.FrmSettings frm = new etc.FrmSettings();
+            frm.Show();
+            
+           // Grid_Menu.Visibility = Visibility.Visible;
+           }
         private void ЗакрытьМенюИгры(object sender, RoutedEventArgs e)
         { 
             Grid_Menu.Visibility = Visibility.Hidden;
@@ -978,9 +1030,15 @@ namespace PH4_WPF
 
         private void ТестоваяКнопка(object sender, RoutedEventArgs e)
         {
-            App.GameGlobal.GamerInfo.HiTecLevel += 5;
-            App.GameGlobal.Instructions_V();
+            Application.Current.Shutdown();
 
+            //App.GameGlobal.GamerInfo.HiTecLevel += 5;
+            //App.GameGlobal.Instructions_V();
+
+            // App.GameGlobal.GameScen.ActiveScen.Script["win"].ForEach(x => x.Run());
+
+            App.GameGlobal.FindServer ("www.ddospell.com").AdministratorWarning();
+            
 
         }
 

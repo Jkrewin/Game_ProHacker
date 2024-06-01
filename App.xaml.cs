@@ -8,12 +8,11 @@ using System.Windows;
 
 namespace PH4_WPF
 {
-    /// <summary>
-    /// Interaction logic for App.xaml
-    /// </summary>
     public partial class App : Application
     {
         private static readonly string FileConfig = AppDomain.CurrentDomain.BaseDirectory + @"Save\config.cnf";
+
+        public static GameStart GameStart;
 
         //Стандартные размеры для Grid где распологаеться иконка сервера и название 
         public const int W_GRIND= 55;
@@ -22,7 +21,7 @@ namespace PH4_WPF
         /// <summary>
         /// Изменяемый каталог игрового контрента 
         /// </summary>
-        public static readonly string PatchAB = AppDomain.CurrentDomain.BaseDirectory + "\\Content\\";
+        public static readonly string PatchAB = AppDomain.CurrentDomain.BaseDirectory + @"Content\";
 
         /// <summary>
         ///  Oсновной инстанс
@@ -30,12 +29,28 @@ namespace PH4_WPF
         public static Game GameGlobal = new Game();
 
         /// <summary>
-        /// Облегчает доступ к ресурсам картинок
+        /// Test
+        /// <code> FrmSoft.FrmError msg = new FrmSoft.FrmError(Tr[Title], Tr[Text], Inform);</code>
+        /// </summary>
+        public static etc.Translator TranslatorTest = new etc.Translator();
+
+        /// <summary>
+        /// Облегчает доступ к ресурсам картинок <b>через не прямой адрес PH4_WPF;component</b>
         /// </summary>
         /// <param name="patch">пример Content/Desktop/bPanel/spPaneliisel.png</param>
         /// <returns>BitmapImage</returns>
         public static System.Windows.Media.Imaging.BitmapImage UriResImage(string patch) =>
             new System.Windows.Media.Imaging.BitmapImage(new Uri(@"/PH4_WPF;component/" + patch, UriKind.Relative));
+
+        /// <summary>
+        /// Uses BrushConverter to convert text to color. 
+        /// </summary>
+        /// <param name="col">Format ex = #FF4B566A</param>
+        /// <returns>Media.Brush</returns>
+        public static System.Windows.Media.Brush BrushConv(string col) {
+            var bc = new System.Windows.Media.BrushConverter();
+            return (System.Windows.Media.Brush)bc.ConvertFrom(col);
+        }
 
         #region "Для файла config"
         private static bool _CheatCode = false;

@@ -1,18 +1,9 @@
 ﻿using PH4_WPF.Engine;
 using System;
-using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.Drawing;
-using System.Linq;
-using System.Text;
 using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Data;
 using System.Windows.Documents;
 using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Shapes;
 using Brushes = System.Windows.Media.Brushes;
 
 namespace PH4_WPF.FrmSoft
@@ -22,7 +13,7 @@ namespace PH4_WPF.FrmSoft
     {
         private readonly string PatchAB = App.PatchAB + @"\soft\mail\";
         private MailInBox AttachMail;
-        private ObservableCollection<ListViewItemsData> ListViewItemsCollections = new ObservableCollection<ListViewItemsData>();
+        private readonly ObservableCollection<ListViewItemsData> ListViewItemsCollections = new ObservableCollection<ListViewItemsData>();
      
 
         public Mail()
@@ -31,14 +22,8 @@ namespace PH4_WPF.FrmSoft
             LsMail.ItemsSource = ListViewItemsCollections;
             Refreh_Mail();
 
-
-
         }
-
-      
-
        
-
         public void Refreh_Mail() {
             ListViewItemsCollections.Clear();
            
@@ -52,8 +37,6 @@ namespace PH4_WPF.FrmSoft
                      Mail = item                     
                 });                   
             }
-
-          
         }
 
         private  class ListViewItemsData
@@ -115,10 +98,7 @@ namespace PH4_WPF.FrmSoft
             RedButton.Fill = SaveColor;
             SaveColor = null;
         }
-        private void НажатКрасный(object sender, MouseButtonEventArgs e)
-        {
-            this.Close();
-        }
+        private void НажатКрасный(object sender, MouseButtonEventArgs e) => this.Close();
         private void УдалениеКнопка(object sender, RoutedEventArgs e)
         {
             if (LsMail.SelectedItem == null) return;
@@ -126,23 +106,36 @@ namespace PH4_WPF.FrmSoft
             App.GameGlobal.Servers[0].Mails.Remove(w.Mail);
             ListViewItemsCollections.Remove(w);
             MailText.Text = "";
-        }       
+        }
         private void ОткрытьПрикрКомманду(object sender, RoutedEventArgs e)
         {
-            if (AttachMail.CommandList  is Engine.GameEvenClass.GetMoney t)
+            if (AttachMail.CommandList == null) return;
+
+            // деньги
+            if (AttachMail.CommandList is GameEvenClass.GetMoney t)
             {
-                string txt = "";
-                if (t.CheckLogik(ref txt) == false)
+                if (t.CheckLogik(out string txt) == false)
                 {
-                    FrmError frm = new FrmError("Ошибка", txt, FrmError.InformEnum.Информация);                   
+                    App.GameGlobal.Msg("Ошибка", txt, FrmError.InformEnum.Информация);
                 }
-                else {
-                    App.GameGlobal.SoundSignal("button-sound-14");
+                else
+                {
+                    App.GameGlobal.SoundSignal(Enums.Sounds.attachMail);
                     t.Run();
-                    AttachMail.CommandList  = null;
-                    OpenAtch.Visibility = Visibility.Hidden ;
+                    AttachMail.CommandList = null;
+                    OpenAtch.Visibility = Visibility.Hidden;
+                    App.GameGlobal.LogAdd(txt, Enums.LogTypeEnum.Money);
                 }
             }
+            // вызов чата
+            else if (AttachMail.CommandList is GameEvenClass.StartChat tt)
+            {
+                tt.Run();
+                AttachMail.CommandList = null;
+                OpenAtch.Visibility = Visibility.Hidden;
+            }
+
+
         }
 
     }

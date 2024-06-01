@@ -9,7 +9,7 @@ using System.Windows.Controls;
 using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Media;
-using EventEnum= PH4_WPF.Enums.ConditionEnum;
+using EventEnum = PH4_WPF.Enums.ConditionEnum;
 using System.Xml.Serialization;
 
 namespace PH4_WPF.FrmSoft
@@ -18,7 +18,7 @@ namespace PH4_WPF.FrmSoft
     public partial class Cmd : Window
     {
         private readonly List<string> FF00_ls = new List<string>();                  // Ускоряет доступ к списку файлов Продвинутый уровень  
-        private Stack<string> StackBuffer = new Stack<string>();                     // Стек для буфера
+        private readonly Stack<string> StackBuffer = new Stack<string>();            // Стек для буфера
         private string Pwd = "/";                                                    // Начальный каталог
         private Server GameSrv;                                                      // Куда на какой сервер подключена консоль 
         private readonly Button[] BBSelectButton;                                    // Кнопки которые нужны для меню
@@ -102,7 +102,6 @@ namespace PH4_WPF.FrmSoft
             VisualTimer[2] = "---";
             VisualTimer[3] = @"\\\";
 
-
             // получаем информацию о командах
             XmlSerializer xmlSerializer = new XmlSerializer(typeof(List<XmlInfoCommand>));
             using FileStream fs = new FileStream(App.PatchAB + "XmlInfoCommand.xml", FileMode.OpenOrCreate);
@@ -113,7 +112,7 @@ namespace PH4_WPF.FrmSoft
         private void Загруженно(object sender, RoutedEventArgs e)
         {
             CmdText.Text = "";
-            AddTextConsole("Welcome v0.1", 1, true);
+            AddTextConsole("Welcome v"+ System.Reflection.Assembly.GetExecutingAssembly().GetName().Version, 1, true);
             BashConsole();
 
             ClipBoard = "make Virus.exe";
@@ -283,7 +282,7 @@ namespace PH4_WPF.FrmSoft
                // TimerAdminStr.Content = VisualTimer[indexTimerAdmin];
                 indexTimerAdmin++;
                 if (indexTimerAdmin == VisualTimer.Length) indexTimerAdmin = 0;
-              //  GameSrv.AdministratorWarning();
+                GameSrv.AdministratorWarning();
             }
         }
 
@@ -325,6 +324,7 @@ namespace PH4_WPF.FrmSoft
         /// <returns>AddTextConsole</returns>
         public ConsoleText TextConsole(string text, int timer = 0, bool jumpLine = true, Action action =null)
         {
+           
             List<Inline> txt = new List<Inline>();
             var bc = new BrushConverter();
 
@@ -543,7 +543,7 @@ namespace PH4_WPF.FrmSoft
                 if (txt.Substring(0, Math.Min((HaText + item.NameCommand).Length, txt.Length)) == HaText + item.NameCommand)
                 {
                     CommandInfo.Inlines.Clear();
-                    InfoArgument.Content = item.Info;
+                    InfoArgument.Text = item.Info;
                     List<Inline> tt = new List<Inline>();
                     foreach (var tv in item.Comment)
                     {
@@ -561,7 +561,7 @@ namespace PH4_WPF.FrmSoft
                     return;
                 }
             }
-            InfoArgument.Content = "";
+            InfoArgument.Text = "";
             CommandInfo.Inlines.Clear();
         }
 
@@ -617,9 +617,17 @@ namespace PH4_WPF.FrmSoft
         {
             ShowMenu(3, 317);
             Button03.Focusable = false;
-        }     
+        }
 
+        private void УбратьЗанавес(object sender, EventArgs e)
+        {
+            ShroudGrind.Visibility = Visibility.Hidden;
+        }
 
+        private void ПовеситьЗанавес(object sender, EventArgs e)
+        {
+            ShroudGrind.Visibility = Visibility.Visible;
+        }
     }
 
 
@@ -705,10 +713,11 @@ namespace PH4_WPF.FrmSoft
 
                 if (fileServer.Perfix == "") fileServer.Perfix = "none";
 
-                Action act = () => {
+                void act()
+                {
                     serverOUT.CreateFiles(vs[2], fileServer);
                     App.GameGlobal.EventIntroduce(EventEnum.ФайлСкачан, fileServer.FileName);
-                };
+                }
 
                 AddTextConsole("Файл скопирован успешно в каталог " + serverOUT.NameSrv + "://" + vs[2], act, 1);                
             }
@@ -802,18 +811,19 @@ namespace PH4_WPF.FrmSoft
                 return;
             }
             try
-            {
-                if (App.GameGlobal.OpenUrl.ContainsKey(vs[2]) == false)
-                {
-                    AddTextConsole("Узел не найден, либо закрыт невозможно скачать", 15);
-                    return;
-                }
+            {               
                 AddTextConsole("Подключаюсь к узлу", 1);
                 FileServerClass file;
                 Action action = null;
                 // скачка из сетевого ресурса
                 if (vs[1] == "-u")
                 {
+                    if (App.GameGlobal.OpenUrl.ContainsKey(vs[2]) == false)
+                    {
+                        AddTextConsole("Узел не найден, либо закрыт невозможно скачать", 15);
+                        return;
+                    }
+
                     file = App.GameGlobal.OpenUrl[vs[2]];
 
                     // Проверка доступа к файлу
@@ -1401,7 +1411,7 @@ namespace PH4_WPF.FrmSoft
                         break;
                 }
 
-                if (item.Dir == null)
+                if (item.IsDir == false)
                 {
                     if (full == true)
                     {
@@ -1451,7 +1461,7 @@ namespace PH4_WPF.FrmSoft
             {
                 FF00_ls.Add(item.FileName);
                 string d = "     ";
-                if (item.Dir != null) d = "<DIR>";
+                if (item.IsDir) d = "<DIR>";
                 if (num == true) d += " `" + i + "`";
 
                 if (item.Rights == FileServerClass.PremisionEnum.OnlyAdmin)

@@ -12,7 +12,7 @@ namespace PH4_WPF.FrmSoft
     
     public partial class FrmFile : Window
     {
-
+      
 
         private FileServerClass RenameFile;
         private readonly ObservableCollection<ListViewItemsData> ListViewItemsCollections = new ObservableCollection<ListViewItemsData>();
@@ -159,7 +159,7 @@ namespace PH4_WPF.FrmSoft
                 RefFiles();
             }
             else {
-                App.GameGlobal.Msg("Ошибка", "Нельзя удалить этот файл", FrmError.InformEnum.Критическая_ошибка);
+                App.GameGlobal.Msg("Error", "Файл не может быть удален", FrmError.InformEnum.Критическая_ошибка);
             }
         }
 

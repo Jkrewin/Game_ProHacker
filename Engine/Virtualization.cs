@@ -16,10 +16,27 @@ namespace PH4_WPF.Engine
         private UpgradeStruct ProccesNowUpgadePrv;
         private string _DefeceString;
 
+        private bool SorceFileSec
+        {
+            get
+            {
+                if (FileServerClass.Exist("/user/Hpro4/", "SorceSec.php", App.GameGlobal.MyServer))
+                {
+                    if (FileServerClass.GetFile("/user/Hpro4/SorceSec.php", App.GameGlobal.MyServer).FileСontents.TextCommand == "SorceSec")
+                    {
+                        return false; // есть исходник файла     
+                    }
+                }
+                return true; // нет исходника файла
+            }
+        }
+
+
         /// <summary>
         /// Текст который появиться при дефейсе сайта <b>Если строка пуста означает что нет дефейса</b> <i>Максимум 50 символов</i> 
         /// </summary>
-        public string DefeceString { get => _DefeceString;
+        public string DefeceString {
+            get => _DefeceString;
             set {
                 _DefeceString = value.Substring(0, Math.Min(value.Length, 50));
             } }       
@@ -71,7 +88,7 @@ namespace PH4_WPF.Engine
                 ServerName = svr_name,
             });
             App.GameGlobal.AllEventGame.Add(evenStruct);
-            ProccesNowUpgadePrv = new UpgradeStruct() { DataStart = App.GameGlobal.DataGM, NewVer = new_instace , EvenLink =evenStruct };      
+            ProccesNowUpgadePrv = new UpgradeStruct(App.GameGlobal.DataGM, new_instace, evenStruct );      
         }
         /// <summary>
         /// Делаем для таблици ListBoxItem
@@ -104,8 +121,7 @@ namespace PH4_WPF.Engine
             }
 
             // Текущая операция с сервисом
-            string state="";
-            if (instance.UpdateSoft) state = "";
+            string state= instance.UpdateSoft ? "" : "";
 
             // тут создаем контролы
             Grid grid = new Grid() { Width = 670 };
@@ -193,6 +209,10 @@ namespace PH4_WPF.Engine
                 Enums.InstaceTypeEnum.MySql,
                 Enums.InstaceTypeEnum.BanerAD,
                 Enums.InstaceTypeEnum.Mail }),
+            Enums.InstaceTypeEnum.Booking => new InstaceClass(TypeName, 10, 200, new Enums.InstaceTypeEnum[] {
+                Enums.InstaceTypeEnum.MySql,
+                Enums.InstaceTypeEnum.BanerAD,
+                Enums.InstaceTypeEnum.Mail }),
             Enums.InstaceTypeEnum.BanerAD =>     new InstaceClass(TypeName, 10, 50, new Enums.InstaceTypeEnum[] { Enums.InstaceTypeEnum.Mail }),
             Enums.InstaceTypeEnum.Mail =>        new InstaceClass(TypeName, 10, 200, new Enums.InstaceTypeEnum[] { Enums.InstaceTypeEnum.FTP }),
             Enums.InstaceTypeEnum.Coordinator => new InstaceClass(TypeName, 10, 0, new Enums.InstaceTypeEnum[] { }),
@@ -216,6 +236,7 @@ namespace PH4_WPF.Engine
             Enums.InstaceTypeEnum.WebForumApi =>     new InstaceClass(TypeName, 0, 0, new Enums.InstaceTypeEnum[] { Enums.InstaceTypeEnum.TranceSrv }, true),
             Enums.InstaceTypeEnum.MailApi =>         new InstaceClass(TypeName, 0, 0, new Enums.InstaceTypeEnum[] { Enums.InstaceTypeEnum.TranceSrv }, true),
             Enums.InstaceTypeEnum.BookingApi =>      new InstaceClass(TypeName, 0, 0, new Enums.InstaceTypeEnum[] { Enums.InstaceTypeEnum.TranceSrv }, true),
+            Enums.InstaceTypeEnum.SecServerSorce =>  new InstaceClass(TypeName, 0, 0, new Enums.InstaceTypeEnum[] { Enums.InstaceTypeEnum.TranceSrv }, SorceFileSec),
             _ =>  null
         };
         /// <summary>
@@ -245,6 +266,7 @@ namespace PH4_WPF.Engine
                 Enums.InstaceTypeEnum.BookingApi => "Покупка билетов и аренда Уникальный",
                 Enums.InstaceTypeEnum.WebForumApi => "Веб-сайт Уникальный",
                 Enums.InstaceTypeEnum.MailApi => "Почта Уникальный",
+                Enums.InstaceTypeEnum.SecServerSorce => "Собственно написанный микро-сервис ",
                 _ => "<Роль не определена>",
             };
 
@@ -290,7 +312,7 @@ namespace PH4_WPF.Engine
 
             public Enums.InstaceTypeEnum InstaceType { get; set; }
             public byte VerA = 1;
-            public byte VerB = 0;
+            public byte VerB = 1;
             public string Version { get => VerA + "." + VerB; }
             public Enums.StatusInstanceEnum StatusInstance { get => StatusInstancePrv; set => StatusInstancePrv = value; }
             public readonly Enums.InstaceTypeEnum[] Dependencies = new Enums.InstaceTypeEnum[] { Enums.InstaceTypeEnum.MySql };
@@ -335,11 +357,17 @@ namespace PH4_WPF.Engine
         }
 
         [Serializable]
-        public struct UpgradeStruct
+        public readonly struct UpgradeStruct
         {
-            public DateTime DataStart;
-            public InstaceClass NewVer;
-            public GameEvenClass EvenLink;
+            public readonly DateTime DataStart;
+            public readonly InstaceClass NewVer;
+            public readonly GameEvenClass EvenLink;
+
+            public UpgradeStruct(DateTime dataStart, InstaceClass newVer, GameEvenClass evenLink) {
+                EvenLink = evenLink;
+                DataStart = dataStart;
+                NewVer = newVer;            
+            }
         }
 
        

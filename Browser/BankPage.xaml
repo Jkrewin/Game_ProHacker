@@ -63,7 +63,7 @@
                 </Grid.Effect>
             </Grid>
             <Label x:Name="ErrorText" Visibility="Hidden"  Content="Label" HorizontalAlignment="Center" Grid.Row="1" Background="#FFCE4343" Width="800" Foreground="#FFEEE4E4" HorizontalContentAlignment="Center" FontSize="14" FontWeight="Bold" Height="28" VerticalAlignment="Bottom"/>
-            <Grid x:Name="Acc" Visibility="Hidden"   Height="350" Margin="0,0,90,0" VerticalAlignment="Center" Background="#FF6A58B9" Grid.Row="1" HorizontalAlignment="Center" Width="620">
+            <Grid x:Name="Acc" Visibility="Visible"   Height="350" Margin="0,0,90,0" VerticalAlignment="Center" Background="#FF6A58B9" Grid.Row="1" HorizontalAlignment="Center" Width="620">
                 <Label Content="Деньги на счету" HorizontalAlignment="Left" Margin="10,37,0,0" VerticalAlignment="Top" Background="{x:Null}" Foreground="#FFD0D0D0" FontSize="14" Height="19" HorizontalContentAlignment="Left" Width="134" Padding="5,0,5,0" FontWeight="Bold" BorderBrush="#FF3D1E1E"/>
                 <TextBox x:Name="AllMoney" HorizontalAlignment="Left" Margin="149,37,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="189" FontSize="14" FontWeight="Bold" Background="#FF7868C3" Foreground="White" UndoLimit="20" BorderBrush="#FF4E3F8C" IsEnabled="False" HorizontalContentAlignment="Center" Text="002"/>
                 <Rectangle Height="20" Stroke="#FF4E3F8C" VerticalAlignment="Top" Fill="#FF4E3F8C"/>
@@ -83,6 +83,8 @@
                 <Label Content="Счет № " HorizontalAlignment="Left" Margin="20,0,0,0" VerticalAlignment="Top" Background="{x:Null}" Foreground="#FFD0D0D0" FontSize="14" Height="19" HorizontalContentAlignment="Left" Width="134" Padding="5,0,5,0" FontWeight="Bold" BorderBrush="#FF3D1E1E"/>
                 <Label x:Name="NumRS" Content="00000" HorizontalAlignment="Left" Margin="79,0,0,0" VerticalAlignment="Top" Background="{x:Null}" Foreground="#FFD0D0D0" FontSize="14" Height="19" HorizontalContentAlignment="Left" Width="134" Padding="5,0,5,0" FontWeight="Bold" BorderBrush="#FF3D1E1E"/>
                 <CheckBox x:Name="CB_ПоУмолчанию" Content="Этот счет сделать по умолчанию для переводов" HorizontalAlignment="Left" Margin="20,321,0,0" VerticalAlignment="Top" Foreground="#FFEAEAEA" FontSize="14" FontWeight="Bold" Click="УстановкаПоУмолчанию"/>
+                <Label x:Name="InfCa" Content="[Отправленно на почту]" HorizontalAlignment="Left" Margin="440,237,0,0" VerticalAlignment="Top" Background="{x:Null}" Foreground="#FFD0D0D0" FontSize="14" Height="19" HorizontalContentAlignment="Left" Width="156" Padding="5,0,5,0" FontWeight="Normal" BorderBrush="#FF3D1E1E"/>
+                <Button x:Name="ButtonFine" Content="Оплатить штрафы, пении" HorizontalAlignment="Left" Margin="430,236,0,0" VerticalAlignment="Top" Width="176" Background="#FF3E929A" Foreground="#FFF6F6F6" FontWeight="Bold" BorderBrush="#FF4E3F8C" Click="Кнопка_Штрафы"/>
             </Grid>
             <Label x:Name="DefLab" Visibility="Hidden"  Content="Ваш счет по умолчанию" HorizontalAlignment="Left" Height="31" Margin="14,1,0,0" Grid.Row="1" VerticalAlignment="Top" Width="530" Foreground="#FF402E2E"/>
         </Grid>

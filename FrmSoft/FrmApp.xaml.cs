@@ -83,7 +83,7 @@ namespace PH4_WPF.FrmSoft
                 if (ResultPwd)
                 {
                     // готовый пароль тут 
-                    s = "Логин:Пароль " + SelectedSrv.LoginAndPass + " для сервера " + SelectedSrv.NameSrv;
+                    s = "Успех найден [Логин:Пароль] " + SelectedSrv.LoginAndPass + " для сервера " + SelectedSrv.NameSrv;
                     App.GameGlobal.EventIntroduce(Enums.ConditionEnum.ПодборПароляЗавершен, SelectedSrv.NameSrv, SelectedSrv.LoginAndPass);
                 }
                 else
@@ -157,9 +157,10 @@ namespace PH4_WPF.FrmSoft
         private  void ПоискСвоихРигов(object sender, RoutedEventArgs e)
         {
             if (ButtonFinder.Background == Brushes.Red) return;
-            var result = from tv in App.GameGlobal.Servers where tv.Premision == Engine.Server.PremissionServerEnum.FullControl || tv.Premision == Engine.Server.PremissionServerEnum.Zombies
-                                                           select tv;
-                        
+
+            var result = (from tv in App.GameGlobal.Servers 
+                         where tv.Premision == Engine.Server.PremissionServerEnum.FullControl || tv.Premision == Engine.Server.PremissionServerEnum.UserControl 
+                         select tv).ToArray();                        
             ButtonFinder.Background = Brushes.Red;
 
             Task task = new Task(() => {
@@ -177,10 +178,13 @@ namespace PH4_WPF.FrmSoft
 
                     }
                 }
-                this.Dispatcher.Invoke(() => { 
+                this.Dispatcher.Invoke(() => 
+                { 
+                    if (s == 0) InfoProcess.Content = "Только сервера с установленной службой перебора хещей (RigFrame) может быть объединён в общую сеть "; 
                     ButtonFinder.Background = null; 
-                    Сluster = (short)(s + 1); });
-                   if (ListBoxServer.Items.Count==0) InfoProcess.Content = "Только сервера с установленной службой перебора хещей может быть подключено ";
+                    Сluster = (short)(s + 1); 
+                });
+                
             });
 
             task.Start();

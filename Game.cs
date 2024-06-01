@@ -9,6 +9,7 @@ namespace PH4_WPF
     [Serializable]
     public sealed class Game
     {
+        //private etc.Translator Tr { get; } = App.TranslatorTest;
         private GameSpeedEnum gameSpeed = GameSpeedEnum.Pause;      // Начальный режим времени
         private DateTime stDataGM = new DateTime(2001, 1, 1);       // Начальная дата игры
 
@@ -54,23 +55,7 @@ namespace PH4_WPF
             get => gameSpeed; set
             {
                 gameSpeed = value;
-                switch (value)
-                {
-                    case GameSpeedEnum.Pause:
-                        MainWindow.StatusSpeedImg.Source = App.UriResImage("Content/Desktop/bPanel/SpeedPause.png");
-                        break;
-                    case GameSpeedEnum.Speed1X:
-                        MainWindow.StatusSpeedImg.Source = App.UriResImage("Content/Desktop/bPanel/Speed1x.png");
-                        break;
-                    case GameSpeedEnum.Speed2X:
-                        MainWindow.StatusSpeedImg.Source = App.UriResImage("Content/Desktop/bPanel/Speed2x.png");
-                        break;
-                    case GameSpeedEnum.Speed4X:
-                        MainWindow.StatusSpeedImg.Source = App.UriResImage("Content/Desktop/bPanel/Speed4x.png");
-                        break;
-                    default:
-                        break;
-                }
+                MainWindow.IconTimeSpeed(value);
             }
         }
         /// <summary>
@@ -108,6 +93,10 @@ namespace PH4_WPF
         /// Список вирусов работающих в сети 
         /// </summary>
         public VirusListClass VirusList = new VirusListClass();
+        /// <summary>
+        /// Сумма штрафа подлежащая уплате игроку
+        /// </summary>
+        public int FineSum = 0;
 
         /// <summary>
         /// создает карту серверов
@@ -218,16 +207,11 @@ namespace PH4_WPF
         /// Звуковой сиг оповещений
         /// </summary>
         /// <param name="str"></param>
-        public void SoundSignal(string str) {
-            //iqWav - новое сообщение в чат
-            //newMail - новая почта
-            //gameover - игра закончена
-            //buy - Покупка
-            //button-sound-14 - письмо откыто аттачь 
+        public void SoundSignal(Enums.Sounds sound) {            
             if (App.SoundDisable == false)
             {
                 System.Windows.Media.MediaPlayer media = new System.Windows.Media.MediaPlayer();
-                media.Open(new Uri(App.PatchAB + @"sound\" + str + ".mp3", UriKind.Relative));
+                media.Open(new Uri(App.PatchAB + @"sound\" + sound.ToString () + ".mp3", UriKind.Relative));
                 media.Play();
             }
         }

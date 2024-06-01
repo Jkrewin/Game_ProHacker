@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Windows;
 using static PH4_WPF.Game;
 
@@ -11,6 +10,10 @@ namespace PH4_WPF.Engine
     [Serializable]
     public class GameEvenClass
     {
+        /// <summary>
+        /// Названгие ID опционально для быстрого поиска
+        /// </summary>
+        public string TitleId = "";
         /// <summary>
         /// Когда наступает событие или прошла эта дата уже
         /// </summary>
@@ -24,11 +27,17 @@ namespace PH4_WPF.Engine
             DataStart = dataStart;
             GameEvent = gameEven;
         }
+        public GameEvenClass(string titleId, DateTime dataStart, IEventGame gameEven)
+        {
+            DataStart = dataStart;
+            GameEvent = gameEven;
+            TitleId = titleId;
+        }
 
         public override string ToString() => DataStart.ToString("d") + " " + GameEvent.GetType().Name;
        
         /// <summary>
-        /// Реализует патрен стратеджи 
+        /// Реализует патрен  
         /// </summary>
         public interface IEventGame
         {            
@@ -61,12 +70,16 @@ namespace PH4_WPF.Engine
                                 App.GameGlobal.GamerInfo.ExtraPoint++;
                             else
                                 App.GameGlobal.GamerInfo.CoderLvl = 1;
+
+                            App.GameGlobal.Msg("Способность", "Вы научились создавать программы", FrmSoft.FrmError.InformEnum.Информация);
                             break;
                         case ProfEnum.GetClearLog:
                             if (App.GameGlobal.GamerInfo.DefecerLvl >= 1)
                                 App.GameGlobal.GamerInfo.ExtraPoint++;
                             else
                                 App.GameGlobal.GamerInfo.DefecerLvl = 1;
+
+
                             break;
                         default:
                             break;
@@ -116,6 +129,7 @@ namespace PH4_WPF.Engine
                 }
                 srv.VirtualizationServer.Instance[i] = Instace;
                 srv.VirtualizationServer.ServiceControl();
+                App.GameGlobal.EventIntroduce(Enums.ConditionEnum.СофтОбновлен, ServerName);
             }
         }
         /// <summary>
@@ -183,7 +197,7 @@ namespace PH4_WPF.Engine
                 SrvUp.VirtualizationServer.Hardware.TotalRAM += Proc;
                 SrvUp.VirtualizationServer.Hardware.TotalHDD += HDD;
                 App.GameGlobal.LogAdd("Сервер обновил железо :: " + SrvUp.NameSrv, Enums.LogTypeEnum.Server );
-                App.GameGlobal.EventIntroduce(Enums.ConditionEnum.МощностьСервераУвеличина, SrvUp.NameSrv);
+                App.GameGlobal.EventIntroduce(Enums.ConditionEnum.МощностьСервераУвеличина, SrvUp.NameSrv, HDD.ToString() + " "  + Proc.ToString ());
             }
         }
         /// <summary>
@@ -192,13 +206,19 @@ namespace PH4_WPF.Engine
         [Serializable]
         public readonly struct SendMail : IEventGame
         {
-            readonly MailInBox Mail;
+            readonly string Title;
+            readonly string BodyText;
+            readonly string Mailto;
+            readonly GameEvenClass.IEventGame Command;
 
-            public SendMail(MailInBox mail) {
-                Mail = mail;
+            public SendMail(string title, string bodyText, string mailto, Engine.GameEvenClass.IEventGame commandList) {
+                Title = title;
+                BodyText = bodyText;
+                Mailto = mailto;
+                Command = commandList;
             }
 
-            public void Run() => MailInBox.NewMail(Mail);
+            public void Run() => MailInBox.NewMail(title: Title, bodytext: BodyText, mailto: Mailto, command: Command);
         }  
         /// <summary>
             /// Добавить свою уязвимость
@@ -370,8 +390,8 @@ namespace PH4_WPF.Engine
 
             public void Run()
             {
-                List<GameEvenClass.IEventGame> script = App.GameGlobal.GameScen.ActiveScen.Script[NameScript];
-                script.ForEach(x => x.Run());
+                if (App.GameGlobal.GameScen.ActiveScen.Script.ContainsKey(NameScript) ) 
+                    App.GameGlobal.GameScen.ActiveScen.Script[NameScript].ForEach(x => x.Run());                
             }
         }
         /// <summary>
@@ -536,23 +556,24 @@ namespace PH4_WPF.Engine
             /// Проверяет возможна предача денг или есть ошибки 
             /// </summary>
             /// <returns></returns>
-            public bool CheckLogik(ref string textError)
+            public bool CheckLogik(out string text_result)
             {
                 if (App.GameGlobal.Bank.DefaultBankAccount == null)
                 {
-                    textError = "У вас нет счета по умолчанию чтобы отправить на него деньги";
+                    text_result = "У вас нет счета по умолчанию чтобы отправить на него деньги";
                     return false;
                 }
                 else
                 {
                     if (App.GameGlobal.Bank.DefaultBankAccount.TypeMoney != TypeMoney)
                     {
-                        textError = "Счет предназначен для валюты " + App.GameGlobal.Bank.DefaultBankAccount.TypeMoney.ToString()
+                        text_result = "Счет предназначен для валюты " + App.GameGlobal.Bank.DefaultBankAccount.TypeMoney.ToString()
                             + " а вам нужно перевести на счет с валютой " + TypeMoney.ToString();
                         return false;
                     }
                     else
                     {
+                        text_result = "Зачисленны деньги на ваш счет +" + Money;
                         return true;
                     }
                 }
@@ -569,12 +590,11 @@ namespace PH4_WPF.Engine
 
             public void Run()
             {
-                string txt = "";
-                if (CheckLogik(ref txt))
+                if (CheckLogik(out _))
                 {
                     App.GameGlobal.Bank.DefaultBankAccount.Money += Money;
                     App.GameGlobal.LogAdd("Вы получили деньги +" + Money + " на счет " + App.GameGlobal.Bank.DefaultBankAccount.Rs, Enums.LogTypeEnum.Money );
-                    App.GameGlobal.SoundSignal("button-sound-14");
+                    App.GameGlobal.SoundSignal(Enums.Sounds.attachMail);
                 }
             }
         }
@@ -612,6 +632,29 @@ namespace PH4_WPF.Engine
             }
 
             public void Run() => App.GameGlobal.AllEventGame.Add(new GameEvenClass(DataStart, GameEvent));
+        }
+        /// <summary>
+        /// Проверка штрафа через время на его уплату <p> <b>fine_check - строка для поиска событий обязательна тут</b>
+        /// </summary>
+        [Serializable]
+        public readonly struct CheckFine : IEventGame
+        {           
+            public void Run()
+            {
+                if (App.GameGlobal.FineSum == 0)
+                {
+                    // удалить другие запросы если они были запланированны 
+                    for (int i = App.GameGlobal.AllEventGame.Count - 1; i >= 0; i--)
+                    {
+                        if (App.GameGlobal.AllEventGame [i].TitleId == "fine_check") App.GameGlobal.AllEventGame.RemoveAt (i);
+                    }
+                }
+                else 
+                {
+                    var end = new  GameOver("Вас посадили за неуплату штрафа !!!");
+                    end.Run();
+                }
+            }
         }
 
     }

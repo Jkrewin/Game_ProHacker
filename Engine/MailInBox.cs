@@ -36,6 +36,7 @@ namespace PH4_WPF.Engine
         /// </summary>
         public DateTime DateTo { get; set; }
 
+      
         #region "Тут статика"
         /// <summary>
         /// Создает почтовое сообщение с учетом оповещения
@@ -55,17 +56,17 @@ namespace PH4_WPF.Engine
             });
             RfMail();
         }
-        /// <summary>
-        /// Создает почтовое сообщение с учетом оповещения
-        /// </summary>
-        public static void NewMail(MailInBox mail)
-        {
-            ref var ls = ref App.GameGlobal.Servers[0].Mails;
-            if (ls == null) ls = new List<MailInBox>();
-            if (mail.DateTo == null) mail.DateTo = App.GameGlobal.DataGM;
-            ls.Add(mail);
-            RfMail();
-        }
+        ///// <summary>
+        ///// Создает почтовое сообщение с учетом оповещения
+        ///// </summary>
+        //public static void NewMail(MailInBox mail)
+        //{
+        //    ref var ls = ref App.GameGlobal.Servers[0].Mails;
+        //    if (ls == null) ls = new List<MailInBox>();
+        //    if (mail.DateTo == null) mail.DateTo = App.GameGlobal.DataGM;
+        //    ls.Add(mail);
+        //    RfMail();
+        //}
         /// <summary>
         /// Проверяет если новая почта или нет и показывает иконку на раб. столе
         /// </summary>
@@ -93,7 +94,7 @@ namespace PH4_WPF.Engine
             }
             // нотификация прихода почты
             MailNotification();
-            App.GameGlobal.SoundSignal("newMail");
+            App.GameGlobal.SoundSignal(Enums.Sounds.newMail);
         }
         #endregion
 

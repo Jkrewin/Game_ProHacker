@@ -64,7 +64,7 @@
                     </TextBox.ContextMenu>
                 </TextBox>
                 <Label x:Name="LabelError" Visibility="Hidden" Content="Целевой Сервер" HorizontalAlignment="Center" Margin="0,352,0,0" VerticalAlignment="Top" Foreground="White" FontSize="18" Width="798" Background="#FFE02626" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" Padding="5,0,5,5"/>
-                <Label x:Name="InfoProcess" Content="" Margin="10,264,10,0" VerticalAlignment="Top" Foreground="#FFDDDDDD" FontSize="14" Height="59" FontStyle="Normal" ScrollViewer.VerticalScrollBarVisibility="Disabled" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" Background="{x:Null}"/>
+                <Label x:Name="InfoProcess" Content="asdasd" Margin="10,264,10,0" VerticalAlignment="Top" Foreground="#FFDDDDDD" FontSize="14" Height="59" FontStyle="Normal" ScrollViewer.VerticalScrollBarVisibility="Disabled" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" Background="{x:Null}"/>
             </Grid>
         </Border>
 

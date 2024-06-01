@@ -26,7 +26,7 @@ Background="Transparent"
             </TextBox.ContextMenu>
         </TextBox>
         <Label Content="Server name:" HorizontalAlignment="Left" Margin="10,0,0,0" Grid.Row="1" VerticalAlignment="Center" Foreground="#FF7EA1E8" FontWeight="Bold"/>
-        <Button x:Name="ButtonSearch"  HorizontalAlignment="Left" Grid.Row="1" VerticalAlignment="Center" Width="38" Margin="385,0,0,0" Height="22" Click="НачатьПоиск" BorderBrush="Gray" Background="#FF1B2026" BorderThickness="1">
+        <Button x:Name="ButtonSearch"  HorizontalAlignment="Left" Grid.Row="1" VerticalAlignment="Bottom" Width="38" Margin="385,0,0,10" Height="22" Click="НачатьПоиск" BorderBrush="Gray" Background="#FF1B2026" BorderThickness="1">
             <StackPanel>
                 <Image x:Name="ButtonSearch1"  Source="/Content/soft/scaner_server/ButtonSearch.png" MouseEnter="ВыделениеКнопки" />
             </StackPanel>

@@ -91,7 +91,7 @@ namespace PH4_WPF.FrmSoft
             skill = new SkillInfo[] {
                 new SkillInfo ( 1, "[Н] Писать код, улучшать программы", "Вы можете писать программы, это поможет вам обновлять программы дописывая код в Админ Панели."),
                 new SkillInfo ( 2, "[S] Исходник для поиска данных о банковских счетах", "Помогает искать банковские данные на сервере, скрип доступен в браузере на стартовой странице в разделе Мои Скрипты."),
-                new SkillInfo ( 3, "[S] Улучшает Brute-force", " "),
+                new SkillInfo ( 3, "[A] Маскировка Кода", "Возможность максимально скрыть ваши следы. Если вас поймают то сумма штрафа будет меньше "),
                 new SkillInfo ( 4, "[S] Улучшает сканер", " "),
                 new SkillInfo ( 5, "[S] Код для поиска важных файлов на сервере", " "),
                 new SkillInfo ( 6, "[Н] Писать код как профи", "Повышает качество кода, увеличивает полезность кода"),
@@ -146,35 +146,50 @@ namespace PH4_WPF.FrmSoft
         }
 
 
-        private void SelectTem(Label sender, SkillInfo[] mass, byte lvl) {
+        private void SelectTem(Label sender, SkillInfo[] mass, byte lvl)
+        {
 
-            L_Coder.Background = null;
-            L_Craker.Background = null;
-            L_Defecer.Background = null;
-            L_Vir.Background = null;
-            L_CoderB.Background = null;
-            L_CrakerB.Background = null;
-            L_DefecerB.Background = null;
-            L_VirB.Background = null;
+            Label[,] labels = new Label[4, 2];
 
-            sender.Background = Brushes.CornflowerBlue;           
-            
-                LB_Info.Items.Clear();
-                for (int i = 0; i < 9; i++)
+            labels[0, 0] = L_Coder;
+            labels[1, 0] = L_Craker;
+            labels[2, 0] = L_Defecer;
+            labels[3, 0] = L_Vir;
+            labels[0, 1] = L_CoderB;
+            labels[1, 1] = L_CrakerB;
+            labels[2, 1] = L_DefecerB;
+            labels[3, 1] = L_VirB;
+
+            for (int i = 0; i < 4; i++)
+            {
+                if (sender.Name == labels[i, 0].Name || sender.Name == labels[i, 1].Name)
                 {
-                    Brush b = null;
-                    if (lvl >= (i+1)) b = Brushes.GreenYellow;
-                    Label label = new Label()
-                    {
-                        Content = mass[i].Title,
-                        Padding = new Thickness(5, 0, 5, 0),
-                        Background = b,
-                        Tag = mass[i].Info,
-                        Width = 385
-                    };
-                    LB_Info.Items.Add(label);
+                    labels[i, 0].Background = Brushes.CornflowerBlue;
+                    labels[i, 1].Background = Brushes.CornflowerBlue;
                 }
-            
+                else
+                {
+                    labels[i, 0].Background = null;
+                    labels[i, 1].Background = null;
+                }
+            }
+
+            LB_Info.Items.Clear();
+            for (int i = 0; i < 9; i++)
+            {
+                Brush b = null;
+                if (lvl >= (i + 1)) b = Brushes.GreenYellow;
+                Label label = new Label()
+                {
+                    Content = mass[i].Title,
+                    Padding = new Thickness(5, 0, 5, 0),
+                    Background = b,
+                    Tag = mass[i].Info,
+                    Width = 385
+                };
+                LB_Info.Items.Add(label);
+            }
+
         }
 
         private void AddStars(Label label, byte b)
@@ -249,35 +264,43 @@ namespace PH4_WPF.FrmSoft
                 case 1:
                     if (GamerInfo.CoderLvl != 10) 
                     {
+                        ((Label)LB_Info.Items[GamerInfo.CoderLvl]).Background = Brushes.GreenYellow;
                         GamerInfo.CoderLvl++;
                         GamerInfo.ExtraPoint--;
+                        AddStars(CoderStars, GamerInfo.CoderLvl);                        
                     }
                     break;
                 case 2:
                     if (GamerInfo.DefecerLvl != 10)
                     {
+                       ((Label)LB_Info.Items[GamerInfo.DefecerLvl]).Background = Brushes.GreenYellow;
                         GamerInfo.DefecerLvl++;
                         GamerInfo.ExtraPoint--;
+                        AddStars(DefecerStars, GamerInfo.DefecerLvl);                        
                     }
                     break;
                 case 3:
                     if (GamerInfo.VirLvl != 10)
                     {
+
+                        ((Label)LB_Info.Items[GamerInfo.VirLvl]).Background = Brushes.GreenYellow;
                         GamerInfo.VirLvl++;
                         GamerInfo.ExtraPoint--;
+                        AddStars(VirStars, GamerInfo.VirLvl);
                     }
                     break;
                 case 4:
                     if (GamerInfo.CrackLvl != 10)
                     {
+                        ((Label)LB_Info.Items[GamerInfo.CrackLvl]).Background = Brushes.GreenYellow;
                         GamerInfo.CrackLvl++;
                         GamerInfo.ExtraPoint--;
+                        AddStars(CrackerStars, GamerInfo.CrackLvl);
+                        
                     }
                     break;
-                default:
-                    break;
             }
-
+                       
             Label_point.Content = GamerInfo.ExtraPoint;
             if (GamerInfo.ExtraPoint == 0) ButtonUPLvl.Visibility = Visibility.Hidden;
         }

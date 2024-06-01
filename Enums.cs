@@ -13,12 +13,12 @@
             ПерезапускСервера = 1,
             СообщитьДефейсе = 2,            
             СоздаватьМаршруты = 3,
-            УскоренныйПоиск = 4, //ускоренный поиск и вероятноть определения ос
+            УскоренныйПоиск = 4, 
             ЧисткаЛогов = 5,
-            AA = 6,
-            AAA = 7,
-            AAAA = 8,
-            ДоступКоВсемУязвимостям = 9,
+            AA = 6,//0
+            AAA = 7,//0
+            AAAA = 8,//0
+            ДоступКоВсемУязвимостям = 9,//0
             МаксимальноеДостижение = 10
         }
         /// <summary>
@@ -29,12 +29,12 @@
             СобиратьХешиПаролей = 1,
             СкидкаНаСофт20 = 2,
             ТорговатьХешами = 3,
-            ИИИ = 4,
+            ИИИ = 4,//0
             ДоступКрипте = 5,
-            AA = 6,
-            AAA = 7,
-            AAAA = 8,
-            AAAAA = 9,
+            AA = 6,//0
+            AAA = 7,//0
+            AAAA = 8,//0
+            AAAAA = 9,//0
             МаксимальноеДостижение = 10
         }
         /// <summary>
@@ -60,13 +60,13 @@
         {
             ПисатьКод = 1,
             ПоискБанковскойИнформации = 2,
-            мм = 3,
-            ИИИ = 4,
-            ммм = 5,
-            AA = 6,
-            AAA = 7,
-            AAAA = 8,
-            AAAAA = 9,
+            МаскировкаКода = 3,//0
+            ИИИ = 4,//0
+            ммм = 5,//0
+            AA = 6,//0
+            AAA = 7,//0
+            AAAA = 8,//0
+            AAAAA = 9,//0
             МаксимальноеДостижение = 10
         }
         /// <summary>
@@ -121,7 +121,8 @@
             ShopApi,
             BookingApi,
             StreamVideoApi,
-            SerWebApi
+            SerWebApi,
+            SecServerSorce
         }
         /// <summary>
         /// Статус работы инстанса
@@ -148,7 +149,8 @@
             instructions,
             script_deface,
             sbank,
-            virus_win
+            virus_win,
+            sorce_file
         }
         /// <summary>
         /// Типы логов для обозначения типа 
@@ -172,6 +174,40 @@
             Разное = 3,
             Важное = 4,
             НовостиКасательноИгрока = 5
+        }
+        /// <summary>
+        /// Sounds in the game, the name is the name enum of the file in the Content/sound folder
+        /// </summary>
+        public enum Sounds
+        {
+            /// <summary>
+            /// new message in chat
+            /// </summary>
+            idWav,
+            /// <summary>
+            /// new mail
+            /// </summary>
+            newMail,
+            /// <summary>
+            /// gameover
+            /// </summary>
+            gameover,
+            /// <summary>
+            /// purchasing software
+            /// </summary>
+            buy,
+            /// <summary>
+            /// open attachment in mail
+            /// </summary>
+            attachMail,
+            /// <summary>
+            /// beep
+            /// </summary>
+            beep,
+            /// <summary>
+            /// game save ok
+            /// </summary>
+            saveok
         }
     }
 }

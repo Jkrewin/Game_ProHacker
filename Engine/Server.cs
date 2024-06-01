@@ -139,7 +139,7 @@ namespace PH4_WPF.Engine
                     string[] txt2 = App.GameGlobal.MainWindow.Firewall_TXT;
                     FireWall = txt2[rand.Next(0, txt2.Length)].Split(',')[1];
                 }
-                else if (PrvOS == TypeOSEnum.Logerhead) goto w10;
+                else if (PrvOS == TypeOSEnum.Logerhead) { OSName = "Unix Core Logerhead"; goto w10; }
                 else if (PrvOS == TypeOSEnum.Linux) key = "BSD system ";
                 
                 if (PopularSRV >= 40) v = "High";
@@ -154,7 +154,6 @@ namespace PH4_WPF.Engine
                         goto w10;
                     }
                 }
-                OSName = "Unknown";
                 PrvOS = TypeOSEnum.Unknown;
             w10:;
             }
@@ -162,7 +161,7 @@ namespace PH4_WPF.Engine
         /// <summary>
         /// Содержит название ОС  для совместимости shell кодов
         /// </summary>
-        public string OSName { get; set; }
+        public string OSName { get; set; } = "Unknown";
         /// <summary>
         /// Фаервол по умоланию не установлен
         /// </summary>
@@ -695,12 +694,19 @@ namespace PH4_WPF.Engine
             // Проверка засветился в логах игрок
             if (LogSaver != 0)
             {
-                App.GameGlobal.Msg("", "в логах", FrmSoft.FrmError.InformEnum.Критическая_ошибка);
-            }
+                App.GameGlobal.SoundSignal(Enums.Sounds.beep);
 
             //предупреждение и выписка штрафа если юзер был обнаружен
-        }      
-               
+            var d = App.GameGlobal.DataGM.AddMonths(6);
+            int sum = this.PopularSRV * 50;
+            App.GameGlobal.FineSum += sum;
+            App.GameGlobal.AllEventGame.Add(new GameEvenClass("fine_check", d, new GameEvenClass.CheckFine()));
+            MailInBox.NewMail("guard@ovyzd.gdn", "Вам выписали штраф!", "Вас обнаружили на сервере " + this.NameSrv + " Вы обязаны оплатить штраф за попытку взлома сервера в размере " + sum + "$ до " + d.ToShortDateString(), null );
+            App.GameGlobal.LogAdd("Вас вычислили на сервере " + this.NameSrv, Enums.LogTypeEnum.Problem);
+            }
+
+        }
+
 
         #region "Структуры и перечисления"
         [Serializable]

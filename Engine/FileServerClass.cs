@@ -37,6 +37,7 @@ namespace PH4_WPF.Engine
         /// Размер файла
         /// </summary>
         public float Size { get; set; }
+
         public ParameterClass FileСontents { get; set; }
         /// <summary>
         /// прова доступа к файлу
@@ -54,6 +55,17 @@ namespace PH4_WPF.Engine
         /// Файл удален (true)
         /// </summary>
         public bool HasDel { get => hasDel; }
+        /// <summary>
+        /// Это каталог или файл <b>true - каталог</b>
+        /// </summary>
+        public bool IsDir
+        {
+            get
+            {
+                if (Dir == null) return false;
+                return Dir.Count >= 0;
+            }
+        }
 
         /// <summary>
         /// Содержимое файла
@@ -292,12 +304,12 @@ namespace PH4_WPF.Engine
                 case Enums.TypeParam.file:
                     break;
                 case Enums.TypeParam.goal_file:
-                    if (f.FileСontents.EventGame != null)
-                        f.FileСontents.EventGame.Run();                    
+                   // if (f.FileСontents.EventGame != null)
+                        f.FileСontents.EventGame?.Run();                    
                     break;
                 case Enums.TypeParam.exe:
                     // Установка программы в App
-                    if (FileServerClass.Exist("/apps/", f.FileСontents.TextCommand, App.GameGlobal.MyServer))
+                    if (Exist("/apps/", f.FileСontents.TextCommand, App.GameGlobal.MyServer))
                     {
                         App.GameGlobal.Msg("Программа", "Эта программа была ранее установлена", FrmError.InformEnum.СообщениеОтПрограмимы);
                     }

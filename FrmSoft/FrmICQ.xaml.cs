@@ -42,7 +42,7 @@ namespace PH4_WPF.FrmSoft
         private void Q_Chat(object sender, EventArgs e)
         {
             L_AnswerText.Visibility = Visibility.Hidden;
-            App.GameGlobal.SoundSignal("iqWav");
+            App.GameGlobal.SoundSignal(Enums.Sounds.idWav);
             ImgAva.Visibility = Visibility.Visible;
             L_NameN.Visibility = Visibility.Visible;
             App.GameGlobal.MainWindow.MessageIcon.Source = App.UriResImage("/Content/soft/IQNewMess.png");
@@ -72,26 +72,26 @@ namespace PH4_WPF.FrmSoft
                 var r = ICQ.MyChat.Messages[ICQ.IndexChat].Answers[i];
                 switch (r.CommandAnswer)
                 {
-                    case Message.Answer.CommandAnswerEnum.Переход:
+                    case Message.Answer.CommandAnswerEnum.GoTo:
                         ICQ.IndexChat = r.IntArgument;
                         XTimer.Interval = TimeSpan.FromSeconds(ICQ.MyChat.Messages[ICQ.IndexChat].Sec);
                         L_AnswerText.Visibility = Visibility.Visible;
                         L_AnswerText.Content = "Ваш ответ отправлен: " + r.TextAnswer;
                         XTimer.Start();
                         break;
-                    case Message.Answer.CommandAnswerEnum.ВыходЗапуститьСкрипт:
+                    case Message.Answer.CommandAnswerEnum.ExitStartScript:
                         App.GameGlobal.GameChat = null;
                        List <Engine.GameEvenClass.IEventGame> script = App.GameGlobal.GameScen.ActiveScen.Script[r.StrArgument];
                         script.ForEach(x => x.Run());
                         App.GameGlobal.MainWindow.MessageIcon.Opacity = 50;                        
                         this.Close();
                         break;
-                    case Message.Answer.CommandAnswerEnum.ВыходЗапуститьЧат:
+                    case Message.Answer.CommandAnswerEnum.ExitStartChat:
                         App.GameGlobal.GameChat = new Game.GameChatClass(App.GameGlobal.GameScen.ActiveScen.Chat[r.StrArgument]);
                         App.GameGlobal.GameChat.InLoadChat();
                         this.Close();
                         break;
-                    case Message.Answer.CommandAnswerEnum.ПростоВыход:
+                    case Message.Answer.CommandAnswerEnum.JustExit:
                         App.GameGlobal.GameChat = null;
                         App.GameGlobal.MainWindow.MessageIcon.Opacity = 50;
                         this.Close();

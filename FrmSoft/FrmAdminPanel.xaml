@@ -11,9 +11,7 @@ AllowsTransparency="True"
 Background="Transparent"
         Title="FrmAdminPanel" Height="450" Width="800" Closed="ФормаЗакрыта" WindowStartupLocation="CenterScreen" Loaded="ЗагруженнаФорма">
 
-    <Window.Effect>
-        <DropShadowEffect Color="#FF0BE7BB" Direction="320" ShadowDepth="8" Opacity="0.5" RenderingBias="Performance"/>
-    </Window.Effect>
+   
     <Grid Background="#FF242947" MouseMove="ФормаВыделение">
 
 
@@ -148,7 +146,7 @@ Background="Transparent"
             </Border>
         </Grid>
 
-        <Grid  x:Name="Page1" Visibility="Hidden" Margin="63,79,10,10" Width="727" Height="361" Background="#FFFDFFFC" HorizontalAlignment="Left" VerticalAlignment="Top" ScrollViewer.VerticalScrollBarVisibility="Disabled">
+        <Grid  x:Name="Page1" Visibility="Visible" Margin="63,79,10,10" Width="727" Height="361" Background="#FFFDFFFC" HorizontalAlignment="Left" VerticalAlignment="Top" ScrollViewer.VerticalScrollBarVisibility="Disabled">
             <Grid.Clip>
                 <RectangleGeometry Rect="0,0,727,361" RadiusX="15" RadiusY="15"/>
             </Grid.Clip>
@@ -245,4 +243,7 @@ Background="Transparent"
     <Window.Clip>
         <RectangleGeometry Rect="0,0,800,450" RadiusX="25" RadiusY="25"/>
     </Window.Clip>
+    <Window.Effect>
+        <DropShadowEffect Color="#FF0BE7BB" Direction="320" ShadowDepth="8" Opacity="0.5" RenderingBias="Performance"/>
+    </Window.Effect>
 </Window>

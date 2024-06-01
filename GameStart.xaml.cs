@@ -13,7 +13,7 @@ namespace PH4_WPF
    
     public partial class GameStart : Window
     {       
-        private readonly string DirSaveGame = System.AppDomain.CurrentDomain.BaseDirectory + @"Save\";
+        private readonly string DirSaveGame = AppDomain.CurrentDomain.BaseDirectory + @"Save\";
         int MyIndex = 0;
         string[] Ava;
         int My_char = 0;
@@ -35,9 +35,10 @@ namespace PH4_WPF
 
             StartPanel.Visibility = Visibility.Hidden;
                         
-            if (System.IO.Directory.Exists(DirSaveGame) == false) System.IO.Directory.CreateDirectory(DirSaveGame);
+            if (Directory.Exists(DirSaveGame) == false) System.IO.Directory.CreateDirectory(DirSaveGame);
                        
             App.GameGlobal.MainWindow = new MainWindow ();
+            
             App.LoadConfig();
                        
         }
@@ -50,12 +51,12 @@ namespace PH4_WPF
         }
 
         private void Refreh_FileSav() {
-            string[] ls = System.IO.Directory.GetFiles(DirSaveGame, "*.sav");
+            string[] ls = Directory.GetFiles(DirSaveGame, "*.sav");
             ListFile.Items.Clear();
             foreach (var item in ls)
             {
                 FileInfo f = new FileInfo(item);
-                ListFile.Items.Add(f.LastAccessTime.ToString("dd/mm/yy") + " - " + f.Name.Substring(0, f.Name.Length - 4));
+                ListFile.Items.Add(f.LastAccessTime.ToString("dd/mm/yy") + " - " + f.Name[0..^4]);
             }
         }
 
@@ -112,11 +113,13 @@ namespace PH4_WPF
 
         private void Загруженно(object sender, RoutedEventArgs e)
         {
+            App.GameStart = new GameStart();
+
             if (App.StartUP)
             {
                 App.GameGlobal.MainWindow.Show();
-                App.GameGlobal.MainWindow.LoadGame(AppDomain.CurrentDomain.BaseDirectory + @"Save\1.sav");
-                this.Hide();
+                App.GameGlobal.MainWindow.LoadGame(AppDomain.CurrentDomain.BaseDirectory + @"Save\debuger.sav");
+                Hide();
                 return;
             }            
             
@@ -141,7 +144,7 @@ namespace PH4_WPF
 
         }
 
-        private void СписокИгры(object sender, RoutedEventArgs e)
+        public void СписокИгры(object sender, RoutedEventArgs e)
         {
             LoadList.Visibility = Visibility.Visible;
             StartPanel.Visibility = Visibility.Hidden;
@@ -186,6 +189,14 @@ namespace PH4_WPF
 
         private void НачатьИгру(object sender, RoutedEventArgs e)
         {
+
+            // проверить на наличие профиля 
+            string prof = AppDomain.CurrentDomain.BaseDirectory + @"Save\" + Nick.Text + ".sav";
+            if (System.IO.File.Exists(prof)) {
+                // Профиль игрока '" + Nick.Text + "' был ранее создан, следует его удалить.  
+                return;
+            }
+
             FileInfo f = new FileInfo(Ava [MyIndex]);
             GamerInfoClass gamer = new GamerInfoClass
             {

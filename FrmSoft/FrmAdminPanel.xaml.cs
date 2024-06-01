@@ -68,7 +68,6 @@ namespace PH4_WPF.FrmSoft
         private void АнимацияЗадержки(object sender, EventArgs e) {
             if (TagInstace.StatusInstance != Enums.StatusInstanceEnum.Working)
             {
-
                 if ((MainServer.VirtualizationServer.SummarPower + TagInstace.KVT_Ver * TagInstace.VerA) > PowerServer.Maximum)
                 {
                     App.GameGlobal.Msg("", "Невозможно запустить так как сервер будет перегружен, высокая нагрузка на сервер.", FrmError.InformEnum.Информация);
@@ -76,7 +75,6 @@ namespace PH4_WPF.FrmSoft
                 }
                 else
                 {
-
                     bool b = MainServer.VirtualizationServer.CheckDependencies(TagInstace, out string msg_error);
                     if (b)
                     {
@@ -125,7 +123,6 @@ namespace PH4_WPF.FrmSoft
             L_AllProcessor.Content = VirtualSrv.Hardware.TotalProcessor + " шт";
             L_OZY.Content = VirtualSrv.Hardware.TotalRAM + " Gb";
             L_HDD.Content = VirtualSrv.Hardware.TotalHDD + " Tb";
-
 
             PB_popular.Maximum = MainServer.PopularSRV * 155;
             PB_popular.Value = VirtualSrv.SummarPopular;
@@ -188,7 +185,7 @@ namespace PH4_WPF.FrmSoft
                 if (LsVM.SelectedItem is ListBoxItem v)
                 {
                     PG_InProcess.Visibility = Visibility.Visible;
-                    TagInstace = v.Tag as Virtualization.InstaceClass;
+                    TagInstace = v.Tag as InstaceClass;
                     EchoCm.Start();
                 }
             }
@@ -222,12 +219,14 @@ namespace PH4_WPF.FrmSoft
                 FormCrateSrev.Visibility = Visibility.Visible;
 
                 CB_Serv.Items.Clear();
-                foreach (Enums.InstaceTypeEnum item in Enum.GetValues(typeof(Enums.InstaceTypeEnum)).Cast<Enums.InstaceTypeEnum>().ToList())
-                {
-                    if (MainServer.VirtualizationServer.Instance.FindIndex(x => x.InstaceType == item) == -1) CB_Serv.Items.Add(item.ToString());
-                }
 
+                var result = from tv in Enum.GetValues(typeof(Enums.InstaceTypeEnum)).Cast<Enums.InstaceTypeEnum>() 
+                             where MainServer.VirtualizationServer.Instance.FindIndex(x => x.InstaceType == tv) == -1
+                             where VirtualSrv.Role_Templates(tv).API == false
+                             select tv.ToString();
 
+                foreach (var item in result)
+                    CB_Serv.Items.Add(item);
             }
         }
         private void УбратьСписок(object sender, RoutedEventArgs e)
@@ -260,7 +259,7 @@ namespace PH4_WPF.FrmSoft
                 if (LsVM.SelectedItem is ListBoxItem v)
                 {
                     HideAllPage();
-                    SelectedInstance = v.Tag as InstaceClass;
+                    SelectedInstance = (InstaceClass)v.Tag;
                     StartUpProg.Visibility = SelectedInstance.UpdateSoft ? Visibility.Hidden : Visibility.Visible;
                     Page2.Visibility = Visibility.Visible;
                     LabelNameProgramm.Content = SelectedInstance.InstaceType.ToString();
@@ -269,9 +268,7 @@ namespace PH4_WPF.FrmSoft
                     L_old_popular.Content = SelectedInstance.Popular;
                     L_new_kvt.Content = SelectedInstance.KVT;
                     L_new_polular.Content = (SelectedInstance.VerB + 1) * SelectedInstance.Popular_Ver;
-
                 }
-
             }
         }
         private void UgProg(object sender, MouseButtonEventArgs e)

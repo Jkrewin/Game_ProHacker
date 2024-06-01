@@ -4,12 +4,12 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:PH4_WPF.FrmSoft"
-        mc:Ignorable="d"
-         WindowStyle="None"
+        mc:Ignorable="d"         
         WindowStartupLocation="CenterScreen"
         AllowsTransparency="True"
+         WindowStyle="None"      
         Background="Transparent"
-        Title="Cmd" Height="700" Width="800" Loaded="Загруженно" KeyDown="НажатиеКлав" Closed="ЗакрытаФорма">
+        Title="Cmd" Height="700" Width="800" Loaded="Загруженно" KeyDown="НажатиеКлав" Closed="ЗакрытаФорма" Activated="УбратьЗанавес" Deactivated="ПовеситьЗанавес">
     <Window.Clip>
         <RectangleGeometry Rect="0,0,800,700" RadiusX="10" RadiusY="10"/>
     </Window.Clip>
@@ -17,8 +17,8 @@
         <TextBlock x:Name="txt_Txt"/>
         <Rectangle x:Name="PanelUp" Height="30" Margin="-5,0,-5,0" Stroke="Black" VerticalAlignment="Top" Fill="#FF2E3444" MouseDown="Перетаскивание"/>
         <Grid HorizontalAlignment="Center" Margin="0,634,0,0" Width="800" Background="#FF7A2A2A">
-            <Label x:Name="InfoArgument" Content="&lt;нет&gt;" HorizontalAlignment="Center" VerticalAlignment="Top" Height="46" Width="780" Foreground="#FFBABABA" FontWeight="Normal" Margin="0,20,0,0"/>
-            <TextBlock x:Name="CommandInfo" HorizontalAlignment="Center" VerticalAlignment="Top" Height="24" Width="780" Foreground="#FFBABABA" FontWeight="Normal"/>
+            <TextBlock x:Name="InfoArgument" TextWrapping="Wrap" Text="" HorizontalAlignment="Center" VerticalAlignment="Top" Height="33" Width="780" Foreground="#FFBABABA" FontWeight="Normal" Margin="0,33,0,0" FontStyle="Italic"/>
+            <TextBlock x:Name="CommandInfo" TextWrapping="Wrap" HorizontalAlignment="Center" VerticalAlignment="Top" Height="33" Width="780" Foreground="#FFBABABA" FontWeight="Normal"/>
         </Grid>
         <Grid x:Name="CmdPanel" Height="583" Margin="5,51,5,0" VerticalAlignment="Top" Background="#FF222735" >
             <TextBlock x:Name="CmdText" Foreground="#FF34C354" FontSize="13" Text="1" FontFamily="Consolas" ></TextBlock>
@@ -46,5 +46,7 @@
         <Label x:Name="TimerAdminLog" Content="---" HorizontalAlignment="Left" Margin="663,6,0,0" VerticalAlignment="Top" Foreground="#FFDFDFDF" Width="69" FontFamily="OCR A Std" FontWeight="Bold" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" Padding="5,0,5,5" FontSize="16" ToolTip="Вероятное время вашего обнаружения, когда вы подключены к серверу"/>
         <Label x:Name="TimerAdminStr" Content="" HorizontalAlignment="Left" Margin="616,6,0,0" VerticalAlignment="Top" Foreground="#FFDFDFDF" Width="47" FontFamily="OCR A Std" FontWeight="Bold" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" Padding="5,0,5,5" FontSize="16" ToolTip=""/>
 
+        <Grid Visibility="Hidden" x:Name="ShroudGrind" Width="800" Height="700" Opacity="10" Background="#80090909" />
     </Grid>
+
 </Window>

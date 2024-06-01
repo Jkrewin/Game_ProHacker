@@ -39,6 +39,25 @@
                 </StackPanel>
             </ScrollViewer>
         </Grid>
+
+        <Grid x:Name="ProgEditor" Background="#FF0200AB" Margin="10,49,10,137" Grid.Row="3" >
+            <Rectangle HorizontalAlignment="Center" Height="22" Stroke="Black" VerticalAlignment="Top" Width="780" Fill="#FFAAAAAA"/>
+            <StackPanel x:Name="SP_L1" Margin="10,61,524,75" Background="#FF302DEB" Width="246"/>
+            <StackPanel x:Name="SP_L2" Margin="267,61,267,75" Background="#FF302DEB" Width="246"/>
+            <StackPanel x:Name="SP_L3" Margin="524,61,10,75" Background="#FF302DEB" Width="246"/>
+            <Label Content="Stack Frame" HorizontalAlignment="Left" Margin="10,38,0,0" VerticalAlignment="Top" RenderTransformOrigin="0.438,-0.023" Width="246" Background="#FFAAAAAA" Foreground="#FF0200AB" Height="21" Padding="5,4,5,5" FontSize="14" HorizontalContentAlignment="Center" FontWeight="Normal" FontFamily="Lucida Console"/>
+            <Label Content="Buffer" HorizontalAlignment="Center" Margin="0,38,0,0" VerticalAlignment="Top" RenderTransformOrigin="0.438,-0.023" Width="246" Background="#FFAAAAAA" Foreground="#FF0200AB" Height="21" Padding="5,4,5,5" FontSize="14" HorizontalContentAlignment="Center" FontWeight="Normal" FontFamily="Lucida Console"/>
+            <Label Content="Set" HorizontalAlignment="Left" Margin="524,38,0,0" VerticalAlignment="Top" RenderTransformOrigin="0.438,-0.023" Width="246" Background="#FFAAAAAA" Foreground="#FF0200AB" Height="21" Padding="5,4,5,5" FontSize="14" HorizontalContentAlignment="Center" FontWeight="Normal" FontFamily="Lucida Console"/>
+            <Label Content="Buffer" HorizontalAlignment="Center" VerticalAlignment="Top" RenderTransformOrigin="0.438,-0.023" Width="694" Background="#FFAAAAAA" Foreground="#FF020256" Height="17" Padding="5,2,5,5" HorizontalContentAlignment="Center" FontWeight="Normal" FontFamily="Lucida Console" Margin="0,3,0,0"/>
+            <Label Content="&gt;&gt;" HorizontalAlignment="Left" Margin="138,341,0,0" VerticalAlignment="Top" RenderTransformOrigin="0.438,-0.023" Width="31" Background="#FF00AAAB" Foreground="Black" Height="21" Padding="5,4,5,5" FontSize="14" HorizontalContentAlignment="Center" FontWeight="Normal" FontFamily="Lucida Console" MouseDown="L1_right" MouseMove="ЦветВыделенияСтрелок" MouseLeave="ВозвратЦветаСтрелок"/>
+            <Label Content="&lt;&lt;" HorizontalAlignment="Left" Margin="597,341,0,0" VerticalAlignment="Top" RenderTransformOrigin="0.438,-0.023" Width="30" Background="#FF00AAAB" Foreground="Black" Height="21" Padding="5,4,5,5" FontSize="14" HorizontalContentAlignment="Center" FontWeight="Normal" FontFamily="Lucida Console" MouseDown="L3_left" MouseMove="ЦветВыделенияСтрелок" MouseLeave="ВозвратЦветаСтрелок"/>
+            <Label Content="UP" HorizontalAlignment="Left" Margin="667,341,0,0" VerticalAlignment="Top" RenderTransformOrigin="0.438,-0.023" Width="30" Background="#FF00AAAB" Foreground="Black" Height="21" Padding="5,4,5,5" FontSize="14" HorizontalContentAlignment="Center" FontWeight="Normal" FontFamily="Lucida Console" MouseLeave="ВозвратЦветаСтрелок" MouseMove="ЦветВыделенияСтрелок" MouseDown="КнопкаOKНажата"/>
+            <Label Content="&lt;&lt;" HorizontalAlignment="Left" Margin="335,341,0,0" VerticalAlignment="Top" RenderTransformOrigin="0.438,-0.023" Width="30" Background="#FF00AAAB" Foreground="Black" Height="21" Padding="5,4,5,5" FontSize="14" HorizontalContentAlignment="Center" FontWeight="Normal" FontFamily="Lucida Console" MouseDown="L2_left" MouseMove="ЦветВыделенияСтрелок" MouseLeave="ВозвратЦветаСтрелок"/>
+            <Label Content="&gt;&gt;" HorizontalAlignment="Left" Margin="405,341,0,0" VerticalAlignment="Top" RenderTransformOrigin="0.438,-0.023" Width="30" Background="#FF00AAAB" Foreground="Black" Height="21" Padding="5,4,5,5" FontSize="14" HorizontalContentAlignment="Center" FontWeight="Normal" FontFamily="Lucida Console" MouseDown="L2_right" MouseMove="ЦветВыделенияСтрелок" MouseLeave="ВозвратЦветаСтрелок"/>
+            <Label x:Name="ButtonOK" Content="OK" HorizontalAlignment="Left" Margin="715,376,0,0" VerticalAlignment="Top" RenderTransformOrigin="0.438,-0.023" Width="46" Background="#FF29AB00" Foreground="Black" Height="21" Padding="5,4,5,5" FontSize="14" HorizontalContentAlignment="Center" FontWeight="Normal" FontFamily="Lucida Console" MouseMove="ЦветОк" MouseLeave="ВозвратЦветаОК"/>
+            <Label x:Name="ExitButton" Content="EXIT" HorizontalAlignment="Left" Margin="659,376,0,0" VerticalAlignment="Top" RenderTransformOrigin="0.438,-0.023" Width="46" Background="#FFAB4400" Foreground="Black" Height="21" Padding="5,4,5,5" FontSize="14" HorizontalContentAlignment="Center" FontWeight="Normal" FontFamily="Lucida Console" MouseMove="ЦветВыхода" MouseLeave="ВозвратЦвета" MouseDown="КонкаВыходНажата"/>
+        </Grid>
+
         <Label Content="         Зараженная система                          Тип                                                                                       Описание" HorizontalAlignment="Center" Grid.Row="2" VerticalAlignment="Center" Height="23" Width="800" Background="#FF5D6B99" Foreground="White" Padding="5,3,5,5"/>
         <ComboBox x:Name="CB_ListVirus" HorizontalAlignment="Left" Margin="133,4,0,0" Grid.Row="1" VerticalAlignment="Top" Width="259" FontFamily="Arial Unicode MS" FontSize="14" Height="22" DropDownOpened="МенюОткрыто"/>
         <Label Content="Начать разработку" HorizontalAlignment="Left" VerticalAlignment="Center" FontFamily="Arial Unicode MS" FontSize="14" Foreground="#FF232932" Grid.RowSpan="2"/>
@@ -46,13 +65,13 @@
         <Ellipse x:Name="BlueButton" HorizontalAlignment="Left" Height="20" Margin="737,0,0,0" Stroke="#FF4F68EE" VerticalAlignment="Center" Width="20" Fill="#FF118AD3" MouseEnter="КурсорНадКружком" MouseLeave="КурсорУшелКружок" MouseDown="НажатСиний"/>
         <Button x:Name="B_StrProc" HorizontalAlignment="Left" Margin="400,4,0,0" Grid.Row="1" VerticalAlignment="Top" Width="140" Click="ЗапускПроцесса">
             <Grid Width="140" Height="18">
-
-                <Label Content="Запустить процесс"  VerticalAlignment="Center" FontSize="11" HorizontalContentAlignment="Center" Padding="5,1,5,5" Foreground="#FF201919"/>
+                <Label x:Name="ButtonStart" Content="Запустить процесс"  VerticalAlignment="Center" FontSize="11" HorizontalContentAlignment="Center" Padding="5,1,5,5" Foreground="#FF201919"/>
                 <ProgressBar x:Name="PB_Process" Visibility="Hidden"  Height="18"  VerticalAlignment="Top" Width="140" Value="0" Background="#FFCCD5F0" Foreground="#FFA1A2E8" Maximum="45"/>
             </Grid>
         </Button>
-        <Label Content="Разработка может занять больше месяца" HorizontalAlignment="Left" VerticalAlignment="Top" FontFamily="Arial Unicode MS" FontSize="10" Foreground="#FF232932" Margin="545,4,0,0" Grid.Row="1"/>
+        <Label x:Name="Information" Content="Разработка может занять больше месяца" HorizontalAlignment="Left" VerticalAlignment="Top" FontFamily="Arial Unicode MS" FontSize="10" Foreground="#FF232932" Margin="545,4,0,0" Grid.Row="1"/>
         <Label Content="TIDE " HorizontalAlignment="Left" VerticalAlignment="Center" FontFamily="Arial Unicode MS" FontSize="14" Foreground="#FFDAE0E8" Margin="8,0,0,0"/>
         <Button Content="Обновить" HorizontalAlignment="Left" Margin="733,0,0,0" Grid.Row="2" VerticalAlignment="Center" Height="22" Width="66" Background="#FF697BB6" Foreground="White" Click="Button_Click"/>
+        <Button Content="" HorizontalAlignment="Left" Margin="10,28,0,0" Grid.Row="1" VerticalAlignment="Top" Height="25" Width="25" Background="#FFA8B4D6" Foreground="Black" Click="ВыборФайлаМодиф" FontFamily="Segoe MDL2 Assets" FontSize="18"/>
     </Grid>
 </Window>

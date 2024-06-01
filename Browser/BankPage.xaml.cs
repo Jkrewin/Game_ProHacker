@@ -16,6 +16,10 @@ namespace PH4_WPF.Browser
 {    
     public partial class BankPage : Page
     {
+
+        BankAccount AccountAct;
+
+
         public BankPage()
         {
             InitializeComponent();
@@ -111,7 +115,7 @@ namespace PH4_WPF.Browser
             }
         }
 
-        BankAccount accountAct;
+        
         private void Кнопка_вход(object sender, RoutedEventArgs e)
         {
             BankAccount account;
@@ -133,7 +137,8 @@ namespace PH4_WPF.Browser
             else
             {
                 //Успешный вход
-                accountAct = account;
+                ButtonFine.Visibility = Visibility.Visible;
+                AccountAct = account;
                 NumRS.Content = account.Rs;
                 AllMoney.Text = account.Money.ToString();
                 LinkCnv.Maximum = account.Money;
@@ -145,7 +150,7 @@ namespace PH4_WPF.Browser
                     if (item.Rs != account.Rs) AllRS.Items.Add(item.Rs);
                 }
 
-                if (App.GameGlobal.Bank.DefaultBankAccount == accountAct)
+                if (App.GameGlobal.Bank.DefaultBankAccount == AccountAct)
                 {
                     CB_ПоУмолчанию.IsChecked = true;
                 }
@@ -156,7 +161,7 @@ namespace PH4_WPF.Browser
         private void Изменение_сумма(object sender, RoutedPropertyChangedEventArgs<double> e)
         {
             MoneyC.Text =((int)LinkCnv.Value).ToString ();
-            InfConvert.Content = App.GameGlobal.Bank.ConvertMoney(accountAct.TypeMoney , (int)LinkCnv.Value, accountEx.TypeMoney );
+            InfConvert.Content = App.GameGlobal.Bank.ConvertMoney(AccountAct.TypeMoney , (int)LinkCnv.Value, accountEx.TypeMoney );
         }
 
         private void Кнопка_входИзСчета(object sender, RoutedEventArgs e)
@@ -165,8 +170,8 @@ namespace PH4_WPF.Browser
             StartPG.Visibility = Visibility.Visible;
             ErrorText.Visibility = Visibility.Hidden;
             CB_ПоУмолчанию.IsChecked = false;
-            App.GameGlobal.Bank.DefaultBankAccount = accountAct;
-            accountAct = null;
+            App.GameGlobal.Bank.DefaultBankAccount = AccountAct;
+            AccountAct = null;
         }
 
         BankAccount accountEx;
@@ -178,30 +183,30 @@ namespace PH4_WPF.Browser
 
         private void Кнопка_Удалить_счет(object sender, RoutedEventArgs e)
         {
-            if (accountAct.Money != 0) {
+            if (AccountAct.Money != 0) {
                 ErrorText.Content = "Нельзя удалить этот счет так как на нем есть деньги";
                 ErrorText.Visibility = Visibility.Visible ;
                 return;
             }
 
-            App.GameGlobal.Bank.Accounts.Remove(accountAct);
+            App.GameGlobal.Bank.Accounts.Remove(AccountAct);
             Кнопка_входИзСчета(null,null);
         }
 
         private void Кнопка_ВыполнитьПеревод(object sender, RoutedEventArgs e)
         {
-            accountAct.Money -= int.Parse(MoneyC.Text);
-            AllMoney.Text = accountAct.Money.ToString ();
+            AccountAct.Money -= int.Parse(MoneyC.Text);
+            AllMoney.Text = AccountAct.Money.ToString ();
             LinkCnv.Value = 0;
             accountEx.Money += int.Parse(InfConvert.Content.ToString () );
-            LinkCnv.Maximum = accountAct.Money;
+            LinkCnv.Maximum = AccountAct.Money;
         }
 
         private void УстановкаПоУмолчанию(object sender, RoutedEventArgs e)
         {
             if (CB_ПоУмолчанию.IsChecked == true)
             {
-                App.GameGlobal.Bank.DefaultBankAccount = accountAct;
+                App.GameGlobal.Bank.DefaultBankAccount = AccountAct;
             }
             else {
                 App.GameGlobal.Bank.DefaultBankAccount = null;
@@ -226,6 +231,33 @@ namespace PH4_WPF.Browser
         private void ПокинулКурсор(object sender, MouseEventArgs e)
         {
             DefLab.Visibility = Visibility.Hidden;
+        }
+
+        private void Кнопка_Штрафы(object sender, RoutedEventArgs e)
+        {
+            ButtonFine.Visibility = Visibility.Hidden;
+            string str;
+
+            if (App.GameGlobal.FineSum == 0) str = "У вас нет не уплаченных штрафов";
+            else if (AccountAct.TypeMoney == Enums.TypeMoneyEnum.Dollar) str = "Транзакция отменена. Счет должен быть только в $ для снятия штрафа";
+            else
+            {
+                if (App.GameGlobal.FineSum > AccountAct.Money)
+                {
+                    App.GameGlobal.FineSum -= AccountAct.Money;
+                    AccountAct.Money = 0;
+                    str = "Транзакция частично успешная. У вас нехватило денег на полное погашение штрафа, погашена только его часть. Теперь осталось оплатить всего $ " + App.GameGlobal.FineSum;
+                }
+                else
+                {
+                    AccountAct.Money -= App.GameGlobal.FineSum;
+                    App.GameGlobal.FineSum = 0;
+                    str = "Транзакция успешная. Вы оплатили штраф полностью теперь у вас на счету (" + AccountAct.Rs + ") осталось " + AccountAct.Money + "$";
+                }
+                AllMoney.Text = AccountAct.Money.ToString();
+            }
+
+            MailInBox.NewMail("a1@bank.com", "Сообщение от банка", str, null);
         }
     }
 }

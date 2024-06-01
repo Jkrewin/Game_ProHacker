@@ -159,6 +159,7 @@
     <None Remove="Content\face\WОбычная девушка.gif" />    
     <None Remove="Content\face\WСтарое фото.gif" />    
     <None Remove="Content\Firewall.txt" />    
+    <None Remove="Content\login.txt" />    
     <None Remove="Content\msg\download.png" />    
     <None Remove="Content\msg\error.png" />    
     <None Remove="Content\msg\inform.png" />    
@@ -167,9 +168,13 @@
     <None Remove="Content\msg\soft.png" />    
     <None Remove="Content\News.txt" />    
     <None Remove="Content\OS.txt" />    
+    <None Remove="Content\Ports.txt" />    
+    <None Remove="Content\pwd.txt" />    
     <None Remove="Content\rtf\cmd.rtf" />    
     <None Remove="Content\rtf\exploit.rtf" />    
     <None Remove="Content\rtf\shell.rtf" />    
+    <None Remove="Content\Ru-rus.txt" />    
+    <None Remove="Content\SiteName.txt" />    
     <None Remove="Content\site\milw0rm.jpg" />    
     <None Remove="Content\soft\browser\browIcon.png" />    
     <None Remove="Content\soft\Brute.png" />    
@@ -179,6 +184,7 @@
     <None Remove="Content\soft\FileManager\etc.png" />    
     <None Remove="Content\soft\FileManager\exe.png" />    
     <None Remove="Content\soft\FileManager\filesystems.png" />    
+    <None Remove="Content\soft\FileManager\filesystemsup.png" />    
     <None Remove="Content\soft\FileManager\ini.png" />    
     <None Remove="Content\soft\FileManager\log.png" />    
     <None Remove="Content\soft\FileManager\os.png" />    
@@ -201,11 +207,13 @@
     <None Remove="Content\soft\scaner_server\rolle.png" />    
     <None Remove="Content\soft\scaner_server\ScanerG1.png" />    
     <None Remove="Content\soft\scaner_server\win.png" />    
-    <None Remove="Content\sound\button-sound-14.mp3" />    
+    <None Remove="Content\soft\tide.png" />    
+    <None Remove="Content\sound\attachMail.mp3" />    
     <None Remove="Content\sound\buy.mp3" />    
     <None Remove="Content\sound\gameover.mp3" />    
     <None Remove="Content\sound\iqWav.mp3" />    
     <None Remove="Content\sound\newMail.mp3" />    
+    <None Remove="Content\sound\saveok.mp3" />    
     <None Remove="Content\UI\logo0000.gif" />    
     <None Remove="Content\XmlInfoCommand.xml" />
   </ItemGroup>
@@ -547,6 +555,9 @@
     <Content Include="Content\Firewall.txt">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
+    <Content Include="Content\login.txt">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
     <Content Include="Content\msg\download.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
@@ -571,6 +582,12 @@
     <Content Include="Content\OS.txt">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
+    <Content Include="Content\Ports.txt">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Content\pwd.txt">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
     <Content Include="Content\rtf\cmd.rtf">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
@@ -578,6 +595,12 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="Content\rtf\shell.rtf">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Content\Ru-rus.txt">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Content\SiteName.txt">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="Content\site\milw0rm.jpg">
@@ -625,7 +648,7 @@
     <Content Include="Content\soft\scaner_server\PortDeactive.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="Content\sound\button-sound-14.mp3">
+    <Content Include="Content\sound\attachMail.mp3">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="Content\sound\buy.mp3">
@@ -638,6 +661,9 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="Content\sound\newMail.mp3">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Content\sound\saveok.mp3">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="Content\XmlInfoCommand.xml">
@@ -682,11 +708,22 @@
     <Resource Include="Content\Desktop\bPanel\spPaneliisel.png" />
     <Resource Include="Content\Desktop\Wallpapers.png" />
     <Resource Include="Content\soft\browser\browIcon.png" />
-    <Resource Include="Content\soft\FileManager\filesystems.png" />
+    <Content Include="Content\soft\FileManager\filesystems.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Content\soft\FileManager\filesystemsup.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
     <Resource Include="Content\soft\FileManager\uprow.png" />
-    <Resource Include="Content\soft\Brute.png" />
-    <Resource Include="Content\soft\IQ.png" />
-    <Resource Include="Content\soft\IQNewMess.png" />
+    <Resource Include="Content\soft\Brute.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Content\soft\IQ.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Content\soft\IQNewMess.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Resource>
     <Resource Include="Content\soft\mail\back.png" />
     <Resource Include="Content\soft\mail\bin.png" />
     <Content Include="Content\soft\mail\Mail.png">
@@ -701,6 +738,9 @@
     <Resource Include="Content\soft\scaner_server\rolle.png" />
     <Resource Include="Content\soft\scaner_server\ScanerG1.png" />
     <Resource Include="Content\soft\scaner_server\win.png" />
+    <Resource Include="Content\soft\tide.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Resource>
     <Resource Include="Content\UI\logo0000.gif" />
   </ItemGroup>
 
